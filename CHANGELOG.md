@@ -30,6 +30,6 @@ npm run dev
 
 The development app will be running on
 `http://localhost:3000` for frontend
-`http://localhost:5000` for backend.
+`http://localhost:3001` for backend.
 
 Made with Ioannis
