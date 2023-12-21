@@ -9,19 +9,18 @@ import { apiQuery } from '~/common/util/trpc.client';
 import 'katex/dist/katex.min.css';
 import '~/common/styles/CodePrism.css';
 import '~/common/styles/GithubMarkdown.css';
+import '~/common/styles/Custom.css';
 
 import { ProviderBackend } from '~/common/state/ProviderBackend';
 import { ProviderSnacks } from '~/common/state/ProviderSnacks';
 import { ProviderTRPCQueryClient } from '~/common/state/ProviderTRPCQueryClient';
 import { ProviderTheming } from '~/common/state/ProviderTheming';
 
-
-const MyApp = ({ Component, emotionCache, pageProps }: MyAppProps) =>
+const MyApp = ({ Component, emotionCache, pageProps }: MyAppProps) => (
   <>
-
     <Head>
       <title>{Brand.Title.Common}</title>
-      <meta name='viewport' content='minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no' />
+      <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no" />
     </Head>
 
     <ProviderTheming emotionCache={emotionCache}>
@@ -35,8 +34,8 @@ const MyApp = ({ Component, emotionCache, pageProps }: MyAppProps) =>
     </ProviderTheming>
 
     <VercelAnalytics debug={false} />
-
-  </>;
+  </>
+);
 
 // enables the React Query API invocation
 export default apiQuery.withTRPC(MyApp);
