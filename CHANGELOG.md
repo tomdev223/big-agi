@@ -12,6 +12,7 @@ It wil help business to save assistant.
 - **Remove unnecessary part**: Remove news autoload, news button, github, discord button
 - **Push to talk**: Remove push to talk function
 - **Concurrently**: Implemented concurrently functionality for run frontend and backend, database in one command
+- **Change log**: Attached change log file to readme.md
 
 ## 🧩 How to install
 
