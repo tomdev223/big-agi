@@ -1,0 +1,33 @@
+# BIG-AGI CHANGE LOG 🧠✨
+
+Welcome to big-AGI upgraded version.
+We customized BIG-AGI for AI-Seller project.
+It wil help business to save assistant.
+
+### What's New in 1.0.0 · Dec 21, 2023
+
+- **New Backend**: Independent backend with CRUD for Persona profiles.
+- **Call button status**: Made call button as enable status with default value.
+- **Remove text related chat**: Removed chat box for AI chat.
+- **Remove unnecessary part**: Remove news autoload, news button, github, discord button
+- **Push to talk**: Remove push to talk function
+- **Concurrently**: Implemented concurrently functionality for run frontend and backend, database in one command
+
+## 🧩 How to install
+
+Clone this repo, install the dependencies (all locally), and run the backend first, and frontend:
+
+```bash
+git clone https://github.com/tsguru721/big-agi.git
+cd big-agi
+npm install
+cd client
+npm install
+npm run dev
+```
+
+The development app will be running on
+`http://localhost:3000` for frontend
+`http://localhost:5000` for backend.
+
+Made with Ioannis

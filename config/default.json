@@ -1,0 +1,5 @@
+{
+  "mongoURI": "mongodb://127.0.0.1:27017/chatsonic",
+  "jwtSecret": "secret",
+  "githubToken": "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"
+}
