@@ -18,6 +18,7 @@ It wil help business to save assistant.
 Clone this repo, install the dependencies (all locally), and run the backend first, and frontend:
 
 ```bash
+Node version: 18.16.0
 git clone https://github.com/tsguru721/big-agi.git
 cd big-agi
 npm install
