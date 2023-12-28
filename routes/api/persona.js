@@ -59,6 +59,24 @@ router.post('/create', async (req, res) => {
     }
   });
 });
+router.post('/findByTitle', async (req, res) => {
+  console.log('Req.body', req.body);
+  const {
+    title
+  } = req.body;
+  Persona.find({
+    title: title
+  })
+    .exec((err, persona) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send('Error searching in database');
+      } else {
+        console.log("Search result", persona);
+        res.status(200).json(persona);
+      }
+    });
+});
 
 router.post('/update', async (req, res) => {
   const {
