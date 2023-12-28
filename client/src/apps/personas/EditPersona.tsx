@@ -7,13 +7,78 @@ import ScienceIcon from '@mui/icons-material/Science';
 import WhatshotIcon from '@mui/icons-material/Whatshot';
 
 import { useRouter } from 'next/router';
+import axios from 'axios';
+import { SystemPurposeId } from '../../data';
+
 export function EditPersona() {
+  const [id, setId] = React.useState('');
+  const [title, setTitle] = React.useState('');
+  const [symbol, setSymbol] = React.useState('');
+  const [description, setDescription] = React.useState('');
+  const [prompts, setPrompts] = React.useState('');
   const router = useRouter();
+  const handleTitleChange = (event) => {
+    setTitle(event.target.value);
+    console.log('title:', title);
+  };
+  const handleDescriptionChange = (event) => {
+    setDescription(event.target.value);
+    console.log('description:', description);
+  };
+  const handleSymbolChange = (event) => {
+    setSymbol(event.target.value);
+    console.log('description:', description);
+  };
+  const handlePromptsChange = (event) => {
+    setPrompts(event.target.value);
+    console.log('prompts:', prompts);
+  };
+  const getPersonaByTitle = async (title: string) => {
+    try {
+      const response = await axios.post('http://localhost:3001/api/persona/findByTitle', {
+        title: title
+      });
+      setSymbol(response.data[0].symbol as string);
+      setTitle(response.data[0].title as string);
+      setDescription(response.data[0].description as string);
+      setPrompts(response.data[0].systemMessage as string);
+      setId(response.data[0]._id as string);
+      console.log('Response:', response.data);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+  const navigateToPersonaEdit = (title: SystemPurposeId | null) => {
+    // router.push(`/editPersona/${id}`);
+    router.push({
+      pathname: '/editPersona',
+      query: { id: title }, // Additional query params can be added here
+    });
+  }
+  const updatePersona = async () => {
+    try {
+      const response = await axios.post('http://localhost:3001/api/persona/update', {
+        id: id,
+        title: title,
+        symbol:symbol,
+        description: description,
+        systemMessage: prompts
+      });
+      if(response.data){
+        navigateToPersonaEdit(title as SystemPurposeId);
+      }
+      console.log('Response:', response.data);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
   React.useEffect(() => {
-    const param = router.query.id;
+    const title = router.query.id;
 
     // Do something with the parameter
-    console.log('Query parameter:', param);
+    console.log('Query parameter:', title);
+
+    getPersonaByTitle(title);
   }, [router.query]);
   return (
     <Sheet
@@ -33,25 +98,32 @@ export function EditPersona() {
         <form>
           {' '}
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
+            <Typography>symbol</Typography>
+          </Box>
+          <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
+            <Input fullWidth variant='outlined' placeholder='symbol' value={symbol} onChange={handleSymbolChange} />
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
             <Typography>title</Typography>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
-            <Input required type='url' fullWidth variant='outlined' placeholder='title' />
+            <Input fullWidth variant='outlined' placeholder='title' value={title} onChange={handleTitleChange} />
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
             <Typography>description</Typography>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
-            <Input required type='url' fullWidth variant='outlined' placeholder='title' />
+            <Input fullWidth variant='outlined' placeholder='description' value={description}
+                   onChange={handleDescriptionChange} />
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
             <Typography>prompts</Typography>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
-            <Input required type='url' fullWidth variant='outlined' placeholder='title' />
+            <Input fullWidth variant='outlined' placeholder='prompts' value={prompts} onChange={handlePromptsChange} />
           </Box>
-          <Button className='editPersona' type='submit' variant='solid' sx={{ minWidth: 120 }}>
-            Edit
+          <Button className='editPersona' type='button' variant='solid' sx={{ minWidth: 120 }} onClick={updatePersona}>
+            Update
           </Button>
         </form>
       </Container>
