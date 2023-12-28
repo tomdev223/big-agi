@@ -35,18 +35,16 @@ import { runAssistantUpdatingState } from './editors/chat-stream';
 import { runBrowseUpdatingState } from './editors/browse-load';
 import { runImageGenerationUpdatingState } from './editors/image-generate';
 import { runReActUpdatingState } from './editors/react-tangent';
-
+import type { InferGetStaticPropsType, GetStaticProps } from 'next';
 
 /**
  * Mode: how to treat the input from the Composer
  */
 export type ChatModeId = 'immediate' | 'write-user' | 'react' | 'draw-imagine' | 'draw-imagine-plus';
 
-
 const SPECIAL_ID_WIPE_ALL: DConversationId = 'wipe-chats';
 
 export function AppChat() {
-
   // state
   const [isMessageSelectionMode, setIsMessageSelectionMode] = React.useState(false);
   const [diagramConfig, setDiagramConfig] = React.useState<DiagramConfig | null>(null);
@@ -60,14 +58,8 @@ export function AppChat() {
   // external state
   const { chatLLM } = useChatLLM();
 
-  const {
-    chatPanes,
-    focusedConversationId,
-    navigateHistoryInFocusedPane,
-    openConversationInFocusedPane,
-    openConversationInSplitPane,
-    setFocusedPaneIndex,
-  } = usePanesManager();
+  const { chatPanes, focusedConversationId, navigateHistoryInFocusedPane, openConversationInFocusedPane, openConversationInSplitPane, setFocusedPaneIndex } =
+    usePanesManager();
 
   const {
     title: focusedChatTitle,
@@ -83,27 +75,37 @@ export function AppChat() {
     setMessages,
   } = useConversation(focusedConversationId);
 
-
   // Window actions
 
-  const chatPaneIDs = chatPanes.length > 0 ? chatPanes.map(pane => pane.conversationId) : [null];
+  const chatPaneIDs = chatPanes.length > 0 ? chatPanes.map((pane) => pane.conversationId) : [null];
 
-  const setActivePaneIndex = React.useCallback((idx: number) => {
-    setFocusedPaneIndex(idx);
-  }, [setFocusedPaneIndex]);
+  const setActivePaneIndex = React.useCallback(
+    (idx: number) => {
+      setFocusedPaneIndex(idx);
+    },
+    [setFocusedPaneIndex],
+  );
 
-  const setFocusedConversationId = React.useCallback((conversationId: DConversationId | null) => {
-    conversationId && openConversationInFocusedPane(conversationId);
-  }, [openConversationInFocusedPane]);
+  const setFocusedConversationId = React.useCallback(
+    (conversationId: DConversationId | null) => {
+      conversationId && openConversationInFocusedPane(conversationId);
+    },
+    [openConversationInFocusedPane],
+  );
 
-  const openSplitConversationId = React.useCallback((conversationId: DConversationId | null) => {
-    conversationId && openConversationInSplitPane(conversationId);
-  }, [openConversationInSplitPane]);
+  const openSplitConversationId = React.useCallback(
+    (conversationId: DConversationId | null) => {
+      conversationId && openConversationInSplitPane(conversationId);
+    },
+    [openConversationInSplitPane],
+  );
 
-  const handleNavigateHistory = React.useCallback((direction: 'back' | 'forward') => {
-    if (navigateHistoryInFocusedPane(direction))
-      showNextTitle.current = true;
-  }, [navigateHistoryInFocusedPane]);
+  const handleNavigateHistory = React.useCallback(
+    (direction: 'back' | 'forward') => {
+      if (navigateHistoryInFocusedPane(direction)) showNextTitle.current = true;
+    },
+    [navigateHistoryInFocusedPane],
+  );
 
   React.useEffect(() => {
     if (showNextTitle.current) {
@@ -114,77 +116,81 @@ export function AppChat() {
     }
   }, [focusedChatNumber, focusedChatTitle]);
 
-
   // Execution
 
-  const _handleExecute = React.useCallback(async (chatModeId: ChatModeId, conversationId: DConversationId, history: DMessage[]) => {
-    const { chatLLMId } = useModelsStore.getState();
-    if (!chatModeId || !conversationId || !chatLLMId) return;
+  const _handleExecute = React.useCallback(
+    async (chatModeId: ChatModeId, conversationId: DConversationId, history: DMessage[]) => {
+      const { chatLLMId } = useModelsStore.getState();
+      if (!chatModeId || !conversationId || !chatLLMId) return;
 
-    // "/command ...": overrides the chat mode
-    const lastMessage = history.length > 0 ? history[history.length - 1] : null;
-    if (lastMessage?.role === 'user') {
-      const pieces = extractCommands(lastMessage.text);
-      if (pieces.length == 2 && pieces[0].type === 'cmd' && pieces[1].type === 'text') {
-        const [command, prompt] = [pieces[0].value, pieces[1].value];
-        if (CmdRunProdia.includes(command)) {
-          setMessages(conversationId, history);
-          return await runImageGenerationUpdatingState(conversationId, prompt);
-        }
-        if (CmdRunReact.includes(command) && chatLLMId) {
-          setMessages(conversationId, history);
-          return await runReActUpdatingState(conversationId, prompt, chatLLMId);
-        }
-        if (CmdRunBrowse.includes(command) && prompt?.trim() && useBrowseStore.getState().enableCommandBrowse) {
-          setMessages(conversationId, history);
-          return await runBrowseUpdatingState(conversationId, prompt);
-        }
-        if (CmdAddRoleMessage.includes(command)) {
-          lastMessage.role = command.startsWith('/s') ? 'system' : command.startsWith('/a') ? 'assistant' : 'user';
-          lastMessage.sender = 'Bot';
-          lastMessage.text = prompt;
-          return setMessages(conversationId, history);
-        }
-        if (CmdHelp.includes(command)) {
-          return setMessages(conversationId, [...history, createCommandsHelpMessage()]);
+      // "/command ...": overrides the chat mode
+      const lastMessage = history.length > 0 ? history[history.length - 1] : null;
+      if (lastMessage?.role === 'user') {
+        const pieces = extractCommands(lastMessage.text);
+        if (pieces.length == 2 && pieces[0].type === 'cmd' && pieces[1].type === 'text') {
+          const [command, prompt] = [pieces[0].value, pieces[1].value];
+          if (CmdRunProdia.includes(command)) {
+            setMessages(conversationId, history);
+            return await runImageGenerationUpdatingState(conversationId, prompt);
+          }
+          if (CmdRunReact.includes(command) && chatLLMId) {
+            setMessages(conversationId, history);
+            return await runReActUpdatingState(conversationId, prompt, chatLLMId);
+          }
+          if (CmdRunBrowse.includes(command) && prompt?.trim() && useBrowseStore.getState().enableCommandBrowse) {
+            setMessages(conversationId, history);
+            return await runBrowseUpdatingState(conversationId, prompt);
+          }
+          if (CmdAddRoleMessage.includes(command)) {
+            lastMessage.role = command.startsWith('/s') ? 'system' : command.startsWith('/a') ? 'assistant' : 'user';
+            lastMessage.sender = 'Bot';
+            lastMessage.text = prompt;
+            return setMessages(conversationId, history);
+          }
+          if (CmdHelp.includes(command)) {
+            return setMessages(conversationId, [...history, createCommandsHelpMessage()]);
+          }
         }
       }
-    }
 
-    // synchronous long-duration tasks, which update the state as they go
-    if (chatLLMId && focusedSystemPurposeId) {
-      switch (chatModeId) {
-        case 'immediate':
-          return await runAssistantUpdatingState(conversationId, history, chatLLMId, focusedSystemPurposeId);
-        case 'write-user':
-          return setMessages(conversationId, history);
-        case 'react':
-          if (!lastMessage?.text)
-            break;
-          setMessages(conversationId, history);
-          return await runReActUpdatingState(conversationId, lastMessage.text, chatLLMId);
-        case 'draw-imagine':
-        case 'draw-imagine-plus':
-          if (!lastMessage?.text)
-            break;
-          const imagePrompt = chatModeId == 'draw-imagine-plus'
-            ? await imaginePromptFromText(lastMessage.text) || 'An error sign.'
-            : lastMessage.text;
-          setMessages(conversationId, history.map(message => message.id !== lastMessage.id ? message : {
-            ...message,
-            text: `${CmdRunProdia[0]} ${imagePrompt}`,
-          }));
-          return await runImageGenerationUpdatingState(conversationId, imagePrompt);
+      // synchronous long-duration tasks, which update the state as they go
+      if (chatLLMId && focusedSystemPurposeId) {
+        switch (chatModeId) {
+          case 'immediate':
+            return await runAssistantUpdatingState(conversationId, history, chatLLMId, focusedSystemPurposeId);
+          case 'write-user':
+            return setMessages(conversationId, history);
+          case 'react':
+            if (!lastMessage?.text) break;
+            setMessages(conversationId, history);
+            return await runReActUpdatingState(conversationId, lastMessage.text, chatLLMId);
+          case 'draw-imagine':
+          case 'draw-imagine-plus':
+            if (!lastMessage?.text) break;
+            const imagePrompt = chatModeId == 'draw-imagine-plus' ? (await imaginePromptFromText(lastMessage.text)) || 'An error sign.' : lastMessage.text;
+            setMessages(
+              conversationId,
+              history.map((message) =>
+                message.id !== lastMessage.id
+                  ? message
+                  : {
+                      ...message,
+                      text: `${CmdRunProdia[0]} ${imagePrompt}`,
+                    },
+              ),
+            );
+            return await runImageGenerationUpdatingState(conversationId, imagePrompt);
+        }
       }
-    }
 
-    // ISSUE: if we're here, it means we couldn't do the job, at least sync the history
-    console.log('handleExecuteConversation: issue running', chatModeId, conversationId, lastMessage);
-    setMessages(conversationId, history);
-  }, [focusedSystemPurposeId, setMessages]);
+      // ISSUE: if we're here, it means we couldn't do the job, at least sync the history
+      console.log('handleExecuteConversation: issue running', chatModeId, conversationId, lastMessage);
+      setMessages(conversationId, history);
+    },
+    [focusedSystemPurposeId, setMessages],
+  );
 
   const handleComposerAction = (chatModeId: ChatModeId, conversationId: DConversationId, multiPartMessage: ComposerOutputMultiPart): boolean => {
-
     // validate inputs
     if (multiPartMessage.length !== 1 || multiPartMessage[0].type !== 'text-block') {
       addSnackbar({
@@ -201,14 +207,10 @@ export function AppChat() {
 
     // find conversation
     const conversation = getConversation(conversationId);
-    if (!conversation)
-      return false;
+    if (!conversation) return false;
 
     // start execution (async)
-    void _handleExecute(chatModeId, conversationId, [
-      ...conversation.messages,
-      createDMessage('user', userText),
-    ]);
+    void _handleExecute(chatModeId, conversationId, [...conversation.messages, createDMessage('user', userText)]);
     return true;
   };
 
@@ -219,9 +221,10 @@ export function AppChat() {
     const focusedConversation = getConversation(focusedConversationId);
     if (focusedConversation?.messages?.length) {
       const lastMessage = focusedConversation.messages[focusedConversation.messages.length - 1];
-      return await _handleExecute('immediate', focusedConversation.id, lastMessage.role === 'assistant'
-        ? focusedConversation.messages.slice(0, -1)
-        : [...focusedConversation.messages],
+      return await _handleExecute(
+        'immediate',
+        focusedConversation.id,
+        lastMessage.role === 'assistant' ? focusedConversation.messages.slice(0, -1) : [...focusedConversation.messages],
       );
     }
   }, [focusedConversationId, _handleExecute]);
@@ -230,26 +233,18 @@ export function AppChat() {
 
   const handleTextImaginePlus = async (conversationId: DConversationId, messageText: string) => {
     const conversation = getConversation(conversationId);
-    if (conversation)
-      return await _handleExecute('draw-imagine-plus', conversationId, [
-        ...conversation.messages,
-        createDMessage('user', messageText),
-      ]);
+    if (conversation) return await _handleExecute('draw-imagine-plus', conversationId, [...conversation.messages, createDMessage('user', messageText)]);
   };
 
   const handleTextSpeak = async (text: string) => {
     await speakText(text);
   };
 
-
   // Chat actions
 
   const handleConversationNew = React.useCallback(() => {
     // activate an existing new conversation if present, or create another
-    setFocusedConversationId(newConversationId
-      ? newConversationId
-      : prependNewConversation(focusedSystemPurposeId ?? undefined),
-    );
+    setFocusedConversationId(newConversationId ? newConversationId : prependNewConversation(focusedSystemPurposeId ?? undefined));
     composerTextAreaRef.current?.focus();
   }, [focusedSystemPurposeId, newConversationId, prependNewConversation, setFocusedConversationId]);
 
@@ -257,28 +252,28 @@ export function AppChat() {
 
   const handleConversationExport = (conversationId: DConversationId | null) => setTradeConfig({ dir: 'export', conversationId });
 
-  const handleConversationBranch = React.useCallback((conversationId: DConversationId, messageId: string | null): DConversationId | null => {
-    showNextTitle.current = true;
-    const branchedConversationId = branchConversation(conversationId, messageId);
-    addSnackbar({
-      key: 'branch-conversation',
-      message: 'Branch started.',
-      type: 'success',
-      overrides: {
-        autoHideDuration: 3000,
-        startDecorator: <ForkRightIcon />,
-      },
-    });
-    const branchInAltPanel = useUXLabsStore.getState().labsSplitBranching;
-    if (branchInAltPanel)
-      openSplitConversationId(branchedConversationId);
-    else
-      setFocusedConversationId(branchedConversationId);
-    return branchedConversationId;
-  }, [branchConversation, openSplitConversationId, setFocusedConversationId]);
+  const handleConversationBranch = React.useCallback(
+    (conversationId: DConversationId, messageId: string | null): DConversationId | null => {
+      showNextTitle.current = true;
+      const branchedConversationId = branchConversation(conversationId, messageId);
+      addSnackbar({
+        key: 'branch-conversation',
+        message: 'Branch started.',
+        type: 'success',
+        overrides: {
+          autoHideDuration: 3000,
+          startDecorator: <ForkRightIcon />,
+        },
+      });
+      const branchInAltPanel = useUXLabsStore.getState().labsSplitBranching;
+      if (branchInAltPanel) openSplitConversationId(branchedConversationId);
+      else setFocusedConversationId(branchedConversationId);
+      return branchedConversationId;
+    },
+    [branchConversation, openSplitConversationId, setFocusedConversationId],
+  );
 
   const handleConversationFlatten = (conversationId: DConversationId) => setFlattenConversationId(conversationId);
-
 
   const handleConfirmedClearConversation = React.useCallback(() => {
     if (clearConversationId) {
@@ -289,14 +284,11 @@ export function AppChat() {
 
   const handleConversationClear = (conversationId: DConversationId) => setClearConversationId(conversationId);
 
-
   const handleConfirmedDeleteConversation = () => {
     if (deleteConversationId) {
       let nextConversationId: DConversationId | null;
-      if (deleteConversationId === SPECIAL_ID_WIPE_ALL)
-        nextConversationId = wipeAllConversations(focusedSystemPurposeId ?? undefined);
-      else
-        nextConversationId = deleteConversation(deleteConversationId);
+      if (deleteConversationId === SPECIAL_ID_WIPE_ALL) nextConversationId = wipeAllConversations(focusedSystemPurposeId ?? undefined);
+      else nextConversationId = deleteConversation(deleteConversationId);
       setFocusedConversationId(nextConversationId);
       setDeleteConversationId(null);
     }
@@ -304,13 +296,13 @@ export function AppChat() {
 
   const handleConversationsDeleteAll = () => setDeleteConversationId(SPECIAL_ID_WIPE_ALL);
 
-  const handleConversationDelete = React.useCallback((conversationId: DConversationId, bypassConfirmation: boolean) => {
-    if (bypassConfirmation)
-      setFocusedConversationId(deleteConversation(conversationId));
-    else
-      setDeleteConversationId(conversationId);
-  }, [deleteConversation, setFocusedConversationId]);
-
+  const handleConversationDelete = React.useCallback(
+    (conversationId: DConversationId, bypassConfirmation: boolean) => {
+      if (bypassConfirmation) setFocusedConversationId(deleteConversation(conversationId));
+      else setDeleteConversationId(conversationId);
+    },
+    [deleteConversation, setFocusedConversationId],
+  );
 
   // Shortcuts
 
@@ -320,27 +312,36 @@ export function AppChat() {
     openLayoutLLMOptions(chatLLMId);
   }, []);
 
-  const shortcuts = React.useMemo((): GlobalShortcutItem[] => [
-    ['o', true, true, false, handleOpenChatLlmOptions],
-    ['r', true, true, false, handleMessageRegenerateLast],
-    ['n', true, false, true, handleConversationNew],
-    ['b', true, false, true, () => isFocusedChatEmpty || focusedConversationId && handleConversationBranch(focusedConversationId, null)],
-    ['x', true, false, true, () => isFocusedChatEmpty || focusedConversationId && handleConversationClear(focusedConversationId)],
-    ['d', true, false, true, () => focusedConversationId && handleConversationDelete(focusedConversationId, false)],
-    [ShortcutKeyName.Left, true, false, true, () => handleNavigateHistory('back')],
-    [ShortcutKeyName.Right, true, false, true, () => handleNavigateHistory('forward')],
-  ], [focusedConversationId, handleConversationBranch, handleConversationDelete, handleConversationNew, handleMessageRegenerateLast, handleNavigateHistory, handleOpenChatLlmOptions, isFocusedChatEmpty]);
+  const shortcuts = React.useMemo(
+    (): GlobalShortcutItem[] => [
+      ['o', true, true, false, handleOpenChatLlmOptions],
+      ['r', true, true, false, handleMessageRegenerateLast],
+      ['n', true, false, true, handleConversationNew],
+      ['b', true, false, true, () => isFocusedChatEmpty || (focusedConversationId && handleConversationBranch(focusedConversationId, null))],
+      ['x', true, false, true, () => isFocusedChatEmpty || (focusedConversationId && handleConversationClear(focusedConversationId))],
+      ['d', true, false, true, () => focusedConversationId && handleConversationDelete(focusedConversationId, false)],
+      [ShortcutKeyName.Left, true, false, true, () => handleNavigateHistory('back')],
+      [ShortcutKeyName.Right, true, false, true, () => handleNavigateHistory('forward')],
+    ],
+    [
+      focusedConversationId,
+      handleConversationBranch,
+      handleConversationDelete,
+      handleConversationNew,
+      handleMessageRegenerateLast,
+      handleNavigateHistory,
+      handleOpenChatLlmOptions,
+      isFocusedChatEmpty,
+    ],
+  );
   useGlobalShortcuts(shortcuts);
-
 
   // Pluggable ApplicationBar components
 
-  const centerItems = React.useMemo(() =>
-      <ChatDropdowns conversationId={focusedConversationId} />,
-    [focusedConversationId],
-  );
+  const centerItems = React.useMemo(() => <ChatDropdowns conversationId={focusedConversationId} />, [focusedConversationId]);
 
-  const drawerItems = React.useMemo(() =>
+  const drawerItems = React.useMemo(
+    () => (
       <ChatDrawerItemsMemo
         activeConversationId={focusedConversationId}
         disableNewButton={isFocusedChatEmpty}
@@ -349,11 +350,13 @@ export function AppChat() {
         onConversationImportDialog={handleConversationImportDialog}
         onConversationNew={handleConversationNew}
         onConversationsDeleteAll={handleConversationsDeleteAll}
-      />,
+      />
+    ),
     [focusedConversationId, handleConversationDelete, handleConversationNew, isFocusedChatEmpty, setFocusedConversationId],
   );
 
-  const menuItems = React.useMemo(() =>
+  const menuItems = React.useMemo(
+    () => (
       <ChatMenuItems
         conversationId={focusedConversationId}
         hasConversations={!areChatsEmpty}
@@ -364,114 +367,128 @@ export function AppChat() {
         onConversationClear={handleConversationClear}
         onConversationExport={handleConversationExport}
         onConversationFlatten={handleConversationFlatten}
-      />,
+      />
+    ),
     [areChatsEmpty, focusedConversationId, handleConversationBranch, isFocusedChatEmpty, isMessageSelectionMode],
   );
 
   useLayoutPluggable(centerItems, drawerItems, menuItems);
 
-  return <>
-
-    <Box sx={{
-      flexGrow: 1,
-      display: 'flex', flexDirection: { xs: 'column', md: 'row' },
-      overflow: 'clip',
-    }}>
-
-      {chatPaneIDs.map((_conversationId, idx) => (
-        <Box key={'chat-pane-' + idx} onClick={() => setActivePaneIndex(idx)} sx={{
-          flexGrow: 1, flexBasis: 1,
-          display: 'flex', flexDirection: 'column',
+  return (
+    <>
+      <Box
+        sx={{
+          flexGrow: 1,
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
           overflow: 'clip',
-        }}>
-
-          <ChatMessageList
-            conversationId={_conversationId}
-            chatLLMContextTokens={chatLLM?.contextTokens}
-            isMessageSelectionMode={isMessageSelectionMode}
-            setIsMessageSelectionMode={setIsMessageSelectionMode}
-            onConversationBranch={handleConversationBranch}
-            onConversationExecuteHistory={handleConversationExecuteHistory}
-            onTextDiagram={handleTextDiagram}
-            onTextImagine={handleTextImaginePlus}
-            onTextSpeak={handleTextSpeak}
+        }}
+      >
+        {chatPaneIDs.map((_conversationId, idx) => (
+          <Box
+            key={'chat-pane-' + idx}
+            onClick={() => setActivePaneIndex(idx)}
             sx={{
               flexGrow: 1,
-              backgroundColor: 'background.level1',
-              overflowY: 'auto',
-              minHeight: 96,
-              // outline the current focused pane
-              ...(chatPaneIDs.length < 2 ? {}
-                : (_conversationId === focusedConversationId)
-                  ? {
-                    border: '2px solid',
-                    borderColor: 'primary.solidBg',
-                  } : {
-                    padding: '2px',
-                  }),
+              flexBasis: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              overflow: 'clip',
             }}
-          />
+          >
+            <ChatMessageList
+              conversationId={_conversationId}
+              chatLLMContextTokens={chatLLM?.contextTokens}
+              isMessageSelectionMode={isMessageSelectionMode}
+              setIsMessageSelectionMode={setIsMessageSelectionMode}
+              onConversationBranch={handleConversationBranch}
+              onConversationExecuteHistory={handleConversationExecuteHistory}
+              onTextDiagram={handleTextDiagram}
+              onTextImagine={handleTextImaginePlus}
+              onTextSpeak={handleTextSpeak}
+              sx={{
+                flexGrow: 1,
+                backgroundColor: 'background.level1',
+                overflowY: 'auto',
+                minHeight: 96,
+                // outline the current focused pane
+                ...(chatPaneIDs.length < 2
+                  ? {}
+                  : _conversationId === focusedConversationId
+                    ? {
+                        border: '2px solid',
+                        borderColor: 'primary.solidBg',
+                      }
+                    : {
+                        padding: '2px',
+                      }),
+              }}
+            />
 
-          <Ephemerals
-            conversationId={_conversationId}
-            sx={{
-              // flexGrow: 0.1,
-              flexShrink: 0.5,
-              overflowY: 'auto',
-              minHeight: 64,
-            }} />
+            <Ephemerals
+              conversationId={_conversationId}
+              sx={{
+                // flexGrow: 0.1,
+                flexShrink: 0.5,
+                overflowY: 'auto',
+                minHeight: 64,
+              }}
+            />
+          </Box>
+        ))}
+      </Box>
 
-        </Box>
-      ))}
-    </Box>
-
-    <Composer
-      chatLLM={chatLLM}
-      composerTextAreaRef={composerTextAreaRef}
-      conversationId={focusedConversationId}
-      isDeveloperMode={focusedSystemPurposeId === 'Developer'}
-      onAction={handleComposerAction}
-      sx={{
-        zIndex: 21, // position: 'sticky', bottom: 0,
-        backgroundColor: 'background.surface',
-        borderTop: `1px solid`,
-        borderTopColor: 'divider',
-        p: { xs: 1, md: 2 },
-      }} />
-
-
-    {/* Diagrams */}
-    {!!diagramConfig && <DiagramsModal config={diagramConfig} onClose={() => setDiagramConfig(null)} />}
-
-    {/* Flatten */}
-    {!!flattenConversationId && (
-      <FlattenerModal
-        conversationId={flattenConversationId}
-        onConversationBranch={handleConversationBranch}
-        onClose={() => setFlattenConversationId(null)}
+      <Composer
+        chatLLM={chatLLM}
+        composerTextAreaRef={composerTextAreaRef}
+        conversationId={focusedConversationId}
+        isDeveloperMode={focusedSystemPurposeId === 'Developer'}
+        onAction={handleComposerAction}
+        sx={{
+          zIndex: 21, // position: 'sticky', bottom: 0,
+          backgroundColor: 'background.surface',
+          borderTop: `1px solid`,
+          borderTopColor: 'divider',
+          p: { xs: 1, md: 2 },
+        }}
       />
-    )}
 
-    {/* Import / Export  */}
-    {!!tradeConfig && <TradeModal config={tradeConfig} onConversationActivate={setFocusedConversationId} onClose={() => setTradeConfig(null)} />}
+      {/* Diagrams */}
+      {!!diagramConfig && <DiagramsModal config={diagramConfig} onClose={() => setDiagramConfig(null)} />}
 
+      {/* Flatten */}
+      {!!flattenConversationId && (
+        <FlattenerModal conversationId={flattenConversationId} onConversationBranch={handleConversationBranch} onClose={() => setFlattenConversationId(null)} />
+      )}
 
-    {/* [confirmation] Reset Conversation */}
-    {!!clearConversationId && <ConfirmationModal
-      open onClose={() => setClearConversationId(null)} onPositive={handleConfirmedClearConversation}
-      confirmationText={'Are you sure you want to discard all messages?'} positiveActionText={'Clear conversation'}
-    />}
+      {/* Import / Export  */}
+      {!!tradeConfig && <TradeModal config={tradeConfig} onConversationActivate={setFocusedConversationId} onClose={() => setTradeConfig(null)} />}
 
-    {/* [confirmation] Delete All */}
-    {!!deleteConversationId && <ConfirmationModal
-      open onClose={() => setDeleteConversationId(null)} onPositive={handleConfirmedDeleteConversation}
-      confirmationText={deleteConversationId === SPECIAL_ID_WIPE_ALL
-        ? 'Are you absolutely sure you want to delete ALL conversations? This action cannot be undone.'
-        : 'Are you sure you want to delete this conversation?'}
-      positiveActionText={deleteConversationId === SPECIAL_ID_WIPE_ALL
-        ? 'Yes, delete all'
-        : 'Delete conversation'}
-    />}
+      {/* [confirmation] Reset Conversation */}
+      {!!clearConversationId && (
+        <ConfirmationModal
+          open
+          onClose={() => setClearConversationId(null)}
+          onPositive={handleConfirmedClearConversation}
+          confirmationText={'Are you sure you want to discard all messages?'}
+          positiveActionText={'Clear conversation'}
+        />
+      )}
 
-  </>;
+      {/* [confirmation] Delete All */}
+      {!!deleteConversationId && (
+        <ConfirmationModal
+          open
+          onClose={() => setDeleteConversationId(null)}
+          onPositive={handleConfirmedDeleteConversation}
+          confirmationText={
+            deleteConversationId === SPECIAL_ID_WIPE_ALL
+              ? 'Are you absolutely sure you want to delete ALL conversations? This action cannot be undone.'
+              : 'Are you sure you want to delete this conversation?'
+          }
+          positiveActionText={deleteConversationId === SPECIAL_ID_WIPE_ALL ? 'Yes, delete all' : 'Delete conversation'}
+        />
+      )}
+    </>
+  );
 }
