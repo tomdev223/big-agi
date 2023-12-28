@@ -12,7 +12,7 @@ import { Link } from '~/common/components/Link';
 import { useUIPreferencesStore } from '~/common/state/store-ui';
 import { useUXLabsStore } from '~/common/state/store-ux-labs';
 
-import { SystemPurposeId } from '../../../../data';
+import { SystemPurposeId, SystemPurposes } from '../../../../data';
 import { usePurposeStore } from './store-purposes';
 
 import axios from 'axios';
@@ -20,6 +20,7 @@ import axios from 'axios';
 // the "flex box cannot shrink over wrapped content" issue
 //
 // Absolutely dislike this workaround, but it's the only way I found to make it work
+import { useRouter } from 'next/router';
 
 const bpTileSize = { xs: 116, md: 125, xl: 130 };
 const tileCols = [3, 4, 6];
@@ -39,80 +40,16 @@ const getRandomElement = <T,>(array: T[]): T | undefined => (array.length > 0 ? 
 /**
  * Purpose selector for the current chat. Clicking on any item activates it for the current chat.
  */
+
 export function PersonaSelector(props: { conversationId: DConversationId; runExample: (example: string) => void }) {
-  // state
-  const [searchQuery, setSearchQuery] = React.useState('');
-  const [filteredIDs, setFilteredIDs] = React.useState<SystemPurposeId[] | null>(null);
-  const [editMode, setEditMode] = React.useState(false);
-  const [SystemPurposes, setSystemPurposes] = React.useState({});
-
-  // external state
-  const showFinder = useUIPreferencesStore((state) => state.showPurposeFinder);
-  const labsPersonaYTCreator = useUXLabsStore((state) => state.labsPersonaYTCreator);
-  const { systemPurposeId, setSystemPurposeId } = useChatStore((state) => {
-    const conversation = state.conversations.find((conversation) => conversation.id === props.conversationId);
-    return {
-      systemPurposeId: conversation ? conversation.systemPurposeId : null,
-      setSystemPurposeId: conversation ? state.setSystemPurposeId : null,
-    };
-  }, shallow);
-  const { hiddenPurposeIDs, toggleHiddenPurposeId } = usePurposeStore(
-    (state) => ({ hiddenPurposeIDs: state.hiddenPurposeIDs, toggleHiddenPurposeId: state.toggleHiddenPurposeId }),
-    shallow,
-  );
-
-  // safety check - shouldn't happen
-  if (!systemPurposeId || !setSystemPurposeId) return null;
-
-  const handleSearchClear = () => {
-    setSearchQuery('');
-    setFilteredIDs(null);
-  };
-
-  const handleSearchOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const query = e.target.value;
-    if (!query) return handleSearchClear();
-    setSearchQuery(query);
-
-    // Filter results based on search term
-    const ids = Object.keys(SystemPurposes)
-      .filter((key) => SystemPurposes.hasOwnProperty(key))
-      .filter((key) => {
-        const purpose = SystemPurposes[key as SystemPurposeId];
-        return (
-          purpose.title.toLowerCase().includes(query.toLowerCase()) ||
-          (typeof purpose.description === 'string' && purpose.description.toLowerCase().includes(query.toLowerCase()))
-        );
-      });
-    setFilteredIDs(ids as SystemPurposeId[]);
-
-    // If there's a search term, activate the first item
-    if (ids.length && !ids.includes(systemPurposeId)) handlePurposeChanged(ids[0] as SystemPurposeId);
-  };
-
-  const handleSearchOnKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
-    if (e.key == 'Escape') handleSearchClear();
-  };
-
-  1;
-  const toggleEditMode = () => setEditMode(!editMode);
-
-  const handlePurposeChanged = (purposeId: SystemPurposeId | null) => {
-    if (purposeId) setSystemPurposeId(props.conversationId, purposeId);
-  };
-
-  const handleCustomSystemMessageChange = (v: React.ChangeEvent<HTMLTextAreaElement>): void => {
-    // TODO: persist this change? Right now it's reset every time.
-    //       maybe we shall have a "save" button just save on a state to persist between sessions
-    SystemPurposes['Custom'].systemMessage = v.target.value;
-  };
-
-  // we show them all if the filter is clear (null)
-  const unfilteredPurposeIDs = filteredIDs && showFinder ? filteredIDs : Object.keys(SystemPurposes);
-  const purposeIDs = editMode ? unfilteredPurposeIDs : unfilteredPurposeIDs.filter((id) => !hiddenPurposeIDs.includes(id));
-
-  const selectedPurpose = purposeIDs.length ? SystemPurposes[systemPurposeId] ?? null : null;
-  const selectedExample = (selectedPurpose?.examples && getRandomElement(selectedPurpose.examples)) || null;
+  const router = useRouter();
+  const navigateToPersonaEdit = (id: SystemPurposeId | null) => {
+    // router.push(`/editPersona/${id}`);
+    router.push({
+      pathname: '/editPersona',
+      query: { id: id }, // Additional query params can be added here
+    });
+  }
 
   type OriginalDataType = {
     _id: string;
@@ -165,12 +102,96 @@ export function PersonaSelector(props: { conversationId: DConversationId; runExa
 
     return transformedData;
   }
+  // state
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const [filteredIDs, setFilteredIDs] = React.useState<SystemPurposeId[] | null>(null);
+  const [editMode, setEditMode] = React.useState(false);
+  const [systemPurposes, setSystemPurposes] = React.useState({});
+
+  // external state
+  const showFinder = useUIPreferencesStore((state) => state.showPurposeFinder);
+  const labsPersonaYTCreator = useUXLabsStore((state) => state.labsPersonaYTCreator);
+  const { systemPurposeId, setSystemPurposeId } = useChatStore((state) => {
+    const conversation = state.conversations.find((conversation) => conversation.id === props.conversationId);
+    return {
+      systemPurposeId: conversation ? conversation.systemPurposeId : null,
+      setSystemPurposeId: conversation ? state.setSystemPurposeId : null,
+    };
+  }, shallow);
+  const { hiddenPurposeIDs, toggleHiddenPurposeId } = usePurposeStore(
+    (state) => ({ hiddenPurposeIDs: state.hiddenPurposeIDs, toggleHiddenPurposeId: state.toggleHiddenPurposeId }),
+    shallow,
+  );
+
+  // safety check - shouldn't happen
+  if (!systemPurposeId || !setSystemPurposeId) return null;
+
+  const handleSearchClear = () => {
+    setSearchQuery('');
+    setFilteredIDs(null);
+  };
+
+  const handleSearchOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    if (!query) return handleSearchClear();
+    setSearchQuery(query);
+
+    // Filter results based on search term
+    const ids = Object.keys(systemPurposes)
+      .filter((key) => systemPurposes.hasOwnProperty(key))
+      .filter((key) => {
+        const purpose = systemPurposes[key as SystemPurposeId];
+        return (
+          purpose.title.toLowerCase().includes(query.toLowerCase()) ||
+          (typeof purpose.description === 'string' && purpose.description.toLowerCase().includes(query.toLowerCase()))
+        );
+      });
+    setFilteredIDs(ids as SystemPurposeId[]);
+
+    // If there's a search term, activate the first item
+    if (ids.length && !ids.includes(systemPurposeId)) handlePurposeChanged(ids[0] as SystemPurposeId);
+  };
+
+  const handleSearchOnKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
+    if (e.key == 'Escape') handleSearchClear();
+  };
+
+  1;
+  const toggleEditMode = () => {
+    setEditMode(!editMode);
+    navigateToPersonaEdit(systemPurposeId as SystemPurposeId);
+  };
+
+  const handlePurposeChanged = (purposeId: SystemPurposeId | null) => {
+    console.log("PurposeId",  purposeId)
+    if (purposeId) setSystemPurposeId(props.conversationId, purposeId);
+  };
+
+  const handleCustomSystemMessageChange = (v: React.ChangeEvent<HTMLTextAreaElement>): void => {
+    // TODO: persist this change? Right now it's reset every time.
+    //       maybe we shall have a "save" button just save on a state to persist between sessions
+    systemPurposes['Custom'].systemMessage = v.target.value;
+  };
+
+  // we show them all if the filter is clear (null)
+  const unfilteredPurposeIDs = filteredIDs && showFinder ? filteredIDs : Object.keys(systemPurposes);
+  const purposeIDs = editMode ? unfilteredPurposeIDs : unfilteredPurposeIDs.filter((id) => !hiddenPurposeIDs.includes(id));
+
+  const selectedPurpose = purposeIDs.length ? systemPurposes[systemPurposeId] ?? null : null;
+  const selectedExample = (selectedPurpose?.examples && getRandomElement(selectedPurpose.examples)) || null;
+
+  // Function to transform the original structure into the desired result
+  function transformToResult(data: RequiredDataType): string {
+    return Object.values(data)
+      .map((role) => role.title)
+      .join(' | ');
+  }
   React.useEffect(() => {
     const fetchData = async () => {
       try {
         // Replace with your own URL and data
         const url = 'http://localhost:3001/api/persona';
-        const config = {
+        const config:any = {
           headers: {
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
@@ -182,8 +203,10 @@ export function PersonaSelector(props: { conversationId: DConversationId; runExa
         const requiredData = transformData(originalData);
         setSystemPurposes(requiredData);
 
-        console.log('Required data', SystemPurposes);
-        // console.log('Response:', response);
+        // Usage
+        const result = transformToResult(requiredData);
+        console.log('title sum id', result);
+        console.log('Required data', requiredData);
       } catch (error) {
         console.error('Error during the Axios POST request:', error);
       }
@@ -231,7 +254,7 @@ export function PersonaSelector(props: { conversationId: DConversationId; runExa
               <Grid key={spId}>
                 <Button
                   variant={!editMode && systemPurposeId === spId ? 'solid' : 'soft'}
-                  color={!editMode && systemPurposeId === spId ? 'primary' : SystemPurposes[spId as SystemPurposeId]?.highlighted ? 'warning' : 'neutral'}
+                  color={!editMode && systemPurposeId === spId ? 'primary' : systemPurposes[spId as SystemPurposeId]?.highlighted ? 'warning' : 'neutral'}
                   onClick={() => !editMode && handlePurposeChanged(spId as SystemPurposeId)}
                   sx={{
                     flexDirection: 'column',
@@ -242,7 +265,7 @@ export function PersonaSelector(props: { conversationId: DConversationId; runExa
                     ...(editMode || systemPurposeId !== spId
                       ? {
                           boxShadow: 'md',
-                          ...(SystemPurposes[spId as SystemPurposeId]?.highlighted ? {} : { backgroundColor: 'background.surface' }),
+                          ...(systemPurposes[spId as SystemPurposeId]?.highlighted ? {} : { backgroundColor: 'background.surface' }),
                         }
                       : {}),
                   }}
@@ -255,8 +278,8 @@ export function PersonaSelector(props: { conversationId: DConversationId; runExa
                       sx={{ alignSelf: 'flex-start' }}
                     />
                   )}
-                  <div style={{ fontSize: '2rem' }}>{SystemPurposes[spId as SystemPurposeId]?.symbol}</div>
-                  <div>{SystemPurposes[spId as SystemPurposeId]?.title}</div>
+                  <div style={{ fontSize: '2rem' }}>{systemPurposes[spId as SystemPurposeId]?.symbol}</div>
+                  <div>{systemPurposes[spId as SystemPurposeId]?.title}</div>
                 </Button>
               </Grid>
             ))}
@@ -326,7 +349,7 @@ export function PersonaSelector(props: { conversationId: DConversationId; runExa
               autoFocus
               placeholder={'Craft your custom system message here…'}
               minRows={3}
-              defaultValue={SystemPurposes['Custom']?.systemMessage}
+              defaultValue={systemPurposes['Custom']?.systemMessage}
               onChange={handleCustomSystemMessageChange}
               sx={{
                 backgroundColor: 'background.level1',
