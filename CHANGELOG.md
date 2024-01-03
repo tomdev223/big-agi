@@ -7,12 +7,14 @@ It wil help business to save assistant.
 ### What's New in 1.0.2 · Jan 03, 2024
 
 - **Migration from MongoDB to PostgreSQL**: Built backend with PostgreSQL.
+- **ORM**: TypeORM
+- **Backend language and framework**: Typescript + Express.js
+- **Database**: PostgreSQL
 
 ### What's New in 1.0.1 · Dec 28, 2023
 
 - **Cors error fix**: Fixed cors issue in sending request to backend in localhost.
 - **CRUD for Persona**: Completed CRUD for persona profile
-
 
 ### What's New in 1.0.0 · Dec 21, 2023
 
