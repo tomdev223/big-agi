@@ -92,24 +92,6 @@ export function PersonaSelector(props: { conversationId: DConversationId; runExa
     };
   };
 
-  function transformData(originalData: OriginalDataType[]): RequiredDataType {
-    let transformedData: RequiredDataType = {};
-
-    originalData.forEach((item) => {
-      transformedData[item.title] = {
-        title: item.title,
-        description: item.description,
-        systemMessage: item.systemMessage,
-        symbol: item.symbol,
-        examples: item.examples,
-        call: item.call,
-        voices: item.voices,
-      };
-    });
-
-    return transformedData;
-  }
-
   // state
   const [searchQuery, setSearchQuery] = React.useState('');
   const [filteredIDs, setFilteredIDs] = React.useState<SystemPurposeId[] | null>(null);
@@ -191,14 +173,30 @@ export function PersonaSelector(props: { conversationId: DConversationId; runExa
   const selectedPurpose = purposeIDs.length ? systemPurposes[systemPurposeId] ?? null : null;
   const selectedExample = (selectedPurpose?.examples && getRandomElement(selectedPurpose.examples)) || null;
 
-  // Function to transform the original structure into the desired result
-  function transformToResult(data: RequiredDataType): string {
-    return Object.values(data)
-      .map((role) => role.title)
-      .join(' | ');
-  }
-
   React.useEffect(() => {
+    function transformData(originalData: OriginalDataType[]): RequiredDataType {
+      let transformedData: RequiredDataType = {};
+
+      originalData.forEach((item) => {
+        transformedData[item.title] = {
+          title: item.title,
+          description: item.description,
+          systemMessage: item.systemMessage,
+          symbol: item.symbol,
+          examples: item.examples,
+          call: item.call,
+          voices: item.voices,
+        };
+      });
+
+      return transformedData;
+    }
+    // Function to transform the original structure into the desired result
+    function transformToResult(data: RequiredDataType): string {
+      return Object.values(data)
+        .map((role) => role.title)
+        .join(' | ');
+    }
     const fetchData = async () => {
       try {
         // Replace with your own URL and data
