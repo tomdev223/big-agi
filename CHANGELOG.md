@@ -4,6 +4,10 @@ Welcome to big-AGI upgraded version.
 We customized BIG-AGI for AI-Seller project.
 It wil help business to save assistant.
 
+### What's New in 1.0.2 · Jan 03, 2024
+
+- **Migration from MongoDB to PostgreSQL**: Built backend with PostgreSQL.
+
 ### What's New in 1.0.1 · Dec 28, 2023
 
 - **Cors error fix**: Fixed cors issue in sending request to backend in localhost.
