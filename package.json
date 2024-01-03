@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server",
-    "server": "nodemon server",
+    "server": "npm run dev --prefix backend-postgresql",
     "client": "npm run dev --prefix client",
     "live": "concurrently \"mongod --dbpath db --port 27017\" \"npm run server\" \"npm run client\"",
     "dev": "concurrently  \"npm run server\" \"npm run client\"",
