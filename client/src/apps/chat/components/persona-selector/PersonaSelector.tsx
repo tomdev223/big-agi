@@ -30,12 +30,12 @@ const bpMaxWidth = Object.entries(bpTileSize).reduce(
     acc[key] = tileCols[index] * (value + 8 * tileSpacing) - 8 * tileSpacing;
     return acc;
   },
-  {} as Record<string, number>
+  {} as Record<string, number>,
 );
 const bpTileGap = { xs: 0.5, md: 1 };
 
 // Add this utility function to get a random array element
-const getRandomElement = <T, >(array: T[]): T | undefined => (array.length > 0 ? array[Math.floor(Math.random() * array.length)] : undefined);
+const getRandomElement = <T,>(array: T[]): T | undefined => (array.length > 0 ? array[Math.floor(Math.random() * array.length)] : undefined);
 
 /**
  * Purpose selector for the current chat. Clicking on any item activates it for the current chat.
@@ -47,13 +47,13 @@ export function PersonaSelector(props: { conversationId: DConversationId; runExa
     // router.push(`/editPersona/${id}`);
     router.push({
       pathname: '/editPersona',
-      query: { id: id } // Additional query params can be added here
+      query: { id: id }, // Additional query params can be added here
     });
   };
   const goToCreate = () => {
     // router.push(`/createPersona`);
     router.push({
-      pathname: '/createPersona'
+      pathname: '/createPersona',
     });
   };
 
@@ -103,7 +103,7 @@ export function PersonaSelector(props: { conversationId: DConversationId; runExa
         symbol: item.symbol,
         examples: item.examples,
         call: item.call,
-        voices: item.voices
+        voices: item.voices,
       };
     });
 
@@ -123,12 +123,12 @@ export function PersonaSelector(props: { conversationId: DConversationId; runExa
     const conversation = state.conversations.find((conversation) => conversation.id === props.conversationId);
     return {
       systemPurposeId: conversation ? conversation.systemPurposeId : null,
-      setSystemPurposeId: conversation ? state.setSystemPurposeId : null
+      setSystemPurposeId: conversation ? state.setSystemPurposeId : null,
     };
   }, shallow);
   const { hiddenPurposeIDs, toggleHiddenPurposeId } = usePurposeStore(
     (state) => ({ hiddenPurposeIDs: state.hiddenPurposeIDs, toggleHiddenPurposeId: state.toggleHiddenPurposeId }),
-    shallow
+    shallow,
   );
 
   // safety check - shouldn't happen
@@ -206,8 +206,8 @@ export function PersonaSelector(props: { conversationId: DConversationId; runExa
         const config: any = {
           headers: {
             'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
-          }
+            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+          },
         };
         const response = await axios.get(url, config);
 
@@ -231,41 +231,44 @@ export function PersonaSelector(props: { conversationId: DConversationId; runExa
         <Box sx={{ p: 2 * tileSpacing }}>
           <Input
             fullWidth
-            variant='outlined'
-            color='neutral'
+            variant="outlined"
+            color="neutral"
             value={searchQuery}
             onChange={handleSearchOnChange}
             onKeyDown={handleSearchOnKeyDown}
-            placeholder='Search for purpose…'
+            placeholder="Search for purpose…"
             startDecorator={<SearchIcon />}
             endDecorator={
               searchQuery && (
-                <IconButton variant='plain' color='neutral' onClick={handleSearchClear}>
+                <IconButton variant="plain" color="neutral" onClick={handleSearchClear}>
                   <ClearIcon />
                 </IconButton>
               )
             }
             sx={{
-              boxShadow: 'sm'
+              boxShadow: 'sm',
             }}
           />
         </Box>
       )}
 
-      <Stack direction='column' sx={{ minHeight: '60vh', justifyContent: 'center', alignItems: 'center' }}>
+      <Stack direction="column" sx={{ minHeight: '60vh', justifyContent: 'center', alignItems: 'center' }}>
         <Box sx={{ maxWidth: bpMaxWidth }}>
-          <Box sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'baseline',
-            justifyContent: 'space-between',
-            gap: 2,
-            mb: 1
-          }}>
-            <Typography level='title-sm'>AI Persona</Typography>
-            <Button variant='plain' color='neutral' size='sm' onClick={redirectToCreate}>Create
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'baseline',
+              justifyContent: 'space-between',
+              gap: 2,
+              mb: 1,
+            }}
+          >
+            <Typography level="title-sm">AI Persona</Typography>
+            <Button variant="plain" color="neutral" size="sm" onClick={redirectToCreate}>
+              Create
             </Button>
-            <Button variant='plain' color='neutral' size='sm' onClick={toggleEditMode}>
+            <Button variant="plain" color="neutral" size="sm" onClick={toggleEditMode}>
               {editMode ? 'Done' : 'Edit'}
             </Button>
           </Box>
@@ -285,15 +288,15 @@ export function PersonaSelector(props: { conversationId: DConversationId; runExa
                     width: bpTileSize,
                     ...(editMode || systemPurposeId !== spId
                       ? {
-                        boxShadow: 'md',
-                        ...(systemPurposes[spId as SystemPurposeId]?.highlighted ? {} : { backgroundColor: 'background.surface' })
-                      }
-                      : {})
+                          boxShadow: 'md',
+                          ...(systemPurposes[spId as SystemPurposeId]?.highlighted ? {} : { backgroundColor: 'background.surface' }),
+                        }
+                      : {}),
                   }}
                 >
                   {editMode && (
                     <Checkbox
-                      label={<Typography level='body-sm'>show</Typography>}
+                      label={<Typography level="body-sm">show</Typography>}
                       checked={!hiddenPurposeIDs.includes(spId)}
                       onChange={() => toggleHiddenPurposeId(spId)}
                       sx={{ alignSelf: 'flex-start' }}
@@ -308,11 +311,11 @@ export function PersonaSelector(props: { conversationId: DConversationId; runExa
             {labsPersonaYTCreator && (
               <Grid>
                 <Button
-                  variant='soft'
-                  color='neutral'
+                  variant="soft"
+                  color="neutral"
                   component={Link}
                   noLinkStyle
-                  href='/personas'
+                  href="/personas"
                   sx={{
                     '--Icon-fontSize': '2rem',
                     flexDirection: 'column',
@@ -322,7 +325,7 @@ export function PersonaSelector(props: { conversationId: DConversationId; runExa
                     width: bpTileSize,
                     border: `1px dashed`,
                     boxShadow: 'md',
-                    backgroundColor: 'background.surface'
+                    backgroundColor: 'background.surface',
                   }}
                 >
                   <div>
@@ -334,14 +337,14 @@ export function PersonaSelector(props: { conversationId: DConversationId; runExa
             )}
           </Grid>
           <Typography
-            level='body-sm'
+            level="body-sm"
             sx={{
               mt: selectedExample ? 1 : 3,
               display: 'flex',
               alignItems: 'center',
               gap: 1,
               // justifyContent: 'center',
-              '&:hover > button': { opacity: 1 }
+              '&:hover > button': { opacity: 1 },
             }}
           >
             {!selectedPurpose ? (
@@ -350,9 +353,9 @@ export function PersonaSelector(props: { conversationId: DConversationId; runExa
               <>
                 Example: {selectedExample}
                 <IconButton
-                  variant='plain'
-                  color='primary'
-                  size='md'
+                  variant="plain"
+                  color="primary"
+                  size="md"
                   onClick={() => props.runExample(selectedExample)}
                   sx={{ opacity: 0, transition: 'opacity 0.3s' }}
                 >
@@ -366,7 +369,7 @@ export function PersonaSelector(props: { conversationId: DConversationId; runExa
 
           {systemPurposeId === 'Custom' && (
             <Textarea
-              variant='outlined'
+              variant="outlined"
               autoFocus
               placeholder={'Craft your custom system message here…'}
               minRows={3}
@@ -375,10 +378,10 @@ export function PersonaSelector(props: { conversationId: DConversationId; runExa
               sx={{
                 backgroundColor: 'background.level1',
                 '&:focus-within': {
-                  backgroundColor: 'background.popup'
+                  backgroundColor: 'background.popup',
                 },
                 lineHeight: 1.75,
-                mt: 1
+                mt: 1,
               }}
             />
           )}

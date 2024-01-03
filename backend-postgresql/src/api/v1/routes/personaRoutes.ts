@@ -14,7 +14,7 @@ import {
 
 const router = express.Router();
 
-// router.get('/', getPersonas);
+router.get('/', getPersonas);
 
 router.get('/:personaId', getPersona);
 
