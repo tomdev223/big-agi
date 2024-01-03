@@ -8,7 +8,7 @@
  */
 export const Brand = {
   Title: {
-    Base: 'big-AGI',
+    Base: 'AI SELLER - VIRTUAL TRAINING',
     Common: 'Lamassu A.I. Seller',
     // Common: (process.env.NODE_ENV === 'development' ? '[DEV] ' : '') + 'Lamassu A.I. Seller',
   },
