@@ -38,16 +38,16 @@ export function CreatePersona() {
       pathname: '/editPersona',
       query: { id: title }, // Additional query params can be added here
     });
-  }
+  };
   const createPersona = async () => {
     try {
-      const response = await axios.post('http://localhost:3001/api/persona/create', {
+      const response = await axios.post('http://3.13.141.173:3001/api/persona/create', {
         title: title,
-        symbol:symbol,
+        symbol: symbol,
         description: description,
-        systemMessage: prompts
+        systemMessage: prompts,
       });
-      if(response.data){
+      if (response.data) {
         navigateToPersonaEdit(title as SystemPurposeId);
       }
       console.log('Response:', response.data);
@@ -61,11 +61,11 @@ export function CreatePersona() {
         flexGrow: 1,
         overflowY: 'auto',
         backgroundColor: 'background.level1',
-        p: { xs: 3, md: 6 }
+        p: { xs: 3, md: 6 },
       }}
     >
-      <Container disableGutters maxWidth='md' sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-        <Typography level='title-lg' sx={{ textAlign: 'center' }}>
+      <Container disableGutters maxWidth="md" sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+        <Typography level="title-lg" sx={{ textAlign: 'center' }}>
           Edit Persona Profile
         </Typography>
 
@@ -76,28 +76,27 @@ export function CreatePersona() {
             <Typography>symbol</Typography>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
-            <Input fullWidth variant='outlined' placeholder='symbol' value={symbol} onChange={handleSymbolChange} />
+            <Input fullWidth variant="outlined" placeholder="symbol" value={symbol} onChange={handleSymbolChange} />
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
             <Typography>title</Typography>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
-            <Input fullWidth variant='outlined' placeholder='title' value={title} onChange={handleTitleChange} />
+            <Input fullWidth variant="outlined" placeholder="title" value={title} onChange={handleTitleChange} />
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
             <Typography>description</Typography>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
-            <Input fullWidth variant='outlined' placeholder='description' value={description}
-                   onChange={handleDescriptionChange} />
+            <Input fullWidth variant="outlined" placeholder="description" value={description} onChange={handleDescriptionChange} />
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
             <Typography>prompts</Typography>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
-            <Input fullWidth variant='outlined' placeholder='prompts' value={prompts} onChange={handlePromptsChange} />
+            <Input fullWidth variant="outlined" placeholder="prompts" value={prompts} onChange={handlePromptsChange} />
           </Box>
-          <Button className='editPersona' type='button' variant='solid' sx={{ minWidth: 120 }} onClick={createPersona}>
+          <Button className="editPersona" type="button" variant="solid" sx={{ minWidth: 120 }} onClick={createPersona}>
             Create
           </Button>
         </form>

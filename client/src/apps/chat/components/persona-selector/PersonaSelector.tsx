@@ -200,7 +200,7 @@ export function PersonaSelector(props: { conversationId: DConversationId; runExa
     const fetchData = async () => {
       try {
         // Replace with your own URL and data
-        const url = 'http://localhost:3001/api/persona';
+        const url = 'http://3.13.141.173:3001/api/persona';
         const config: any = {
           headers: {
             'Access-Control-Allow-Origin': '*',
