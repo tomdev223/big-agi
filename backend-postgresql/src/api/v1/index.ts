@@ -28,7 +28,7 @@ const initializeApp = () => {
   app.use(
     cors({
       credentials: true,
-      origin: [`http://${SERVER_HOST}:${CLIENT_PORT}`],
+      origin: [`http://3.13.141.173:3000`],
     }),
   );
 
