@@ -79,7 +79,7 @@ export function EditPersona() {
     console.log('Query parameter:', title);
 
     getPersonaByTitle(title);
-  }, [router.query]);
+  }, [router.query, title, symbol, description]);
   return (
     <Sheet
       sx={{
