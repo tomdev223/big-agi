@@ -1,5 +1,9 @@
 # dependencies
 /client/node_modules
+/backend-postgresql/node_modules
+/backend-postgresql/build
+/backend-postgresql/.idea
+/backend-postgresql/.vscode
 /node_modules
 /.pnp
 .pnp.js
