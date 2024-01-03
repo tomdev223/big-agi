@@ -98,7 +98,7 @@ export function EditPersona() {
         <form>
           {' '}
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
-            <Typography>symbol</Typography>
+            <Typography>Avatar Image Url</Typography>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
             <Input fullWidth variant="outlined" placeholder="symbol" value={symbol} onChange={handleSymbolChange} />
