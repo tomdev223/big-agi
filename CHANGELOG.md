@@ -40,12 +40,12 @@ It wil help business to save assistant.
 Clone this repo, install the dependencies (all locally), and run the backend first, and frontend:
 
 ```bash
-Node version: 18.16.0
+Node version: 20.10.0
 git clone https://github.com/webmaster223/big-agi.git
 cd big-agi/client
-npm install
+yarn install
 cd big-agi/backend-postgresql
-npm install
+yarn install
 npm run dev
 ```
 
