@@ -28,7 +28,7 @@ export function EditPersona() {
   };
   const handleSymbolChange = (event: any) => {
     setSymbol(event.target.value);
-    console.log('description:', description);
+    console.log('symbol:', symbol);
   };
   const handlePromptsChange = (event: any) => {
     setPrompts(event.target.value);
@@ -36,15 +36,17 @@ export function EditPersona() {
   };
   const getPersonaByTitle = async (title: string) => {
     try {
-      const response = await axios.post(`http://${SERVER_HOST}:${SERVER_PORT}/api/persona/findByTitle`, {
+      const response = await axios.post(`http://${NEXT_PUBLIC_SERVER_HOST}:${NEXT_PUBLIC_SERVER_PORT}/api/persona/findByTitle`, {
         title: title,
       });
-      setSymbol(response.data[0].symbol as string);
-      setTitle(response.data[0].title as string);
-      setDescription(response.data[0].description as string);
-      setPrompts(response.data[0].systemMessage as string);
-      setId(response.data[0]._id as string);
       console.log('Response:', response.data);
+      if (response.data[0]) {
+        setSymbol(response.data[0].symbol);
+        setTitle(response.data[0].title);
+        setDescription(response.data[0].description);
+        setPrompts(response.data[0].systemMessage);
+        setId(response.data[0]._id);
+      }
     } catch (error) {
       console.error('Error:', error);
     }
@@ -58,7 +60,7 @@ export function EditPersona() {
   };
   const updatePersona = async () => {
     try {
-      const response = await axios.post(`http://${SERVER_HOST}:${SERVER_PORT}/api/persona/update`, {
+      const response = await axios.post(`http://${NEXT_PUBLIC_SERVER_HOST}:${NEXT_PUBLIC_SERVER_PORT}/api/persona/update`, {
         id: id,
         title: title,
         symbol: symbol,
@@ -76,11 +78,8 @@ export function EditPersona() {
   React.useEffect(() => {
     const title = router.query.id;
 
-    // Do something with the parameter
-    console.log('Query parameter:', title);
-
     getPersonaByTitle(title as string);
-  }, [router.query, title, symbol, description]);
+  }, [router.query]);
   return (
     <Sheet
       sx={{
