@@ -1,3 +1,4 @@
+import { NEXT_PUBLIC_SERVER_PORT, NEXT_PUBLIC_SERVER_HOST, NEXT_PUBLIC_CLIENT_PORT } from '../../constants';
 import * as React from 'react';
 
 import { Box, Input, Button, Container, ListDivider, Sheet, Typography, IconButton } from '@mui/joy';
@@ -17,25 +18,25 @@ export function EditPersona() {
   const [description, setDescription] = React.useState('');
   const [prompts, setPrompts] = React.useState('');
   const router = useRouter();
-  const handleTitleChange = (event) => {
+  const handleTitleChange = (event: any) => {
     setTitle(event.target.value);
     console.log('title:', title);
   };
-  const handleDescriptionChange = (event) => {
+  const handleDescriptionChange = (event: any) => {
     setDescription(event.target.value);
     console.log('description:', description);
   };
-  const handleSymbolChange = (event) => {
+  const handleSymbolChange = (event: any) => {
     setSymbol(event.target.value);
     console.log('description:', description);
   };
-  const handlePromptsChange = (event) => {
+  const handlePromptsChange = (event: any) => {
     setPrompts(event.target.value);
     console.log('prompts:', prompts);
   };
   const getPersonaByTitle = async (title: string) => {
     try {
-      const response = await axios.post('http://3.13.141.173:3001/api/persona/findByTitle', {
+      const response = await axios.post(`http://${SERVER_HOST}:${SERVER_PORT}/api/persona/findByTitle`, {
         title: title,
       });
       setSymbol(response.data[0].symbol as string);
@@ -57,7 +58,7 @@ export function EditPersona() {
   };
   const updatePersona = async () => {
     try {
-      const response = await axios.post('http://3.13.141.173:3001/api/persona/update', {
+      const response = await axios.post(`http://${SERVER_HOST}:${SERVER_PORT}/api/persona/update`, {
         id: id,
         title: title,
         symbol: symbol,
@@ -78,7 +79,7 @@ export function EditPersona() {
     // Do something with the parameter
     console.log('Query parameter:', title);
 
-    getPersonaByTitle(title);
+    getPersonaByTitle(title as string);
   }, [router.query, title, symbol, description]);
   return (
     <Sheet

@@ -1,3 +1,4 @@
+import { NEXT_PUBLIC_SERVER_PORT, NEXT_PUBLIC_SERVER_HOST, NEXT_PUBLIC_CLIENT_PORT } from '../../constants';
 import * as React from 'react';
 
 import { Box, Input, Button, Container, ListDivider, Sheet, Typography, IconButton } from '@mui/joy';
@@ -16,19 +17,19 @@ export function CreatePersona() {
   const [description, setDescription] = React.useState('');
   const [prompts, setPrompts] = React.useState('');
   const router = useRouter();
-  const handleTitleChange = (event) => {
+  const handleTitleChange = (event: any) => {
     setTitle(event.target.value);
     console.log('title:', title);
   };
-  const handleDescriptionChange = (event) => {
+  const handleDescriptionChange = (event: any) => {
     setDescription(event.target.value);
     console.log('description:', description);
   };
-  const handleSymbolChange = (event) => {
+  const handleSymbolChange = (event: any) => {
     setSymbol(event.target.value);
     console.log('description:', description);
   };
-  const handlePromptsChange = (event) => {
+  const handlePromptsChange = (event: any) => {
     setPrompts(event.target.value);
     console.log('prompts:', prompts);
   };
@@ -41,7 +42,7 @@ export function CreatePersona() {
   };
   const createPersona = async () => {
     try {
-      const response = await axios.post('http://3.13.141.173:3001/api/persona/create', {
+      const response = await axios.post(`http://${NEXT_PUBLIC_SERVER_HOST}:${NEXT_PUBLIC_SERVER_PORT}/api/persona/create`, {
         title: title,
         symbol: symbol,
         description: description,

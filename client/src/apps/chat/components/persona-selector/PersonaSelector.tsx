@@ -1,3 +1,4 @@
+import { NEXT_PUBLIC_SERVER_PORT, NEXT_PUBLIC_SERVER_HOST, NEXT_PUBLIC_CLIENT_PORT } from '../../../../constants';
 import * as React from 'react';
 import { shallow } from 'zustand/shallow';
 
@@ -199,8 +200,9 @@ export function PersonaSelector(props: { conversationId: DConversationId; runExa
     }
     const fetchData = async () => {
       try {
+        console.log('Server host', NEXT_PUBLIC_SERVER_HOST);
         // Replace with your own URL and data
-        const url = 'http://3.13.141.173:3001/api/persona';
+        const url = `http://${NEXT_PUBLIC_SERVER_HOST}:${NEXT_PUBLIC_SERVER_PORT}/api/persona`;
         const config: any = {
           headers: {
             'Access-Control-Allow-Origin': '*',
