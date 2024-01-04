@@ -307,34 +307,6 @@ export function PersonaSelector(props: { conversationId: DConversationId; runExa
                 </Button>
               </Grid>
             ))}
-            {/* Button to start the YouTube persona creator */}
-            {labsPersonaYTCreator && (
-              <Grid>
-                <Button
-                  variant="soft"
-                  color="neutral"
-                  component={Link}
-                  noLinkStyle
-                  href="/personas"
-                  sx={{
-                    '--Icon-fontSize': '2rem',
-                    flexDirection: 'column',
-                    fontWeight: 500,
-                    // gap: bpTileGap,
-                    height: bpTileSize,
-                    width: bpTileSize,
-                    border: `1px dashed`,
-                    boxShadow: 'md',
-                    backgroundColor: 'background.surface',
-                  }}
-                >
-                  <div>
-                    <ScienceIcon />
-                  </div>
-                  <div>YouTube persona creator</div>
-                </Button>
-              </Grid>
-            )}
           </Grid>
           <Typography
             level="body-sm"
