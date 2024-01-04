@@ -102,25 +102,25 @@ export function EditPersona() {
             <Typography>Avatar Image Url</Typography>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
-            <Input fullWidth variant="outlined" placeholder="symbol" value={symbol} onChange={handleSymbolChange} />
+            <Input fullWidth variant="outlined" placeholder="Symbol" value={symbol} onChange={handleSymbolChange} />
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
             <Typography>title</Typography>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
-            <Input fullWidth variant="outlined" placeholder="title" value={title} onChange={handleTitleChange} />
+            <Input fullWidth variant="outlined" placeholder="Title" value={title} onChange={handleTitleChange} />
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
             <Typography>description</Typography>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
-            <Input fullWidth variant="outlined" placeholder="description" value={description} onChange={handleDescriptionChange} />
+            <Input fullWidth variant="outlined" placeholder="Description" value={description} onChange={handleDescriptionChange} />
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
             <Typography>prompts</Typography>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
-            <Input fullWidth variant="outlined" placeholder="prompts" value={prompts} onChange={handlePromptsChange} />
+            <Input fullWidth variant="outlined" placeholder="Prompts" value={prompts} onChange={handlePromptsChange} />
           </Box>
           <Button className="editPersona" type="button" variant="solid" sx={{ minWidth: 120 }} onClick={updatePersona}>
             Update

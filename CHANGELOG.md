@@ -4,6 +4,15 @@ Welcome to big-AGI upgraded version.
 We customized BIG-AGI for AI-Seller project.
 It wil help business to save assistant.
 
+### What's New in 1.0.3 · Jan 04, 2024
+
+- **Concurrently**: Concurrently for development environment to run both backend and frontend in one terminal
+- **PersonaSelector**: Persona selector's function position fix
+- **Label modification**: Modified label of avatar upload form
+- **Constant**: Setup constants for server url and port
+- **Mongodb ignore**: Moved backend-mongodb to one folder
+- **Place holder uppercase**: Place holder text 's first letter to uppercase
+
 ### What's New in 1.0.2 · Jan 03, 2024
 
 - **Migration from MongoDB to PostgreSQL**: Built backend with PostgreSQL.
