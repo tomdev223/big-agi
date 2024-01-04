@@ -28,7 +28,7 @@ const initializeApp = () => {
   app.use(
     cors({
       credentials: true,
-      origin: [`*`],
+      origin: '*',
     }),
   );
 
