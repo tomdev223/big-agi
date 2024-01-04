@@ -4,7 +4,6 @@
   "description": "Social network for developers",
   "main": "server.js",
   "scripts": {
-    "start": "node server",
     "server": "npm run dev --prefix backend-postgresql",
     "client": "npm run dev --prefix client",
     "live": "concurrently \"mongod --dbpath db --port 27017\" \"npm run server\" \"npm run client\"",
