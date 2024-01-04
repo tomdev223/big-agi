@@ -41,16 +41,16 @@ Clone this repo, install the dependencies (all locally), and run the backend fir
 
 ```bash
 Node version: 18.16.0
-git clone https://github.com/tsguru721/big-agi.git
-cd big-agi
+git clone https://github.com/webmaster223/big-agi.git
+cd big-agi/client
 npm install
-cd client
+cd big-agi/backend-postgresql
 npm install
 npm run dev
 ```
 
 The development app will be running on
 `http://localhost:3000` for frontend
-`http://localhost:3001` for backend.
+`http://localhost:3001` for backend
 
 Made with Ioannis
