@@ -33,11 +33,10 @@ export function CreatePersona() {
     setPrompts(event.target.value);
     console.log('prompts:', prompts);
   };
-  const navigateToPersonaEdit = (title: SystemPurposeId | null) => {
+  const navigateToDashboard = () => {
     // router.push(`/editPersona/${id}`);
     router.push({
-      pathname: '/editPersona',
-      query: { id: title }, // Additional query params can be added here
+      pathname: '/',
     });
   };
   const createPersona = async () => {
@@ -49,7 +48,7 @@ export function CreatePersona() {
         systemMessage: prompts,
       });
       if (response.data) {
-        navigateToPersonaEdit(title as SystemPurposeId);
+        navigateToDashboard();
       }
       console.log('Response:', response.data);
     } catch (error) {

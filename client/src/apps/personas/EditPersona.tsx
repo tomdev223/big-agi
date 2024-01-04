@@ -40,12 +40,12 @@ export function EditPersona() {
         title: title,
       });
       console.log('Response:', response.data);
-      if (response.data[0]) {
-        setSymbol(response.data[0].symbol);
-        setTitle(response.data[0].title);
-        setDescription(response.data[0].description);
-        setPrompts(response.data[0].systemMessage);
-        setId(response.data[0]._id);
+      if (response.data) {
+        setSymbol(response.data.symbol);
+        setTitle(response.data.title);
+        setDescription(response.data.description);
+        setPrompts(response.data.systemMessage);
+        setId(response.data._id);
       }
     } catch (error) {
       console.error('Error:', error);
