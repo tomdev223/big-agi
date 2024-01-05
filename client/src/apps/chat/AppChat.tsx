@@ -93,7 +93,7 @@ export function AppChat() {
   const showNextTitle = React.useRef(false);
   const composerTextAreaRef = React.useRef<HTMLTextAreaElement>(null);
 
-  const [systemPurposes, setSystemPurposes] = React.useState<RequiredDataType[] | {}>({});
+  const [systemPurposes, setSystemPurposes] = React.useState<RequiredDataType>({});
   // external state
   const { chatLLM } = useChatLLM();
 

@@ -55,7 +55,7 @@ type RequiredDataType = {
  * A list of ChatMessages
  */
 export function ChatMessageList(props: {
-  systemPurposes:RequiredDataType[] | {};
+  systemPurposes:RequiredDataType;
   conversationId: DConversationId | null;
   chatLLMContextTokens?: number;
   isMessageSelectionMode: boolean;

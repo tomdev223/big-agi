@@ -74,6 +74,7 @@ type RequiredDataType = {
         voiceId: string;
       };
     };
+    highlighted?: boolean; // Add this line
   };
 };
 export function PersonaSelector(props: { systemPurposes: RequiredDataType, conversationId: DConversationId; runExample: (example: string) => void }) {
@@ -131,7 +132,7 @@ export function PersonaSelector(props: { systemPurposes: RequiredDataType, conve
     const ids = Object.keys(props.systemPurposes)
       .filter((key) => props.systemPurposes?.hasOwnProperty(key))
       .filter((key) => {
-        const purpose = props.systemPurposes ?? [key as SystemPurposeId];
+        const purpose = props.systemPurposes [key as SystemPurposeId];
         return (
           purpose.title.toLowerCase().includes(query.toLowerCase()) ||
           (typeof purpose.description === 'string' && purpose.description.toLowerCase().includes(query.toLowerCase()))
@@ -277,7 +278,7 @@ export function PersonaSelector(props: { systemPurposes: RequiredDataType, conve
               <Grid key={spId}>
                 <Button
                   variant={!editMode && systemPurposeId === spId ? 'solid' : 'soft'}
-                  color={!editMode && systemPurposeId === spId ? 'primary' : props.systemPurposes[spId as SystemPurposeId]?.highlighted ? 'warning' : 'neutral'}
+                  color={!editMode && systemPurposeId === spId ? 'primary' : props.systemPurposes[spId as SystemPurposeId].highlighted ? 'warning' : 'neutral'}
                   onClick={() => !editMode && handlePurposeChanged(spId as SystemPurposeId)}
                   sx={{
                     flexDirection: 'column',
