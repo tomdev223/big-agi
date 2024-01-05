@@ -1,4 +1,4 @@
-import { NEXT_PUBLIC_SERVER_PORT, NEXT_PUBLIC_SERVER_HOST, NEXT_PUBLIC_CLIENT_PORT } from '../../constants';
+import { NEXT_PUBLIC_PROTOCOL, NEXT_PUBLIC_SERVER_PORT, NEXT_PUBLIC_SERVER_HOST, NEXT_PUBLIC_CLIENT_PORT } from '../../constants';
 import * as React from 'react';
 
 import { Box, Input, Button, Container, ListDivider, Sheet, Typography, IconButton } from '@mui/joy';
@@ -36,7 +36,7 @@ export function EditPersona() {
   };
   const getPersonaByTitle = async (title: string) => {
     try {
-      const response = await axios.post(`http://${NEXT_PUBLIC_SERVER_HOST}:${NEXT_PUBLIC_SERVER_PORT}/api/persona/findByTitle`, {
+      const response = await axios.post(`${NEXT_PUBLIC_PROTOCOL}://${NEXT_PUBLIC_SERVER_HOST}:${NEXT_PUBLIC_SERVER_PORT}/api/persona/findByTitle`, {
         title: title,
       });
       console.log('Response:', response.data);
@@ -60,7 +60,7 @@ export function EditPersona() {
   };
   const updatePersona = async () => {
     try {
-      const response = await axios.post(`http://${NEXT_PUBLIC_SERVER_HOST}:${NEXT_PUBLIC_SERVER_PORT}/api/persona/update`, {
+      const response = await axios.post(`${NEXT_PUBLIC_PROTOCOL}://${NEXT_PUBLIC_SERVER_HOST}:${NEXT_PUBLIC_SERVER_PORT}/api/persona/update`, {
         id: id,
         title: title,
         symbol: symbol,

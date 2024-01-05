@@ -1,4 +1,4 @@
-import { NEXT_PUBLIC_SERVER_PORT, NEXT_PUBLIC_SERVER_HOST, NEXT_PUBLIC_CLIENT_PORT } from '../../constants/index';
+import { NEXT_PUBLIC_PROTOCOL, NEXT_PUBLIC_SERVER_PORT, NEXT_PUBLIC_SERVER_HOST, NEXT_PUBLIC_CLIENT_PORT } from '../../constants/index';
 
 import * as React from 'react';
 
@@ -173,7 +173,7 @@ export function AppChat() {
       try {
         console.log('Server host', NEXT_PUBLIC_SERVER_HOST);
         // Replace with your own URL and data
-        const url = `http://${NEXT_PUBLIC_SERVER_HOST}:${NEXT_PUBLIC_SERVER_PORT}/api/persona`;
+        const url = `${NEXT_PUBLIC_PROTOCOL}://${NEXT_PUBLIC_SERVER_HOST}:${NEXT_PUBLIC_SERVER_PORT}/api/persona`;
         const config: any = {
           headers: {
             'Access-Control-Allow-Origin': '*',
