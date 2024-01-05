@@ -1,5 +1,4 @@
 # dependencies
-/client/node_modules
 /backend-postgresql/node_modules
 /backend-postgresql/build
 /backend-postgresql/.idea
@@ -16,8 +15,10 @@
 /coverage
 
 # next.js
+/client/node_modules
 /client/.next/
 /client/out/
+/client/.env.local
 
 # production
 /client/build

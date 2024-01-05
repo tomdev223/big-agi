@@ -37,6 +37,9 @@ export default class Persona extends Date {
   @Column({ type: 'text' })
   symbol: string;
 
+  @Column({ type: 'text' })
+  category: string;
+
   @Column({ type: 'text', array: true, nullable: true })
   examples: string[];
 
