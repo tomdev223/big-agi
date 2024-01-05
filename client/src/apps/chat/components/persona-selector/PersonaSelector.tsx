@@ -149,7 +149,7 @@ export function PersonaSelector(props: { systemPurposes: RequiredDataType, conve
   };
 
   const toggleEditMode = () => {
-    setEditMode(!editMode);
+    // setEditMode(!editMode);
     navigateToPersonaEdit(systemPurposeId as SystemPurposeId);
   };
   const redirectToCreate = () => {
