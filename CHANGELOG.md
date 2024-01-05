@@ -4,6 +4,12 @@ Welcome to big-AGI upgraded version.
 We customized BIG-AGI for AI-Seller project.
 It wil help business to save assistant.
 
+### What's New in 1.0.4 · Jan 05, 2024
+
+- **Concurrently**: Concurrently for production environment to run both backend and frontend in one terminal
+- **Typescript React hook**: fixed typescript issues in variable declare to build successfully in next js frontend
+- **env for next.js**: Introduced env file for next.js
+
 ### What's New in 1.0.3 · Jan 04, 2024
 
 - **Concurrently**: Concurrently for development environment to run both backend and frontend in one terminal

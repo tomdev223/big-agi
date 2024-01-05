@@ -1,4 +1,4 @@
-import { NEXT_PUBLIC_SERVER_PORT, NEXT_PUBLIC_SERVER_HOST, NEXT_PUBLIC_CLIENT_PORT } from '../../constants';
+import { NEXT_PUBLIC_SERVER_PORT, NEXT_PUBLIC_SERVER_HOST, NEXT_PUBLIC_CLIENT_PORT } from '../../constants/index';
 
 import * as React from 'react';
 
@@ -92,7 +92,6 @@ export function AppChat() {
   const [flattenConversationId, setFlattenConversationId] = React.useState<DConversationId | null>(null);
   const showNextTitle = React.useRef(false);
   const composerTextAreaRef = React.useRef<HTMLTextAreaElement>(null);
-
   const [systemPurposes, setSystemPurposes] = React.useState<RequiredDataType>({});
   // external state
   const { chatLLM } = useChatLLM();

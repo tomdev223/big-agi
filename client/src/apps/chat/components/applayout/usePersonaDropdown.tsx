@@ -1,4 +1,4 @@
-import { NEXT_PUBLIC_SERVER_PORT, NEXT_PUBLIC_SERVER_HOST, NEXT_PUBLIC_CLIENT_PORT } from '../../../../constants';
+import { NEXT_PUBLIC_SERVER_PORT, NEXT_PUBLIC_SERVER_HOST, NEXT_PUBLIC_CLIENT_PORT } from '../../../../constants/index';
 import * as React from 'react';
 import { shallow } from 'zustand/shallow';
 
