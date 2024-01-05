@@ -76,7 +76,7 @@ function AppBarPersonaDropdown(props: {
     );
   }
   React.useEffect(() => {
-    function transformData(originalData: OriginalDataType[]): RequiredDataType {
+    function transformDataDropDown(originalData: OriginalDataType[]): RequiredDataType {
       let transformedData: RequiredDataType = {};
 
       originalData.forEach((item) => {
@@ -112,7 +112,7 @@ function AppBarPersonaDropdown(props: {
         const response = await axios.get(url, config);
 
         const originalData: OriginalDataType[] = response.data;
-        const requiredData = transformData(originalData);
+        const requiredData = transformDataDropDown(originalData);
         setSystemPurposes(requiredData);
 
         // Usage

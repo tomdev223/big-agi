@@ -17,10 +17,45 @@ import { CleanerMessage, MessagesSelectionHeader } from './message/CleanerMessag
 import { PersonaSelector } from './persona-selector/PersonaSelector';
 import { useChatShowSystemMessages } from '../store-app-chat';
 
+type OriginalDataType = {
+  _id: string;
+  title: string;
+  description: string;
+  systemMessage: string;
+  symbol: string;
+  __v: number;
+  call: {
+    starters: string[];
+  };
+  voices: {
+    elevenLabs: {
+      voiceId: string;
+    };
+  };
+  examples: string[];
+};
+type RequiredDataType = {
+  [key: string]: {
+    title: string;
+    description: string;
+    systemMessage: string;
+    symbol: string;
+    examples: string[];
+    call: {
+      starters: string[];
+    };
+    voices: {
+      elevenLabs: {
+        voiceId: string;
+      };
+    };
+  };
+};
 /**
  * A list of ChatMessages
  */
 export function ChatMessageList(props: {
+  systemPurposes:RequiredDataType[] | {};
   conversationId: DConversationId | null;
   chatLLMContextTokens?: number;
   isMessageSelectionMode: boolean;
@@ -181,7 +216,7 @@ export function ChatMessageList(props: {
     return (
       <Box sx={{ ...props.sx }}>
         {conversationId ? (
-          <PersonaSelector conversationId={conversationId} runExample={handleRunExample} />
+          <PersonaSelector systemPurposes={props.systemPurposes} conversationId={conversationId} runExample={handleRunExample} />
         ) : (
           <InlineError severity="info" error="Select a conversation" sx={{ m: 2 }} />
         )}

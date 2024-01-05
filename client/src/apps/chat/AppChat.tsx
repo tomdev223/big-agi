@@ -1,3 +1,5 @@
+import { NEXT_PUBLIC_SERVER_PORT, NEXT_PUBLIC_SERVER_HOST, NEXT_PUBLIC_CLIENT_PORT } from '../../constants';
+
 import * as React from 'react';
 
 import { Box } from '@mui/joy';
@@ -36,6 +38,7 @@ import { runBrowseUpdatingState } from './editors/browse-load';
 import { runImageGenerationUpdatingState } from './editors/image-generate';
 import { runReActUpdatingState } from './editors/react-tangent';
 import type { InferGetStaticPropsType, GetStaticProps } from 'next';
+import axios from 'axios';
 
 /**
  * Mode: how to treat the input from the Composer
@@ -45,6 +48,41 @@ export type ChatModeId = 'immediate' | 'write-user' | 'react' | 'draw-imagine' |
 const SPECIAL_ID_WIPE_ALL: DConversationId = 'wipe-chats';
 
 export function AppChat() {
+
+  type OriginalDataType = {
+    _id: string;
+    title: string;
+    description: string;
+    systemMessage: string;
+    symbol: string;
+    __v: number;
+    call: {
+      starters: string[];
+    };
+    voices: {
+      elevenLabs: {
+        voiceId: string;
+      };
+    };
+    examples: string[];
+  };
+  type RequiredDataType = {
+    [key: string]: {
+      title: string;
+      description: string;
+      systemMessage: string;
+      symbol: string;
+      examples: string[];
+      call: {
+        starters: string[];
+      };
+      voices: {
+        elevenLabs: {
+          voiceId: string;
+        };
+      };
+    };
+  };
   // state
   const [isMessageSelectionMode, setIsMessageSelectionMode] = React.useState(false);
   const [diagramConfig, setDiagramConfig] = React.useState<DiagramConfig | null>(null);
@@ -55,6 +93,7 @@ export function AppChat() {
   const showNextTitle = React.useRef(false);
   const composerTextAreaRef = React.useRef<HTMLTextAreaElement>(null);
 
+  const [systemPurposes, setSystemPurposes] = React.useState<RequiredDataType[] | {}>({});
   // external state
   const { chatLLM } = useChatLLM();
 
@@ -108,6 +147,56 @@ export function AppChat() {
   );
 
   React.useEffect(() => {
+    function transformData(originalData: OriginalDataType[]): RequiredDataType {
+      let transformedData: RequiredDataType = {};
+
+      originalData.forEach((item) => {
+        transformedData[item.title] = {
+          title: item.title,
+          description: item.description,
+          systemMessage: item.systemMessage,
+          symbol: item.symbol,
+          examples: item.examples,
+          call: item.call,
+          voices: item.voices,
+        };
+      });
+
+      return transformedData;
+    }
+    // Function to transform the original structure into the desired result
+    function transformToResult(data: RequiredDataType): string {
+      return Object.values(data)
+        .map((role) => role.title)
+        .join(' | ');
+    }
+    const fetchData = async () => {
+      try {
+        console.log('Server host', NEXT_PUBLIC_SERVER_HOST);
+        // Replace with your own URL and data
+        const url = `http://${NEXT_PUBLIC_SERVER_HOST}:${NEXT_PUBLIC_SERVER_PORT}/api/persona`;
+        const config: any = {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+          },
+        };
+        const response = await axios.get(url, config);
+
+        const originalData: OriginalDataType[] = response.data;
+        const requiredData = transformData(originalData);
+        setSystemPurposes(requiredData);
+
+        // Usage
+        const result = transformToResult(requiredData);
+        console.log('title sum id', result);
+        console.log('Required data', requiredData);
+      } catch (error) {
+        console.error('Error during the Axios POST request:', error);
+      }
+    };
+    const data = fetchData(); // Fetch data from an API or database
+
     if (showNextTitle.current) {
       showNextTitle.current = false;
       const title = (focusedChatNumber >= 0 ? `#${focusedChatNumber + 1} · ` : '') + (focusedChatTitle || 'New Chat');
@@ -397,6 +486,7 @@ export function AppChat() {
             }}
           >
             <ChatMessageList
+              systemPurposes={systemPurposes}
               conversationId={_conversationId}
               chatLLMContextTokens={chatLLM?.contextTokens}
               isMessageSelectionMode={isMessageSelectionMode}

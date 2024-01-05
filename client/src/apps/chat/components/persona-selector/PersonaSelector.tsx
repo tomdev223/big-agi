@@ -42,7 +42,41 @@ const getRandomElement = <T,>(array: T[]): T | undefined => (array.length > 0 ? 
  * Purpose selector for the current chat. Clicking on any item activates it for the current chat.
  */
 
-export function PersonaSelector(props: { conversationId: DConversationId; runExample: (example: string) => void }) {
+type OriginalDataType = {
+  _id: string;
+  title: string;
+  description: string;
+  systemMessage: string;
+  symbol: string;
+  __v: number;
+  call: {
+    starters: string[];
+  };
+  voices: {
+    elevenLabs: {
+      voiceId: string;
+    };
+  };
+  examples: string[];
+};
+type RequiredDataType = {
+  [key: string]: {
+    title: string;
+    description: string;
+    systemMessage: string;
+    symbol: string;
+    examples: string[];
+    call: {
+      starters: string[];
+    };
+    voices: {
+      elevenLabs: {
+        voiceId: string;
+      };
+    };
+  };
+};
+export function PersonaSelector(props: { systemPurposes: RequiredDataType, conversationId: DConversationId; runExample: (example: string) => void }) {
   const router = useRouter();
   const navigateToPersonaEdit = (id: SystemPurposeId | null) => {
     // router.push(`/editPersona/${id}`);
@@ -58,46 +92,12 @@ export function PersonaSelector(props: { conversationId: DConversationId; runExa
     });
   };
 
-  type OriginalDataType = {
-    _id: string;
-    title: string;
-    description: string;
-    systemMessage: string;
-    symbol: string;
-    __v: number;
-    call: {
-      starters: string[];
-    };
-    voices: {
-      elevenLabs: {
-        voiceId: string;
-      };
-    };
-    examples: string[];
-  };
-  type RequiredDataType = {
-    [key: string]: {
-      title: string;
-      description: string;
-      systemMessage: string;
-      symbol: string;
-      examples: string[];
-      call: {
-        starters: string[];
-      };
-      voices: {
-        elevenLabs: {
-          voiceId: string;
-        };
-      };
-    };
-  };
 
   // state
   const [searchQuery, setSearchQuery] = React.useState('');
   const [filteredIDs, setFilteredIDs] = React.useState<SystemPurposeId[] | null>(null);
   const [editMode, setEditMode] = React.useState(false);
-  const [systemPurposes, setSystemPurposes] = React.useState({});
+  // const [systemPurposes, setSystemPurposes] = React.useState<RequiredDataType[] | {}>({});
 
   // external state
   const showFinder = useUIPreferencesStore((state) => state.showPurposeFinder);
@@ -128,10 +128,10 @@ export function PersonaSelector(props: { conversationId: DConversationId; runExa
     setSearchQuery(query);
 
     // Filter results based on search term
-    const ids = Object.keys(systemPurposes)
-      .filter((key) => systemPurposes.hasOwnProperty(key))
+    const ids = Object.keys(props.systemPurposes)
+      .filter((key) => props.systemPurposes?.hasOwnProperty(key))
       .filter((key) => {
-        const purpose = systemPurposes[key as SystemPurposeId];
+        const purpose = props.systemPurposes ?? [key as SystemPurposeId];
         return (
           purpose.title.toLowerCase().includes(query.toLowerCase()) ||
           (typeof purpose.description === 'string' && purpose.description.toLowerCase().includes(query.toLowerCase()))
@@ -147,7 +147,6 @@ export function PersonaSelector(props: { conversationId: DConversationId; runExa
     if (e.key == 'Escape') handleSearchClear();
   };
 
-  1;
   const toggleEditMode = () => {
     setEditMode(!editMode);
     navigateToPersonaEdit(systemPurposeId as SystemPurposeId);
@@ -164,67 +163,67 @@ export function PersonaSelector(props: { conversationId: DConversationId; runExa
   const handleCustomSystemMessageChange = (v: React.ChangeEvent<HTMLTextAreaElement>): void => {
     // TODO: persist this change? Right now it's reset every time.
     //       maybe we shall have a "save" button just save on a state to persist between sessions
-    systemPurposes['Custom'].systemMessage = v.target.value;
+    props.systemPurposes['Custom'].systemMessage = v.target.value;
   };
 
   // we show them all if the filter is clear (null)
-  const unfilteredPurposeIDs = filteredIDs && showFinder ? filteredIDs : Object.keys(systemPurposes);
+  const unfilteredPurposeIDs = filteredIDs && showFinder ? filteredIDs : Object.keys(props.systemPurposes);
   const purposeIDs = editMode ? unfilteredPurposeIDs : unfilteredPurposeIDs.filter((id) => !hiddenPurposeIDs.includes(id));
 
-  const selectedPurpose = purposeIDs.length ? systemPurposes[systemPurposeId] ?? null : null;
+  const selectedPurpose = purposeIDs.length ? props.systemPurposes[systemPurposeId] ?? null : null;
   const selectedExample = (selectedPurpose?.examples && getRandomElement(selectedPurpose.examples)) || null;
 
-  React.useEffect(() => {
-    function transformData(originalData: OriginalDataType[]): RequiredDataType {
-      let transformedData: RequiredDataType = {};
-
-      originalData.forEach((item) => {
-        transformedData[item.title] = {
-          title: item.title,
-          description: item.description,
-          systemMessage: item.systemMessage,
-          symbol: item.symbol,
-          examples: item.examples,
-          call: item.call,
-          voices: item.voices,
-        };
-      });
-
-      return transformedData;
-    }
-    // Function to transform the original structure into the desired result
-    function transformToResult(data: RequiredDataType): string {
-      return Object.values(data)
-        .map((role) => role.title)
-        .join(' | ');
-    }
-    const fetchData = async () => {
-      try {
-        console.log('Server host', NEXT_PUBLIC_SERVER_HOST);
-        // Replace with your own URL and data
-        const url = `http://${NEXT_PUBLIC_SERVER_HOST}:${NEXT_PUBLIC_SERVER_PORT}/api/persona`;
-        const config: any = {
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-          },
-        };
-        const response = await axios.get(url, config);
-
-        const originalData: OriginalDataType[] = response.data;
-        const requiredData = transformData(originalData);
-        setSystemPurposes(requiredData);
-
-        // Usage
-        const result = transformToResult(requiredData);
-        console.log('title sum id', result);
-        console.log('Required data', requiredData);
-      } catch (error) {
-        console.error('Error during the Axios POST request:', error);
-      }
-    };
-    const data = fetchData(); // Fetch data from an API or database
-  }, []);
+  // React.useEffect(() => {
+  //   function transformData(originalData: OriginalDataType[]): RequiredDataType {
+  //     let transformedData: RequiredDataType = {};
+  //
+  //     originalData.forEach((item) => {
+  //       transformedData[item.title] = {
+  //         title: item.title,
+  //         description: item.description,
+  //         systemMessage: item.systemMessage,
+  //         symbol: item.symbol,
+  //         examples: item.examples,
+  //         call: item.call,
+  //         voices: item.voices,
+  //       };
+  //     });
+  //
+  //     return transformedData;
+  //   }
+  //   // Function to transform the original structure into the desired result
+  //   function transformToResult(data: RequiredDataType): string {
+  //     return Object.values(data)
+  //       .map((role) => role.title)
+  //       .join(' | ');
+  //   }
+  //   const fetchData = async () => {
+  //     try {
+  //       console.log('Server host', NEXT_PUBLIC_SERVER_HOST);
+  //       // Replace with your own URL and data
+  //       const url = `http://${NEXT_PUBLIC_SERVER_HOST}:${NEXT_PUBLIC_SERVER_PORT}/api/persona`;
+  //       const config: any = {
+  //         headers: {
+  //           'Access-Control-Allow-Origin': '*',
+  //           'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+  //         },
+  //       };
+  //       const response = await axios.get(url, config);
+  //
+  //       const originalData: OriginalDataType[] = response.data;
+  //       const requiredData = transformData(originalData);
+  //       setSystemPurposes(requiredData);
+  //
+  //       // Usage
+  //       const result = transformToResult(requiredData);
+  //       console.log('title sum id', result);
+  //       console.log('Required data', requiredData);
+  //     } catch (error) {
+  //       console.error('Error during the Axios POST request:', error);
+  //     }
+  //   };
+  //   const data = fetchData(); // Fetch data from an API or database
+  // }, []);
   return (
     <>
       {showFinder && (
@@ -278,7 +277,7 @@ export function PersonaSelector(props: { conversationId: DConversationId; runExa
               <Grid key={spId}>
                 <Button
                   variant={!editMode && systemPurposeId === spId ? 'solid' : 'soft'}
-                  color={!editMode && systemPurposeId === spId ? 'primary' : systemPurposes[spId as SystemPurposeId]?.highlighted ? 'warning' : 'neutral'}
+                  color={!editMode && systemPurposeId === spId ? 'primary' : props.systemPurposes[spId as SystemPurposeId]?.highlighted ? 'warning' : 'neutral'}
                   onClick={() => !editMode && handlePurposeChanged(spId as SystemPurposeId)}
                   sx={{
                     flexDirection: 'column',
@@ -289,7 +288,7 @@ export function PersonaSelector(props: { conversationId: DConversationId; runExa
                     ...(editMode || systemPurposeId !== spId
                       ? {
                           boxShadow: 'md',
-                          ...(systemPurposes[spId as SystemPurposeId]?.highlighted ? {} : { backgroundColor: 'background.surface' }),
+                          ...(props.systemPurposes[spId as SystemPurposeId]?.highlighted ? {} : { backgroundColor: 'background.surface' }),
                         }
                       : {}),
                   }}
@@ -302,8 +301,8 @@ export function PersonaSelector(props: { conversationId: DConversationId; runExa
                       sx={{ alignSelf: 'flex-start' }}
                     />
                   )}
-                  <div style={{ fontSize: '2rem' }}>{systemPurposes[spId as SystemPurposeId]?.symbol}</div>
-                  <div>{systemPurposes[spId as SystemPurposeId]?.title}</div>
+                  <div style={{ fontSize: '2rem' }}>{props.systemPurposes[spId as SystemPurposeId]?.symbol}</div>
+                  <div>{props.systemPurposes[spId as SystemPurposeId]?.title}</div>
                 </Button>
               </Grid>
             ))}
@@ -345,7 +344,7 @@ export function PersonaSelector(props: { conversationId: DConversationId; runExa
               autoFocus
               placeholder={'Craft your custom system message here…'}
               minRows={3}
-              defaultValue={systemPurposes['Custom']?.systemMessage}
+              defaultValue={props.systemPurposes['Custom']?.systemMessage}
               onChange={handleCustomSystemMessageChange}
               sx={{
                 backgroundColor: 'background.level1',
