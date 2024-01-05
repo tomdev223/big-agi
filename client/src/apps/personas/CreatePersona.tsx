@@ -1,4 +1,4 @@
-import { NEXT_PUBLIC_PROTOCOL, NEXT_PUBLIC_SERVER_PORT, NEXT_PUBLIC_SERVER_HOST, NEXT_PUBLIC_CLIENT_PORT } from '../../constants/index';
+import { NEXT_PUBLIC_PROTOCOL, NEXT_PUBLIC_SERVER_HOST, NEXT_PUBLIC_CLIENT_PORT } from '../../constants/index';
 import * as React from 'react';
 
 import { Box, Input, Button, Container, ListDivider, Sheet, Typography, IconButton } from '@mui/joy';
@@ -41,7 +41,7 @@ export function CreatePersona() {
   };
   const createPersona = async () => {
     try {
-      const response = await axios.post(`${NEXT_PUBLIC_PROTOCOL}://${NEXT_PUBLIC_SERVER_HOST}:${NEXT_PUBLIC_SERVER_PORT}/api/persona/create`, {
+      const response = await axios.post(`${NEXT_PUBLIC_PROTOCOL}://${NEXT_PUBLIC_SERVER_HOST}/api/persona/create`, {
         title: title,
         symbol: symbol,
         description: description,

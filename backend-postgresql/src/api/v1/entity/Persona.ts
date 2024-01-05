@@ -12,6 +12,7 @@ import {
 } from 'typeorm';
 // Entities
 import Date from './Date';
+import Category from './Category';
 // Generators & Validators
 import { IsUUID } from 'class-validator';
 // Constants, Helpers & Types
@@ -25,22 +26,19 @@ export default class Persona extends Date {
     Object.assign(this, persona);
   }
 
-  @Column({ type: 'text' })
+  @Column({ type: 'varchar' })
   title: string;
 
-  @Column({ type: 'text' })
+  @Column({ type: 'varchar' })
   description: string;
 
-  @Column({ type: 'text' })
+  @Column({ type: 'varchar' })
   systemMessage: string;
 
-  @Column({ type: 'text' })
+  @Column({ type: 'varchar' })
   symbol: string;
 
-  @Column({ type: 'text', nullable: true })
-  category: string;
-
-  @Column({ type: 'text', array: true, nullable: true })
+  @Column({ type: 'varchar', array: true, nullable: true })
   examples: string[];
 
   @Column({ type: 'json', nullable: true })
@@ -54,4 +52,11 @@ export default class Persona extends Date {
       voiceId: string;
     };
   };
+
+  @ManyToOne(() => Category, (category) => category.personas, { nullable: false, onDelete: 'CASCADE' })
+  @JoinColumn({
+    name: 'category',
+    referencedColumnName: 'id',
+  })
+  category: Partial<Category>;
 }

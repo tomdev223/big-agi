@@ -1,4 +1,4 @@
-import { NEXT_PUBLIC_PROTOCOL, NEXT_PUBLIC_SERVER_PORT, NEXT_PUBLIC_SERVER_HOST, NEXT_PUBLIC_CLIENT_PORT } from '../../constants/index';
+import { NEXT_PUBLIC_PROTOCOL, NEXT_PUBLIC_SERVER_HOST, NEXT_PUBLIC_CLIENT_PORT } from '../../constants/index';
 
 import * as React from 'react';
 
@@ -48,7 +48,6 @@ export type ChatModeId = 'immediate' | 'write-user' | 'react' | 'draw-imagine' |
 const SPECIAL_ID_WIPE_ALL: DConversationId = 'wipe-chats';
 
 export function AppChat() {
-
   type OriginalDataType = {
     _id: string;
     title: string;
@@ -173,7 +172,7 @@ export function AppChat() {
       try {
         console.log('Server host', NEXT_PUBLIC_SERVER_HOST);
         // Replace with your own URL and data
-        const url = `${NEXT_PUBLIC_PROTOCOL}://${NEXT_PUBLIC_SERVER_HOST}:${NEXT_PUBLIC_SERVER_PORT}/api/persona`;
+        const url = `${NEXT_PUBLIC_PROTOCOL}://${NEXT_PUBLIC_SERVER_HOST}/api/persona`;
         const config: any = {
           headers: {
             'Access-Control-Allow-Origin': '*',
