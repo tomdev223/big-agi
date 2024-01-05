@@ -53,7 +53,7 @@ export default class Persona extends Date {
     };
   };
 
-  @ManyToOne(() => Category, (category) => category.personas, { nullable: false, onDelete: 'CASCADE' })
+  @ManyToOne(() => Category, (category) => category.personas, { nullable: true, onDelete: 'CASCADE' })
   @JoinColumn({
     name: 'category',
     referencedColumnName: 'id',
