@@ -13,6 +13,7 @@ import cors from 'cors';
 // Routes
 import userRoutes from './routes/userRoutes';
 import personaRoutes from './routes/personaRoutes';
+import categoryRoutes from './routes/categoryRoutes';
 // Constants, Helpers & Types
 import { API_VERSION, SERVER_PORT, CLIENT_PORT, SERVER_HOST, serverReady } from './constants';
 import { postgresConnect } from './helpers';
@@ -51,6 +52,8 @@ const initializeApp = () => {
   // user related routes
   app.use(`${API_VERSION}/user`, userRoutes);
   app.use(`${API_VERSION}/persona`, personaRoutes);
+  app.use(`${API_VERSION}/category`, categoryRoutes);
+
   // restaurant related routes
 
   // main route server status
