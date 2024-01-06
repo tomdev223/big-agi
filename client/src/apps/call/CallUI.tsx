@@ -133,10 +133,10 @@ export function CallUI(props: {
     const conversation = state.conversations.find(conversation => conversation.id === props.conversationId);
     return {
       chatTitle: conversation ? conversationTitle(conversation) : 'no conversation',
-      messages: conversation ? conversation.messages : [],
+      messages: conversation ? conversation.messages : []
     };
   }, shallow);
-  const persona = systemPurposes?[props.personaId as SystemPurposeId] ?? undefined;
+  const persona = systemPurposes ? [props.personaId as SystemPurposeId] ?? undefined;
   const personaCallStarters = persona?.call?.starters ?? undefined;
   const personaVoiceId = overridePersonaVoice ? undefined : (persona?.voices?.elevenLabs?.voiceId ?? undefined);
   const personaSystemMessage = persona?.systemMessage ?? undefined;
@@ -151,7 +151,15 @@ export function CallUI(props: {
         setCallMessages(messages => [...messages, createDMessage('user', transcribed)]);
     }
   }, []);
-  const { isSpeechEnabled, isRecording, isRecordingAudio, isRecordingSpeech, startRecording, stopRecording, toggleRecording } = useSpeechRecognition(onSpeechResultCallback, 1000);
+  const {
+    isSpeechEnabled,
+    isRecording,
+    isRecordingAudio,
+    isRecordingSpeech,
+    startRecording,
+    stopRecording,
+    toggleRecording
+  } = useSpeechRecognition(onSpeechResultCallback, 1000);
 
   // derived state
   const isRinging = stage === 'ring';
@@ -176,18 +184,20 @@ export function CallUI(props: {
           symbol: item.symbol,
           examples: item.examples,
           call: item.call,
-          voices: item.voices,
+          voices: item.voices
         };
       });
 
       return transformedData;
     }
+
     // Function to transform the original structure into the desired result
     function transformToResult(data: RequiredDataType): string {
       return Object.values(data)
         .map((role) => role.title)
         .join(' | ');
     }
+
     const fetchData = async () => {
       try {
         console.log('Server host', NEXT_PUBLIC_SERVER_HOST);
@@ -196,8 +206,8 @@ export function CallUI(props: {
         const config: any = {
           headers: {
             'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-          },
+            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
+          }
         };
         const response = await axios.get(url, config);
 
@@ -295,10 +305,16 @@ export function CallUI(props: {
     // 'prompt' for a "telephone call"
     // FIXME: can easily run ouf of tokens - if this gets traction, we'll fix it
     const callPrompt: VChatMessageIn[] = [
-      { role: 'system', content: 'You are having a phone call. Your response style is brief and to the point, and according to your personality, defined below.' },
+      {
+        role: 'system',
+        content: 'You are having a phone call. Your response style is brief and to the point, and according to your personality, defined below.'
+      },
       ...chatMessages.map(message => ({ role: message.role, content: message.text })),
-      { role: 'system', content: 'You are now on the phone call related to the chat above. Respect your personality and answer with short, friendly and accurate thoughtful lines.' },
-      ...callMessages.map(message => ({ role: message.role, content: message.text })),
+      {
+        role: 'system',
+        content: 'You are now on the phone call related to the chat above. Respect your personality and answer with short, friendly and accurate thoughtful lines.'
+      },
+      ...callMessages.map(message => ({ role: message.role, content: message.text }))
     ];
 
     // perform completion
@@ -359,7 +375,7 @@ export function CallUI(props: {
       <CallMenuItems
         pushToTalk={pushToTalk} setPushToTalk={setPushToTalk}
         override={overridePersonaVoice} setOverride={setOverridePersonaVoice} />
-    , [overridePersonaVoice, pushToTalk],
+    , [overridePersonaVoice, pushToTalk]
   );
 
   useLayoutPluggable(chatLLMDropdown, null, menuItems);
@@ -372,7 +388,7 @@ export function CallUI(props: {
       sx={{
         fontSize: { xs: '2.5rem', md: '3rem' },
         textAlign: 'center',
-        mx: 2,
+        mx: 2
       }}
     >
       {isConnected ? personaName : 'Hello'}
@@ -400,7 +416,7 @@ export function CallUI(props: {
         overflow: 'auto',
         width: '100%',
         borderRadius: 'lg',
-        flexDirection: 'column-reverse',
+        flexDirection: 'column-reverse'
       }}>
 
         {/* Messages in reverse order, for auto-scroll from the bottom */}
@@ -430,7 +446,7 @@ export function CallUI(props: {
               key={message.id}
               text={message.text}
               variant={message.role === 'assistant' ? 'solid' : 'soft'} color='neutral'
-              role={message.role} />,
+              role={message.role} />
           )}
         </Box>
       </Card>
@@ -440,8 +456,10 @@ export function CallUI(props: {
     <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-evenly' }}>
 
       {/* [ringing] Decline / Accept */}
-      {isRinging && <CallButton Icon={CallEndIcon} text='Decline' color='danger' onClick={() => setStage('declined')} />}
-      {isRinging && isEnabled && <CallButton Icon={CallIcon} text='Accept' color='success' variant='soft' onClick={() => setStage('connected')} />}
+      {isRinging &&
+        <CallButton Icon={CallEndIcon} text='Decline' color='danger' onClick={() => setStage('declined')} />}
+      {isRinging && isEnabled && <CallButton Icon={CallIcon} text='Accept' color='success' variant='soft'
+                                             onClick={() => setStage('connected')} />}
 
       {/* [Calling] Hang / PTT (mute not enabled yet) */}
       {isConnected && <CallButton Icon={CallEndIcon} text='Hang up' color='danger' onClick={handleCallStop} />}
@@ -456,8 +474,10 @@ export function CallUI(props: {
       )}
 
       {/* [ended] Back / Call Again */}
-      {(isEnded || isDeclined) && <Link noLinkStyle href='/'><CallButton Icon={ArrowBackIcon} text='Back' variant='soft' /></Link>}
-      {(isEnded || isDeclined) && <CallButton Icon={CallIcon} text='Call Again' color='success' variant='soft' onClick={() => setStage('connected')} />}
+      {(isEnded || isDeclined) &&
+        <Link noLinkStyle href='/'><CallButton Icon={ArrowBackIcon} text='Back' variant='soft' /></Link>}
+      {(isEnded || isDeclined) && <CallButton Icon={CallIcon} text='Call Again' color='success' variant='soft'
+                                              onClick={() => setStage('connected')} />}
 
     </Box>
 
