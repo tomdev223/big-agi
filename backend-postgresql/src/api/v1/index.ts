@@ -28,7 +28,18 @@ const initializeApp = () => {
   app.use(
     cors({
       credentials: true,
-      origin: ['http://3.13.141.173:3000', 'http://127.0.0.1:3000', 'http://localhost:3000', 'https://aitools.lamassucrm.com', 'https://aitools.lamassucrm.com/', 'https://aitools.lamassucrm.com:3000'],
+      origin: [
+        'http://3.13.141.173:3000',
+        'https://3.13.141.173:3000',
+        'http://127.0.0.1:3000',
+        'https://127.0.0.1:3000',
+        'http://localhost:3000',
+        'https://aitools.lamassucrm.com',
+        'https://aitools.lamassucrm.com/',
+        'https://aitools.lamassucrm.com:3000',
+      ],
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+      optionsSuccessStatus: 204,
     }),
   );
 
