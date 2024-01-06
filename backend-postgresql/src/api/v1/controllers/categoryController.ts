@@ -23,8 +23,8 @@ export const createCategory = async (req: Request, res: Response) => {
   const category = new Category({
     title,
     icon,
-    color,
-    personas
+    color
+    // personas
   });
   // Validation of input for errors
   const errors = await validateError(category, res);
@@ -80,17 +80,20 @@ export const updateCategory = async (req: Request, res: Response) => {
   // authenticated user
   const { user, body } = req;
 
-  const { id,
+  const {
+    id,
     title,
     icon,
     color,
-    personas } = body;
+    personas
+  } = body;
 
   const category = new Category({
     title,
     icon,
     color,
-    personas });
+    personas
+  });
 
   // Validation of input for errors
   const errors = await validateError(category, res, true);

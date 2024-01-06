@@ -1,3 +1,5 @@
+import { NEXT_PUBLIC_PROTOCOL, NEXT_PUBLIC_SERVER_HOST, NEXT_PUBLIC_CLIENT_PORT } from '../../constants/index';
+
 import * as React from 'react';
 import { shallow } from 'zustand/shallow';
 import { useRouter } from 'next/router';
@@ -29,6 +31,7 @@ import { CallAvatar } from './components/CallAvatar';
 import { CallButton } from './components/CallButton';
 import { CallMessage } from './components/CallMessage';
 import { CallStatus } from './components/CallStatus';
+import axios from 'axios';
 
 
 function CallMenuItems(props: {
@@ -78,6 +81,40 @@ export function CallUI(props: {
   personaId: string,
 }) {
 
+  type OriginalDataType = {
+    _id: string;
+    title: string;
+    description: string;
+    systemMessage: string;
+    symbol: string;
+    __v: number;
+    call: {
+      starters: string[];
+    };
+    voices: {
+      elevenLabs: {
+        voiceId: string;
+      };
+    };
+    examples: string[];
+  };
+  type RequiredDataType = {
+    [key: string]: {
+      title: string;
+      description: string;
+      systemMessage: string;
+      symbol: string;
+      examples: string[];
+      call: {
+        starters: string[];
+      };
+      voices: {
+        elevenLabs: {
+          voiceId: string;
+        };
+      };
+    };
+  };
   // state
   const [avatarClickCount, setAvatarClickCount] = React.useState<number>(0);// const [micMuted, setMicMuted] = React.useState(false);
   const [callElapsedTime, setCallElapsedTime] = React.useState<string>('00:00');
@@ -88,6 +125,7 @@ export function CallUI(props: {
   const [stage, setStage] = React.useState<'ring' | 'declined' | 'connected' | 'ended'>('ring');
   const responseAbortController = React.useRef<AbortController | null>(null);
 
+  const [systemPurposes, setSystemPurposes] = React.useState<RequiredDataType>({});
   // external state
   const { push: routerPush } = useRouter();
   const { chatLLMId, chatLLMDropdown } = useChatLLMDropdown();
@@ -98,7 +136,7 @@ export function CallUI(props: {
       messages: conversation ? conversation.messages : [],
     };
   }, shallow);
-  const persona = SystemPurposes[props.personaId as SystemPurposeId] ?? undefined;
+  const persona = systemPurposes??[props.personaId as SystemPurposeId] ?? undefined;
   const personaCallStarters = persona?.call?.starters ?? undefined;
   const personaVoiceId = overridePersonaVoice ? undefined : (persona?.voices?.elevenLabs?.voiceId ?? undefined);
   const personaSystemMessage = persona?.systemMessage ?? undefined;
@@ -126,6 +164,57 @@ export function CallUI(props: {
 
   // pickup / hangup
   React.useEffect(() => {
+
+    function transformData(originalData: OriginalDataType[]): RequiredDataType {
+      let transformedData: RequiredDataType = {};
+
+      originalData.forEach((item) => {
+        transformedData[item.title] = {
+          title: item.title,
+          description: item.description,
+          systemMessage: item.systemMessage,
+          symbol: item.symbol,
+          examples: item.examples,
+          call: item.call,
+          voices: item.voices,
+        };
+      });
+
+      return transformedData;
+    }
+    // Function to transform the original structure into the desired result
+    function transformToResult(data: RequiredDataType): string {
+      return Object.values(data)
+        .map((role) => role.title)
+        .join(' | ');
+    }
+    const fetchData = async () => {
+      try {
+        console.log('Server host', NEXT_PUBLIC_SERVER_HOST);
+        // Replace with your own URL and data
+        const url = `${NEXT_PUBLIC_PROTOCOL}://${NEXT_PUBLIC_SERVER_HOST}/api/persona`;
+        const config: any = {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+          },
+        };
+        const response = await axios.get(url, config);
+
+        const originalData: OriginalDataType[] = response.data;
+        const requiredData = transformData(originalData);
+        setSystemPurposes(requiredData);
+
+        // Usage
+        const result = transformToResult(requiredData);
+        console.log('title sum id', result);
+        console.log('Required data', requiredData);
+      } catch (error) {
+        console.error('Error during the Axios POST request:', error);
+      }
+    };
+    const data = fetchData(); // Fetch data from an API or database
+
     !isRinging && playSoundUrl(isConnected ? '/sounds/chat-begin.mp3' : '/sounds/chat-end.mp3');
   }, [isRinging, isConnected]);
 
