@@ -2,6 +2,7 @@
 import { Request, Response } from 'express';
 // Entities
 import Persona from '../entity/Persona';
+import Category from '../entity/Category';
 // Constants, Helpers & Types
 import { ResponseCode } from '../types/enum';
 import {
@@ -11,14 +12,18 @@ import {
   responseUpdateDelete,
   uuidError,
   validateError,
-  validateLimitOffset,
+  validateLimitOffset
 } from '../helpers';
 
 export const createPersona = async (req: Request, res: Response) => {
   // authenticated user and request body
   const { user, body } = req;
 
-  const { title, description, systemMessage, symbol, examples, call, voices } = body;
+  const { title, description, systemMessage, symbol, examples, call, voices, categoryId } = body;
+
+  const category = {
+    id:categoryId
+  }
   console.log('req body', body);
   const persona = new Persona({
     title,
@@ -28,7 +33,9 @@ export const createPersona = async (req: Request, res: Response) => {
     examples,
     call,
     voices,
+    category
   });
+  console.log('received category', category);
   // Validation of input for errors
   const errors = await validateError(persona, res);
   if (errors) {
@@ -54,14 +61,14 @@ export const getPersona = async (req: Request, res: Response) => {
 
   // find food by the id
   const persona = await entityManager.findOne(Persona, {
-    where: { id: personaId },
+    where: { id: personaId }, relations: ['category']
   });
 
   if (persona) {
     return res.status(200).json({
       code: ResponseCode.SUCCESS,
       message: 'Food found.',
-      persona,
+      persona
     });
   } else {
     return res.status(204).send();
@@ -84,9 +91,11 @@ export const updatePersona = async (req: Request, res: Response) => {
   // authenticated user
   const { user, body } = req;
 
-  const { id, title, description, systemMessage, symbol, examples, call, voices } = body;
-
-  const persona = new Persona({ title, description, systemMessage, symbol, examples, call, voices });
+  const { id, title, description, systemMessage, symbol, examples, call, voices, categoryId } = body;
+  const category = {
+    id:categoryId
+  }
+  const persona = new Persona({ title, description, systemMessage, symbol, examples, call, voices, category });
 
   // Validation of input for errors
   const errors = await validateError(persona, res, true);
@@ -107,7 +116,7 @@ export const findByTitle = async (req: Request, res: Response) => {
   const { title } = req.body;
 
   const persona = await entityManager.findOne(Persona, {
-    where: { title: title },
+    where: { title: title }, relations: ['category']
   });
 
   res.status(200).json(persona);
@@ -120,7 +129,8 @@ export const getPersonas = async (req: Request, res: Response) => {
   // const { limit, offset } = validateLimitOffset(body);
 
   // find all foods
-  const personas = await entityManager.find(Persona);
+  const personas = await entityManager.find(Persona, { relations: ['category']
+  });
 
   return res.status(200).json(personas);
 };
