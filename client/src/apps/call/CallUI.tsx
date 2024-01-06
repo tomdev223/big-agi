@@ -125,7 +125,7 @@ export function CallUI(props: {
   const [stage, setStage] = React.useState<'ring' | 'declined' | 'connected' | 'ended'>('ring');
   const responseAbortController = React.useRef<AbortController | null>(null);
 
-  const [systemPurposes, setSystemPurposes] = React.useState<RequiredDataType | undefined>(undefined);
+  const [systemPurposes, setSystemPurposes] = React.useState<RequiredDataType>({});
   // external state
   const { push: routerPush } = useRouter();
   const { chatLLMId, chatLLMDropdown } = useChatLLMDropdown();
@@ -136,7 +136,7 @@ export function CallUI(props: {
       messages: conversation ? conversation.messages : []
     };
   }, shallow);
-  const persona = systemPurposes ? [props.personaId as SystemPurposeId] ?? undefined;
+  const persona = systemPurposes [props.personaId as SystemPurposeId] ?? undefined;
   const personaCallStarters = persona?.call?.starters ?? undefined;
   const personaVoiceId = overridePersonaVoice ? undefined : (persona?.voices?.elevenLabs?.voiceId ?? undefined);
   const personaSystemMessage = persona?.systemMessage ?? undefined;
