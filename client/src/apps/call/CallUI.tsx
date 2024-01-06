@@ -104,6 +104,7 @@ export function CallUI(props: {
       description: string;
       systemMessage: string;
       symbol: string;
+      imageUri?: string;
       examples: string[];
       call: {
         starters: string[];

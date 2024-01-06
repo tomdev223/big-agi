@@ -64,6 +64,7 @@ type RequiredDataType = {
     description: string;
     systemMessage: string;
     symbol: string;
+    imageUri?: string;
     examples: string[];
     call: {
       starters: string[];
