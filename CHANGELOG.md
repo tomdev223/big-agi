@@ -4,6 +4,17 @@ Welcome to big-AGI upgraded version.
 We customized BIG-AGI for AI-Seller project.
 It wil help business to save assistant.
 
+### What's New in 1.0.5 · Jan 06, 2024
+
+- **Category CRUD**: CRUD in backend and build create and edit category pages
+- **env file setup**: Setup env for endpoint modification simply
+- **Cors issue**: Fixed Cors issue for https backend
+- **Call UI**: Implemented dynamic persona load in Call UI
+- **Rename brand**: Renamed brand for app configuration
+- **Textarea prompt field**: Changed input tag to textarea in create persona and edit persona pages
+- **Edit persona by id**: Implemented edit persona by id from title
+- **Unnecessary console.log**: Removed unnecessary console.log
+
 ### What's New in 1.0.4 · Jan 05, 2024
 
 - **Concurrently**: Concurrently for production environment to run both backend and frontend in one terminal
