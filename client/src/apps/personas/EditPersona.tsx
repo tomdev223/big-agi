@@ -21,24 +21,19 @@ export function EditPersona() {
   const router = useRouter();
   const handleTitleChange = (event: any) => {
     setTitle(event.target.value);
-    console.log('title:', title);
   };
   const handleDescriptionChange = (event: any) => {
     setDescription(event.target.value);
-    console.log('description:', description);
   };
   const handleSymbolChange = (event: any) => {
     setSymbol(event.target.value);
-    console.log('symbol:', symbol);
   };
   const handlePromptsChange = (event: any) => {
     setPrompts(event.target.value);
-    console.log('prompts:', prompts);
   };
   const getPersonaById = async (id: string) => {
     try {
       const response = await axios.get(`${NEXT_PUBLIC_PROTOCOL}://${NEXT_PUBLIC_SERVER_HOST}/api/persona/${id}`);
-      console.log('Response:', response.data);
       if (response.data) {
         setSymbol(response.data.persona.symbol);
         setTitle(response.data.persona.title);
@@ -69,7 +64,6 @@ export function EditPersona() {
       if (response.data) {
         navigateToPersonaEdit(id as string);
       }
-      console.log('Response:', response.data);
     } catch (error) {
       console.error('Error:', error);
     }

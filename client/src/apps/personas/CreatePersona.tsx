@@ -20,19 +20,15 @@ export function CreatePersona() {
   const router = useRouter();
   const handleTitleChange = (event: any) => {
     setTitle(event.target.value);
-    console.log('title:', title);
   };
   const handleDescriptionChange = (event: any) => {
     setDescription(event.target.value);
-    console.log('description:', description);
   };
   const handleSymbolChange = (event: any) => {
     setSymbol(event.target.value);
-    console.log('description:', description);
   };
   const handlePromptsChange = (event: any) => {
     setPrompts(event.target.value);
-    console.log('prompts:', prompts);
   };
   const navigateToDashboard = () => {
     // router.push(`/editPersona/${id}`);
@@ -51,7 +47,6 @@ export function CreatePersona() {
       if (response.data) {
         navigateToDashboard();
       }
-      console.log('Response:', response.data);
     } catch (error) {
       console.error('Error:', error);
     }
