@@ -49,7 +49,7 @@ const SPECIAL_ID_WIPE_ALL: DConversationId = 'wipe-chats';
 
 export function AppChat() {
   type OriginalDataType = {
-    _id: string;
+    id: string;
     title: string;
     description: string;
     systemMessage: string;
@@ -67,6 +67,7 @@ export function AppChat() {
   };
   type RequiredDataType = {
     [key: string]: {
+      id: string;
       title: string;
       description: string;
       systemMessage: string;
@@ -151,6 +152,7 @@ export function AppChat() {
 
       originalData.forEach((item) => {
         transformedData[item.title] = {
+          id: item.id,
           title: item.title,
           description: item.description,
           systemMessage: item.systemMessage,
@@ -183,6 +185,7 @@ export function AppChat() {
         const response = await axios.get(url, config);
 
         const originalData: OriginalDataType[] = response.data;
+        console.log('Original', originalData);
         const requiredData = transformData(originalData);
         setSystemPurposes(requiredData);
 

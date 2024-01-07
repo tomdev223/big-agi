@@ -42,7 +42,7 @@ const getRandomElement = <T,>(array: T[]): T | undefined => (array.length > 0 ? 
  */
 
 type OriginalDataType = {
-  _id: string;
+  id: string;
   title: string;
   description: string;
   systemMessage: string;
@@ -60,6 +60,7 @@ type OriginalDataType = {
 };
 type RequiredDataType = {
   [key: string]: {
+    id: string;
     title: string;
     description: string;
     systemMessage: string;
@@ -77,9 +78,9 @@ type RequiredDataType = {
     highlighted?: boolean; // Add this line
   };
 };
-export function PersonaSelector(props: { systemPurposes: RequiredDataType, conversationId: DConversationId; runExample: (example: string) => void }) {
+export function PersonaSelector(props: { systemPurposes: RequiredDataType; conversationId: DConversationId; runExample: (example: string) => void }) {
   const router = useRouter();
-  const navigateToPersonaEdit = (id: SystemPurposeId | null) => {
+  const navigateToPersonaEdit = (id: string) => {
     // router.push(`/editPersona/${id}`);
     router.push({
       pathname: '/editPersona',
@@ -93,11 +94,11 @@ export function PersonaSelector(props: { systemPurposes: RequiredDataType, conve
     });
   };
 
-
   // state
   const [searchQuery, setSearchQuery] = React.useState('');
   const [filteredIDs, setFilteredIDs] = React.useState<SystemPurposeId[] | null>(null);
   const [editMode, setEditMode] = React.useState(false);
+  const [editId, setEditId] = React.useState('');
   // const [systemPurposes, setSystemPurposes] = React.useState<RequiredDataType[] | {}>({});
 
   // external state
@@ -132,7 +133,7 @@ export function PersonaSelector(props: { systemPurposes: RequiredDataType, conve
     const ids = Object.keys(props.systemPurposes)
       .filter((key) => props.systemPurposes?.hasOwnProperty(key))
       .filter((key) => {
-        const purpose = props.systemPurposes [key as SystemPurposeId];
+        const purpose = props.systemPurposes[key as SystemPurposeId];
         return (
           purpose.title.toLowerCase().includes(query.toLowerCase()) ||
           (typeof purpose.description === 'string' && purpose.description.toLowerCase().includes(query.toLowerCase()))
@@ -150,7 +151,7 @@ export function PersonaSelector(props: { systemPurposes: RequiredDataType, conve
 
   const toggleEditMode = () => {
     // setEditMode(!editMode);
-    navigateToPersonaEdit(systemPurposeId as SystemPurposeId);
+    navigateToPersonaEdit(editId as string);
   };
   const redirectToCreate = () => {
     goToCreate();
@@ -158,7 +159,11 @@ export function PersonaSelector(props: { systemPurposes: RequiredDataType, conve
 
   const handlePurposeChanged = (purposeId: SystemPurposeId | null) => {
     console.log('PurposeId', purposeId);
-    if (purposeId) setSystemPurposeId(props.conversationId, purposeId);
+    console.log('Selected id', props.systemPurposes[purposeId as string].id);
+    if (purposeId) {
+      setSystemPurposeId(props.conversationId, purposeId);
+      setEditId(props.systemPurposes[purposeId as string].id);
+    }
   };
 
   const handleCustomSystemMessageChange = (v: React.ChangeEvent<HTMLTextAreaElement>): void => {
@@ -175,55 +180,7 @@ export function PersonaSelector(props: { systemPurposes: RequiredDataType, conve
   const selectedExample = (selectedPurpose?.examples && getRandomElement(selectedPurpose.examples)) || null;
 
   // React.useEffect(() => {
-  //   function transformData(originalData: OriginalDataType[]): RequiredDataType {
-  //     let transformedData: RequiredDataType = {};
-  //
-  //     originalData.forEach((item) => {
-  //       transformedData[item.title] = {
-  //         title: item.title,
-  //         description: item.description,
-  //         systemMessage: item.systemMessage,
-  //         symbol: item.symbol,
-  //         examples: item.examples,
-  //         call: item.call,
-  //         voices: item.voices,
-  //       };
-  //     });
-  //
-  //     return transformedData;
-  //   }
-  //   // Function to transform the original structure into the desired result
-  //   function transformToResult(data: RequiredDataType): string {
-  //     return Object.values(data)
-  //       .map((role) => role.title)
-  //       .join(' | ');
-  //   }
-  //   const fetchData = async () => {
-  //     try {
-  //       console.log('Server host', NEXT_PUBLIC_SERVER_HOST);
-  //       // Replace with your own URL and data
-  //       const url = `http://${NEXT_PUBLIC_SERVER_HOST}:${NEXT_PUBLIC_SERVER_PORT}/api/persona`;
-  //       const config: any = {
-  //         headers: {
-  //           'Access-Control-Allow-Origin': '*',
-  //           'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-  //         },
-  //       };
-  //       const response = await axios.get(url, config);
-  //
-  //       const originalData: OriginalDataType[] = response.data;
-  //       const requiredData = transformData(originalData);
-  //       setSystemPurposes(requiredData);
-  //
-  //       // Usage
-  //       const result = transformToResult(requiredData);
-  //       console.log('title sum id', result);
-  //       console.log('Required data', requiredData);
-  //     } catch (error) {
-  //       console.error('Error during the Axios POST request:', error);
-  //     }
-  //   };
-  //   const data = fetchData(); // Fetch data from an API or database
+  //   setEditId(props.systemPurposes[systemPurposeId as string].id);
   // }, []);
   return (
     <>

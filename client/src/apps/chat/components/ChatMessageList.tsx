@@ -18,7 +18,7 @@ import { PersonaSelector } from './persona-selector/PersonaSelector';
 import { useChatShowSystemMessages } from '../store-app-chat';
 
 type OriginalDataType = {
-  _id: string;
+  id: string;
   title: string;
   description: string;
   systemMessage: string;
@@ -36,10 +36,12 @@ type OriginalDataType = {
 };
 type RequiredDataType = {
   [key: string]: {
+    id: string;
     title: string;
     description: string;
     systemMessage: string;
     symbol: string;
+    imageUri?: string;
     examples: string[];
     call: {
       starters: string[];
@@ -55,7 +57,7 @@ type RequiredDataType = {
  * A list of ChatMessages
  */
 export function ChatMessageList(props: {
-  systemPurposes:RequiredDataType;
+  systemPurposes: RequiredDataType;
   conversationId: DConversationId | null;
   chatLLMContextTokens?: number;
   isMessageSelectionMode: boolean;

@@ -35,28 +35,26 @@ export function EditPersona() {
     setPrompts(event.target.value);
     console.log('prompts:', prompts);
   };
-  const getPersonaByTitle = async (title: string) => {
+  const getPersonaById = async (id: string) => {
     try {
-      const response = await axios.post(`${NEXT_PUBLIC_PROTOCOL}://${NEXT_PUBLIC_SERVER_HOST}/api/persona/findByTitle`, {
-        title: title,
-      });
+      const response = await axios.get(`${NEXT_PUBLIC_PROTOCOL}://${NEXT_PUBLIC_SERVER_HOST}/api/persona/${id}`);
       console.log('Response:', response.data);
       if (response.data) {
-        setSymbol(response.data.symbol);
-        setTitle(response.data.title);
-        setDescription(response.data.description);
-        setPrompts(response.data.systemMessage);
-        setId(response.data._id);
+        setSymbol(response.data.persona.symbol);
+        setTitle(response.data.persona.title);
+        setDescription(response.data.persona.description);
+        setPrompts(response.data.persona.systemMessage);
+        setId(response.data.persona.id);
       }
     } catch (error) {
       console.error('Error:', error);
     }
   };
-  const navigateToPersonaEdit = (title: SystemPurposeId | null) => {
+  const navigateToPersonaEdit = (id: string) => {
     // router.push(`/editPersona/${id}`);
     router.push({
       pathname: '/editPersona',
-      query: { id: title }, // Additional query params can be added here
+      query: { id: id }, // Additional query params can be added here
     });
   };
   const updatePersona = async () => {
@@ -69,7 +67,7 @@ export function EditPersona() {
         systemMessage: prompts,
       });
       if (response.data) {
-        navigateToPersonaEdit(title as SystemPurposeId);
+        navigateToPersonaEdit(id as string);
       }
       console.log('Response:', response.data);
     } catch (error) {
@@ -77,9 +75,9 @@ export function EditPersona() {
     }
   };
   React.useEffect(() => {
-    const title = router.query.id;
+    const id = router.query.id;
 
-    getPersonaByTitle(title as string);
+    getPersonaById(id as string);
   }, [router.query]);
   return (
     <Sheet
