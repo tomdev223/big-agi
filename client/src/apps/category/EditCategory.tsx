@@ -1,7 +1,7 @@
 import { NEXT_PUBLIC_PROTOCOL, NEXT_PUBLIC_SERVER_HOST, NEXT_PUBLIC_CLIENT_PORT } from '../../constants/index';
 import * as React from 'react';
 
-import { Box, Input, Button, Container, ListDivider, Sheet, Typography, IconButton } from '@mui/joy';
+import { Box, Input, Button, Container, ListDivider, Sheet, Typography, IconButton, Card, CardContent } from '@mui/joy';
 // import ScienceIcon from '@mui/icons-material/Science';
 
 // import WhatshotIcon from '@mui/icons-material/Whatshot';
@@ -98,10 +98,24 @@ export function EditCategory() {
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
             <Input fullWidth variant="outlined" placeholder="Color" value={color} onChange={handleColorChange} />
+            <Input type="color" value={color} onChange={handleColorChange} label="Category Box Color" variant="filled" sx={{ width: '10%' }} />
           </Box>
           <Button className="editPersona" type="button" variant="solid" sx={{ minWidth: 120 }} onClick={editCategory}>
             Update
           </Button>
+          <Card variant="outlined" sx={{ maxWidth: 250, backgroundColor: color }}>
+            <CardContent>
+              <Typography component="div" sx={{ fontSize: 50, color: 'white', textAlign: 'center' }} gutterBottom>
+                {icon}
+              </Typography>
+              <Typography component="div" sx={{ fontSize: 16, textAlign: 'center', fontWeight: 'bold' }} gutterBottom>
+                {title}
+              </Typography>
+              <Typography variant="h5" component="div">
+                {/* Place iconify icon here */}
+              </Typography>
+            </CardContent>
+          </Card>
         </form>
       </Container>
     </Sheet>
