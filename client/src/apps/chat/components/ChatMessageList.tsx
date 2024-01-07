@@ -57,6 +57,7 @@ type RequiredDataType = {
  * A list of ChatMessages
  */
 export function ChatMessageList(props: {
+  initialFocusedPersona: string;
   systemPurposes: RequiredDataType;
   conversationId: DConversationId | null;
   chatLLMContextTokens?: number;
@@ -218,7 +219,12 @@ export function ChatMessageList(props: {
     return (
       <Box sx={{ ...props.sx }}>
         {conversationId ? (
-          <PersonaSelector systemPurposes={props.systemPurposes} conversationId={conversationId} runExample={handleRunExample} />
+          <PersonaSelector
+            initialFocusedPersona={props.initialFocusedPersona}
+            systemPurposes={props.systemPurposes}
+            conversationId={conversationId}
+            runExample={handleRunExample}
+          />
         ) : (
           <InlineError severity="info" error="Select a conversation" sx={{ m: 2 }} />
         )}

@@ -17,15 +17,12 @@ export function CreateCategory() {
   const router = useRouter();
   const handleTitleChange = (event: any) => {
     setTitle(event.target.value);
-    console.log('title:', title);
   };
   const handleColorChange = (event: any) => {
     setColor(event.target.value);
-    console.log('color:', color);
   };
   const handleIconChange = (event: any) => {
     setIcon(event.target.value);
-    console.log('color:', color);
   };
   const navigateToDashboard = () => {
     // router.push(`/editPersona/${id}`);
@@ -43,7 +40,6 @@ export function CreateCategory() {
       if (response.data) {
         navigateToDashboard();
       }
-      console.log('Response:', response.data);
     } catch (error) {
       console.error('Error:', error);
     }

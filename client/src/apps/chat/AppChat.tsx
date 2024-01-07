@@ -2,6 +2,7 @@ import { NEXT_PUBLIC_PROTOCOL, NEXT_PUBLIC_SERVER_HOST, NEXT_PUBLIC_CLIENT_PORT 
 
 import * as React from 'react';
 
+import { shallow } from 'zustand/shallow';
 import { Box } from '@mui/joy';
 import ForkRightIcon from '@mui/icons-material/ForkRight';
 
@@ -40,6 +41,7 @@ import { runReActUpdatingState } from './editors/react-tangent';
 import type { InferGetStaticPropsType, GetStaticProps } from 'next';
 import axios from 'axios';
 
+import { useChatStore } from '~/common/state/store-chats';
 /**
  * Mode: how to treat the input from the Composer
  */
@@ -92,6 +94,7 @@ export function AppChat() {
   const [deleteConversationId, setDeleteConversationId] = React.useState<DConversationId | null>(null);
   const [flattenConversationId, setFlattenConversationId] = React.useState<DConversationId | null>(null);
   const showNextTitle = React.useRef(false);
+  const [initialFocusedPersona, setInitialFocusedPersona] = React.useState('');
   const composerTextAreaRef = React.useRef<HTMLTextAreaElement>(null);
   const [systemPurposes, setSystemPurposes] = React.useState<RequiredDataType>({});
   // external state
@@ -99,7 +102,13 @@ export function AppChat() {
 
   const { chatPanes, focusedConversationId, navigateHistoryInFocusedPane, openConversationInFocusedPane, openConversationInSplitPane, setFocusedPaneIndex } =
     usePanesManager();
-
+  const { systemPurposeId, setSystemPurposeId } = useChatStore((state) => {
+    const conversation = state.conversations.find((conversation) => conversation.id === focusedConversationId);
+    return {
+      systemPurposeId: conversation ? conversation.systemPurposeId : null,
+      setSystemPurposeId: conversation ? state.setSystemPurposeId : null,
+    };
+  }, shallow);
   const {
     title: focusedChatTitle,
     chatIdx: focusedChatNumber,
@@ -173,7 +182,6 @@ export function AppChat() {
     }
     const fetchData = async () => {
       try {
-        console.log('Server host', NEXT_PUBLIC_SERVER_HOST);
         // Replace with your own URL and data
         const url = `${NEXT_PUBLIC_PROTOCOL}://${NEXT_PUBLIC_SERVER_HOST}/api/persona`;
         const config: any = {
@@ -185,14 +193,11 @@ export function AppChat() {
         const response = await axios.get(url, config);
 
         const originalData: OriginalDataType[] = response.data;
-        console.log('Original', originalData);
         const requiredData = transformData(originalData);
         setSystemPurposes(requiredData);
-
+        setInitialFocusedPersona(requiredData[systemPurposeId as string].id);
         // Usage
         const result = transformToResult(requiredData);
-        console.log('title sum id', result);
-        console.log('Required data', requiredData);
       } catch (error) {
         console.error('Error during the Axios POST request:', error);
       }
@@ -488,6 +493,7 @@ export function AppChat() {
             }}
           >
             <ChatMessageList
+              initialFocusedPersona={initialFocusedPersona}
               systemPurposes={systemPurposes}
               conversationId={_conversationId}
               chatLLMContextTokens={chatLLM?.contextTokens}

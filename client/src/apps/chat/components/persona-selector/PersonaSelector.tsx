@@ -78,7 +78,12 @@ type RequiredDataType = {
     highlighted?: boolean; // Add this line
   };
 };
-export function PersonaSelector(props: { systemPurposes: RequiredDataType; conversationId: DConversationId; runExample: (example: string) => void }) {
+export function PersonaSelector(props: {
+  initialFocusedPersona: string;
+  systemPurposes: RequiredDataType;
+  conversationId: DConversationId;
+  runExample: (example: string) => void;
+}) {
   const router = useRouter();
   const navigateToPersonaEdit = (id: string) => {
     // router.push(`/editPersona/${id}`);
@@ -98,7 +103,7 @@ export function PersonaSelector(props: { systemPurposes: RequiredDataType; conve
   const [searchQuery, setSearchQuery] = React.useState('');
   const [filteredIDs, setFilteredIDs] = React.useState<SystemPurposeId[] | null>(null);
   const [editMode, setEditMode] = React.useState(false);
-  const [editId, setEditId] = React.useState('');
+  const [editId, setEditId] = React.useState(props.initialFocusedPersona);
   // const [systemPurposes, setSystemPurposes] = React.useState<RequiredDataType[] | {}>({});
 
   // external state
@@ -151,6 +156,7 @@ export function PersonaSelector(props: { systemPurposes: RequiredDataType; conve
 
   const toggleEditMode = () => {
     // setEditMode(!editMode);
+    console.log('propts initial id', props.initialFocusedPersona);
     navigateToPersonaEdit(editId as string);
   };
   const redirectToCreate = () => {
@@ -158,8 +164,6 @@ export function PersonaSelector(props: { systemPurposes: RequiredDataType; conve
   };
 
   const handlePurposeChanged = (purposeId: SystemPurposeId | null) => {
-    console.log('PurposeId', purposeId);
-    console.log('Selected id', props.systemPurposes[purposeId as string].id);
     if (purposeId) {
       setSystemPurposeId(props.conversationId, purposeId);
       setEditId(props.systemPurposes[purposeId as string].id);
@@ -179,9 +183,6 @@ export function PersonaSelector(props: { systemPurposes: RequiredDataType; conve
   const selectedPurpose = purposeIDs.length ? props.systemPurposes[systemPurposeId] ?? null : null;
   const selectedExample = (selectedPurpose?.examples && getRandomElement(selectedPurpose.examples)) || null;
 
-  React.useEffect(() => {
-    if (props.systemPurposes[systemPurposeId as string]) setEditId(props.systemPurposes[systemPurposeId as string].id);
-  }, [props.systemPurposes]);
   return (
     <>
       {showFinder && (

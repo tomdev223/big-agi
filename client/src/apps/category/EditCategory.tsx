@@ -17,15 +17,12 @@ export function EditCategory() {
   const router = useRouter();
   const handleTitleChange = (event: any) => {
     setTitle(event.target.value);
-    console.log('title:', title);
   };
   const handleColorChange = (event: any) => {
     setColor(event.target.value);
-    console.log('color:', color);
   };
   const handleIconChange = (event: any) => {
     setIcon(event.target.value);
-    console.log('color:', color);
   };
   const navigateToDashboard = () => {
     // router.push(`/editPersona/${id}`);
@@ -43,7 +40,6 @@ export function EditCategory() {
       if (response.data) {
         navigateToDashboard();
       }
-      console.log('Response:', response.data);
     } catch (error) {
       console.error('Error:', error);
     }
@@ -52,7 +48,6 @@ export function EditCategory() {
   const getCategoryById = async (id: string) => {
     try {
       const response = await axios.get(`${NEXT_PUBLIC_PROTOCOL}://${NEXT_PUBLIC_SERVER_HOST}/api/category/${id}`);
-      console.log('Response:', response.data);
       if (response.data) {
         setTitle(response.data.category.title);
         setIcon(response.data.category.icon);
@@ -64,7 +59,6 @@ export function EditCategory() {
   };
   React.useEffect(() => {
     const id = router.query.id;
-    console.log('id', id);
     getCategoryById(id as string);
   }, [router.query]);
   return (

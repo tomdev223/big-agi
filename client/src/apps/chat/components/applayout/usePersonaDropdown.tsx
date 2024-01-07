@@ -101,7 +101,6 @@ function AppBarPersonaDropdown(props: {
     }
     const fetchData = async () => {
       try {
-        console.log('Server host', NEXT_PUBLIC_SERVER_HOST);
         // Replace with your own URL and data
         const url = `${NEXT_PUBLIC_PROTOCOL}://${NEXT_PUBLIC_SERVER_HOST}/api/persona`;
         const config: any = {
@@ -117,8 +116,6 @@ function AppBarPersonaDropdown(props: {
 
         // Usage
         const result = transformToResult(requiredData);
-        console.log('title sum id', result);
-        console.log('Required data', requiredData);
       } catch (error) {
         console.error('Error during the Axios POST request:', error);
       }
