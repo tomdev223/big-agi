@@ -9,6 +9,7 @@ import WhatshotIcon from '@mui/icons-material/Whatshot';
 
 import { useRouter } from 'next/router';
 import axios from 'axios';
+import { Textarea } from '@mui/joy';
 import { SystemPurposeId } from '../../data';
 
 export function EditPersona() {
@@ -119,7 +120,8 @@ export function EditPersona() {
             <Typography>prompts</Typography>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
-            <Input fullWidth variant="outlined" placeholder="Prompts" value={prompts} onChange={handlePromptsChange} />
+            <Textarea variant="soft" autoFocus minRows={1} placeholder="Prompts" value={prompts} onChange={handlePromptsChange} style={{ width: '100%' }} />
+            {/* <Input fullWidth variant="outlined" placeholder="Prompts" value={prompts} onChange={handlePromptsChange} /> */}
           </Box>
           <Button className="editPersona" type="button" variant="solid" sx={{ minWidth: 120 }} onClick={updatePersona}>
             Update
