@@ -2,7 +2,6 @@ import { NEXT_PUBLIC_PROTOCOL, NEXT_PUBLIC_SERVER_HOST, NEXT_PUBLIC_CLIENT_PORT 
 import * as React from 'react';
 
 import { Box, Input, Button, Container, ListDivider, Sheet, Typography, IconButton } from '@mui/joy';
-// import { YTPersonaCreator } from './YTPersonaCreator';
 // import ScienceIcon from '@mui/icons-material/Science';
 
 // import WhatshotIcon from '@mui/icons-material/Whatshot';
@@ -11,27 +10,22 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 // import { SystemPurposeId } from '../../data';
 
-export function CreatePersona() {
+export function CreateCategory() {
   const [title, setTitle] = React.useState('');
-  const [symbol, setSymbol] = React.useState('');
-  const [description, setDescription] = React.useState('');
-  const [prompts, setPrompts] = React.useState('');
+  const [icon, setIcon] = React.useState('');
+  const [color, setColor] = React.useState('');
   const router = useRouter();
   const handleTitleChange = (event: any) => {
     setTitle(event.target.value);
     console.log('title:', title);
   };
-  const handleDescriptionChange = (event: any) => {
-    setDescription(event.target.value);
-    console.log('description:', description);
+  const handleColorChange = (event: any) => {
+    setColor(event.target.value);
+    console.log('color:', color);
   };
-  const handleSymbolChange = (event: any) => {
-    setSymbol(event.target.value);
-    console.log('description:', description);
-  };
-  const handlePromptsChange = (event: any) => {
-    setPrompts(event.target.value);
-    console.log('prompts:', prompts);
+  const handleIconChange = (event: any) => {
+    setIcon(event.target.value);
+    console.log('color:', color);
   };
   const navigateToDashboard = () => {
     // router.push(`/editPersona/${id}`);
@@ -43,9 +37,8 @@ export function CreatePersona() {
     try {
       const response = await axios.post(`${NEXT_PUBLIC_PROTOCOL}://${NEXT_PUBLIC_SERVER_HOST}/api/persona/create`, {
         title: title,
-        symbol: symbol,
-        description: description,
-        systemMessage: prompts,
+        icon: icon,
+        color: color,
       });
       if (response.data) {
         navigateToDashboard();
@@ -76,7 +69,7 @@ export function CreatePersona() {
             <Typography>Avatar Image Url</Typography>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
-            <Input fullWidth variant="outlined" placeholder="Symbol" value={symbol} onChange={handleSymbolChange} />
+            <Input fullWidth variant="outlined" placeholder="Icon" value={icon} onChange={handleIconChange} />
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
             <Typography>title</Typography>
@@ -85,16 +78,10 @@ export function CreatePersona() {
             <Input fullWidth variant="outlined" placeholder="Title" value={title} onChange={handleTitleChange} />
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
-            <Typography>description</Typography>
+            <Typography>color</Typography>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
-            <Input fullWidth variant="outlined" placeholder="Description" value={description} onChange={handleDescriptionChange} />
-          </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
-            <Typography>prompts</Typography>
-          </Box>
-          <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
-            <Input fullWidth variant="outlined" placeholder="Prompts" value={prompts} onChange={handlePromptsChange} />
+            <Input fullWidth variant="outlined" placeholder="Color" value={color} onChange={handleColorChange} />
           </Box>
           <Button className="editPersona" type="button" variant="solid" sx={{ minWidth: 120 }} onClick={createPersona}>
             Create
