@@ -179,9 +179,9 @@ export function PersonaSelector(props: { systemPurposes: RequiredDataType; conve
   const selectedPurpose = purposeIDs.length ? props.systemPurposes[systemPurposeId] ?? null : null;
   const selectedExample = (selectedPurpose?.examples && getRandomElement(selectedPurpose.examples)) || null;
 
-  // React.useEffect(() => {
-  //   setEditId(props.systemPurposes[systemPurposeId as string].id);
-  // }, []);
+  React.useEffect(() => {
+    if (props.systemPurposes[systemPurposeId as string]) setEditId(props.systemPurposes[systemPurposeId as string].id);
+  }, [props.systemPurposes]);
   return (
     <>
       {showFinder && (
