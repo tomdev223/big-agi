@@ -103,7 +103,7 @@ export function PersonaSelector(props: {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [filteredIDs, setFilteredIDs] = React.useState<SystemPurposeId[] | null>(null);
   const [editMode, setEditMode] = React.useState(false);
-  const [editId, setEditId] = React.useState(props.initialFocusedPersona);
+  const [editId, setEditId] = React.useState('');
   // const [systemPurposes, setSystemPurposes] = React.useState<RequiredDataType[] | {}>({});
 
   // external state
@@ -154,10 +154,10 @@ export function PersonaSelector(props: {
     if (e.key == 'Escape') handleSearchClear();
   };
 
-  const toggleEditMode = () => {
-    // setEditMode(!editMode);
-    console.log('propts initial id', props.initialFocusedPersona);
-    navigateToPersonaEdit(editId as string);
+  const toggleEditMode = async () => {
+    const newEditId = props.initialFocusedPersona;
+    setEditId(newEditId); // This will schedule the state to be updated
+    navigateToPersonaEdit(newEditId as string); // Use the new value directly
   };
   const redirectToCreate = () => {
     goToCreate();
