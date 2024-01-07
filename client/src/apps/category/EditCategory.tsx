@@ -11,6 +11,7 @@ import axios from 'axios';
 // import { SystemPurposeId } from '../../data';
 
 export function EditCategory() {
+  const [id, setId] = React.useState('');
   const [title, setTitle] = React.useState('');
   const [icon, setIcon] = React.useState('');
   const [color, setColor] = React.useState('');
@@ -32,7 +33,8 @@ export function EditCategory() {
   };
   const editCategory = async () => {
     try {
-      const response = await axios.post(`${NEXT_PUBLIC_PROTOCOL}://${NEXT_PUBLIC_SERVER_HOST}/api/category/create`, {
+      const response = await axios.post(`${NEXT_PUBLIC_PROTOCOL}://${NEXT_PUBLIC_SERVER_HOST}/api/category/update`, {
+        id: id,
         title: title,
         icon: icon,
         color: color,
@@ -52,6 +54,7 @@ export function EditCategory() {
         setTitle(response.data.category.title);
         setIcon(response.data.category.icon);
         setColor(response.data.category.color);
+        setId(response.data.category.id);
       }
     } catch (error) {
       console.error('Error:', error);

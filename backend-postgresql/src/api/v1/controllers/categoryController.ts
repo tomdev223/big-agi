@@ -11,7 +11,7 @@ import {
   responseUpdateDelete,
   uuidError,
   validateError,
-  validateLimitOffset
+  validateLimitOffset,
 } from '../helpers';
 
 export const createCategory = async (req: Request, res: Response) => {
@@ -23,7 +23,7 @@ export const createCategory = async (req: Request, res: Response) => {
   const category = new Category({
     title,
     icon,
-    color
+    color,
     // personas
   });
   // Validation of input for errors
@@ -50,14 +50,14 @@ export const getCategory = async (req: Request, res: Response) => {
 
   // find food by the id
   const category = await entityManager.findOne(Category, {
-    where: { id: categoryId }
+    where: { id: categoryId },
   });
 
   if (category) {
     return res.status(200).json({
       code: ResponseCode.SUCCESS,
       message: 'Category found.',
-      category
+      category,
     });
   } else {
     return res.status(204).send();
@@ -80,19 +80,12 @@ export const updateCategory = async (req: Request, res: Response) => {
   // authenticated user
   const { user, body } = req;
 
-  const {
-    id,
-    title,
-    icon,
-    color,
-    personas
-  } = body;
+  const { id, title, icon, color } = body;
 
   const category = new Category({
     title,
     icon,
     color,
-    personas
   });
 
   // Validation of input for errors
