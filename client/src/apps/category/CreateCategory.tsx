@@ -33,9 +33,9 @@ export function CreateCategory() {
       pathname: '/',
     });
   };
-  const createPersona = async () => {
+  const createCategory = async () => {
     try {
-      const response = await axios.post(`${NEXT_PUBLIC_PROTOCOL}://${NEXT_PUBLIC_SERVER_HOST}/api/persona/create`, {
+      const response = await axios.post(`${NEXT_PUBLIC_PROTOCOL}://${NEXT_PUBLIC_SERVER_HOST}/api/category/create`, {
         title: title,
         icon: icon,
         color: color,
@@ -83,7 +83,7 @@ export function CreateCategory() {
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
             <Input fullWidth variant="outlined" placeholder="Color" value={color} onChange={handleColorChange} />
           </Box>
-          <Button className="editPersona" type="button" variant="solid" sx={{ minWidth: 120 }} onClick={createPersona}>
+          <Button className="editPersona" type="button" variant="solid" sx={{ minWidth: 120 }} onClick={createCategory}>
             Create
           </Button>
         </form>
