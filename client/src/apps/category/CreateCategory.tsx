@@ -89,7 +89,7 @@ export function CreateCategory() {
               {icon}
             </Typography>
             <Typography component="div" sx={{ fontSize: 16, textAlign: 'center', fontWeight: 'bold' }} gutterBottom>
-              Newbies Level 1: Basic
+              {title}
             </Typography>
             <Typography variant="h5" component="div">
               {/* Place iconify icon here */}
