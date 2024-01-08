@@ -77,7 +77,7 @@ export function CreateCategory() {
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
             <Input fullWidth variant="outlined" placeholder="Color" value={color} onChange={handleColorChange} />
-            <Input type="color" value={color} onChange={handleColorChange} label="Category Box Color" variant="filled" sx={{ width: '10%' }} />
+            <Input type="color" value={color} onChange={handleColorChange} variant="outlined" sx={{ width: '10%' }} />
           </Box>
           <Button className="editPersona" type="button" variant="solid" sx={{ minWidth: 120 }} onClick={createCategory}>
             Create
