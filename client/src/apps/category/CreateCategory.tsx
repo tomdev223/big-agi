@@ -54,7 +54,7 @@ export function CreateCategory() {
     >
       <Container disableGutters maxWidth="md" sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
         <Typography level="title-lg" sx={{ textAlign: 'center' }}>
-          Edit Persona Profile
+          Create Category
         </Typography>
 
         <ListDivider sx={{ my: 2 }} />
