@@ -60,7 +60,6 @@ export function AllCategory(props: {}) {
   const [systemPurposes, setSystemPurposes] = React.useState<OriginalDataType[]>([]);
 
   const goToPersonasPage = (id: string) => {
-    console.log("Selected category's id", id);
     setEditId(id);
   };
   const goToCreate = () => {
@@ -90,7 +89,6 @@ export function AllCategory(props: {}) {
 
         const originalData: OriginalDataType[] = response.data;
         setSystemPurposes(originalData);
-        console.log('origin data', originalData);
       } catch (error) {
         console.error('Error during the Axios POST request:', error);
       }
