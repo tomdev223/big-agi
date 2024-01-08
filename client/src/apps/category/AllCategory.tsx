@@ -17,6 +17,7 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 
 const bpTileSize = { xs: 116, md: 125, xl: 130 };
+const bpTileSizeWidth = { xs: 180, md: 200, xl: 250 };
 const tileCols = [3, 4, 6];
 const tileSpacing = 1;
 const bpMaxWidth = Object.entries(bpTileSize).reduce(
@@ -91,7 +92,19 @@ export function AllCategory(props: {}) {
   }, []);
   return (
     <>
-      <Stack direction="column" sx={{ minHeight: '60vh', justifyContent: 'center', alignItems: 'center' }}>
+      <Stack
+        direction="column"
+        sx={{
+          flexGrow: 1,
+          overflowY: 'auto',
+          backgroundColor: 'white',
+          p: { xs: 3, md: 6 },
+          alignItems: 'center',
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
+          <Typography sx={{ fontSize: 20, marginBottom: 5 }}>Available training categories</Typography>
+        </Box>
         <Box sx={{ maxWidth: bpMaxWidth }}>
           <Grid container spacing={tileSpacing} sx={{ justifyContent: 'flex-start' }}>
             {systemPurposes.map((item, key) => (
@@ -104,8 +117,9 @@ export function AllCategory(props: {}) {
                     fontWeight: 500,
                     gap: bpTileGap,
                     height: bpTileSize,
-                    width: bpTileSize,
+                    width: bpTileSizeWidth,
                     backgroundColor: item.color,
+                    margin: 1,
                   }}
                 >
                   <div style={{ fontSize: '2rem' }}>{item.icon}</div>

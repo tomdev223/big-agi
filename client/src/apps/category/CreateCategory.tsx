@@ -48,6 +48,7 @@ export function CreateCategory() {
       sx={{
         flexGrow: 1,
         overflowY: 'auto',
+        backgroundColor: 'white',
         p: { xs: 3, md: 6 },
       }}
     >
