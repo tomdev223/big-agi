@@ -91,9 +91,7 @@ export function CreateCategory() {
             <Typography component="div" sx={{ fontSize: 16, textAlign: 'center', fontWeight: 'bold' }} gutterBottom>
               {title}
             </Typography>
-            <Typography variant="h5" component="div">
-              {/* Place iconify icon here */}
-            </Typography>
+            <Typography component="div">{/* Place iconify icon here */}</Typography>
           </CardContent>
         </Card>
       </Container>

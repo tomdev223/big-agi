@@ -98,7 +98,7 @@ export function EditCategory() {
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
             <Input fullWidth variant="outlined" placeholder="Color" value={color} onChange={handleColorChange} />
-            <Input type="color" value={color} onChange={handleColorChange} label="Category Box Color" variant="filled" sx={{ width: '10%' }} />
+            <Input type="color" value={color} onChange={handleColorChange} sx={{ width: '10%' }} />
           </Box>
           <Button className="editPersona" type="button" variant="solid" sx={{ minWidth: 120 }} onClick={editCategory}>
             Update
@@ -110,9 +110,6 @@ export function EditCategory() {
               </Typography>
               <Typography component="div" sx={{ fontSize: 16, textAlign: 'center', fontWeight: 'bold' }} gutterBottom>
                 {title}
-              </Typography>
-              <Typography variant="h5" component="div">
-                {/* Place iconify icon here */}
               </Typography>
             </CardContent>
           </Card>
