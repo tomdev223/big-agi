@@ -53,23 +53,27 @@ export function AllCategory(props: {}) {
       query: { id: id }, // Additional query params can be added here
     });
   };
-  const goToCreate = () => {
-    // router.push(`/createPersona`);
-    router.push({
-      pathname: '/createPersona',
-    });
-  };
 
   // state
   const [searchQuery, setSearchQuery] = React.useState('');
   const [editId, setEditId] = React.useState('');
   const [systemPurposes, setSystemPurposes] = React.useState<OriginalDataType[]>([]);
 
-  const redirectToCreate = () => {
-    goToCreate();
-  };
   const goToPersonasPage = (id: string) => {
     console.log("Selected category's id", id);
+    setEditId(id);
+  };
+  const goToCreate = () => {
+    // router.push(`/createPersona`);
+    router.push({
+      pathname: '/category/createCategory',
+    });
+  };
+  const goToEdit = () => {
+    router.push({
+      pathname: '/category/editCategory/',
+      query: { id: editId }, // Additional query params can be added here
+    });
   };
   React.useEffect(() => {
     const fetchData = async () => {
@@ -133,6 +137,15 @@ export function AllCategory(props: {}) {
             ))}
           </Grid>
         </Box>
+        <Box sx={{ maxWidth: bpMaxWidth }}>
+          <Button className="editPersona" type="button" variant="solid" onClick={goToCreate} sx={{ marginRight: 2 }}>
+            Add
+          </Button>
+          <Button className="editPersona" type="button" variant="outlined" onClick={goToEdit}>
+            Edit
+          </Button>
+        </Box>
+        <Box></Box>
       </Stack>
     </>
   );

@@ -28,7 +28,7 @@ export function EditCategory() {
   const navigateToDashboard = () => {
     // router.push(`/editPersona/${id}`);
     router.push({
-      pathname: '/',
+      pathname: '/category/allCategory',
     });
   };
   const editCategory = async () => {
