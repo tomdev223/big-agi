@@ -68,6 +68,9 @@ export function AllCategory(props: {}) {
   const redirectToCreate = () => {
     goToCreate();
   };
+  const goToPersonasPage = (id: string) => {
+    console.log("Selected category's id", id);
+  };
   React.useEffect(() => {
     const fetchData = async () => {
       try {
@@ -110,6 +113,7 @@ export function AllCategory(props: {}) {
             {systemPurposes.map((item, key) => (
               <Grid key={key}>
                 <Button
+                  onClick={() => goToPersonasPage(item.id as string)}
                   variant={'soft'}
                   color={'neutral'}
                   sx={{
