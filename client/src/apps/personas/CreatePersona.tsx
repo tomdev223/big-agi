@@ -10,8 +10,17 @@ import { Box, Input, Button, Container, ListDivider, Sheet, Typography, IconButt
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { Textarea } from '@mui/joy';
+import { DropDown } from './DropDown';
 // import { SystemPurposeId } from '../../data';
 
+type OriginalDataType = {
+  id: string;
+  createdDate: string;
+  updatedDate: string;
+  title: string;
+  icon: string;
+  color: string;
+};
 export function CreatePersona() {
   const [title, setTitle] = React.useState('');
   const [symbol, setSymbol] = React.useState('');
@@ -51,6 +60,29 @@ export function CreatePersona() {
       console.error('Error:', error);
     }
   };
+
+  const [categories, setCategories] = React.useState<OriginalDataType[]>([]);
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Replace with your own URL and data
+        const url = `${NEXT_PUBLIC_PROTOCOL}://${NEXT_PUBLIC_SERVER_HOST}/api/category`;
+        const config: any = {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+          },
+        };
+        const response = await axios.get(url, config);
+
+        const originalData: OriginalDataType[] = response.data;
+        setCategories(originalData);
+      } catch (error) {
+        console.error('Error during the Axios POST request:', error);
+      }
+    };
+    fetchData();
+  }, []);
   return (
     <Sheet
       sx={{
@@ -92,6 +124,12 @@ export function CreatePersona() {
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
             <Textarea variant="soft" autoFocus minRows={1} placeholder="Prompts" value={prompts} onChange={handlePromptsChange} style={{ width: '100%' }} />
             {/* <Input fullWidth variant="outlined" placeholder="Prompts" value={prompts} onChange={handlePromptsChange} /> */}
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
+            <Typography>Category</Typography>
+          </Box>
+          <Box>
+            <DropDown categories={categories}></DropDown>
           </Box>
           <Button className="editPersona" type="button" variant="solid" sx={{ minWidth: 120 }} onClick={createPersona}>
             Create

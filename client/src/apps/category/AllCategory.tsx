@@ -57,7 +57,7 @@ export function AllCategory(props: {}) {
   // state
   const [searchQuery, setSearchQuery] = React.useState('');
   const [editId, setEditId] = React.useState('');
-  const [systemPurposes, setSystemPurposes] = React.useState<OriginalDataType[]>([]);
+  const [categories, setCategories] = React.useState<OriginalDataType[]>([]);
 
   const goToPersonasPage = (id: string) => {
     setEditId(id);
@@ -88,7 +88,7 @@ export function AllCategory(props: {}) {
         const response = await axios.get(url, config);
 
         const originalData: OriginalDataType[] = response.data;
-        setSystemPurposes(originalData);
+        setCategories(originalData);
       } catch (error) {
         console.error('Error during the Axios POST request:', error);
       }
@@ -112,7 +112,7 @@ export function AllCategory(props: {}) {
         </Box>
         <Box sx={{ maxWidth: bpMaxWidth }}>
           <Grid container spacing={tileSpacing} sx={{ justifyContent: 'flex-start' }}>
-            {systemPurposes.map((item, key) => (
+            {categories.map((item, key) => (
               <Grid key={key}>
                 <Button
                   onClick={() => goToPersonasPage(item.id as string)}

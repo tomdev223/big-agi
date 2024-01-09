@@ -43,6 +43,7 @@ export function CreateCategory() {
       console.error('Error:', error);
     }
   };
+
   return (
     <Sheet
       sx={{
