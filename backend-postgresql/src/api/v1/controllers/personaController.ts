@@ -12,7 +12,7 @@ import {
   responseUpdateDelete,
   uuidError,
   validateError,
-  validateLimitOffset
+  validateLimitOffset,
 } from '../helpers';
 
 export const createPersona = async (req: Request, res: Response) => {
@@ -22,8 +22,8 @@ export const createPersona = async (req: Request, res: Response) => {
   const { title, description, systemMessage, symbol, examples, call, voices, categoryId } = body;
 
   const category = {
-    id:categoryId
-  }
+    id: categoryId,
+  };
   console.log('req body', body);
   const persona = new Persona({
     title,
@@ -33,7 +33,7 @@ export const createPersona = async (req: Request, res: Response) => {
     examples,
     call,
     voices,
-    category
+    category,
   });
   console.log('received category', category);
   // Validation of input for errors
@@ -61,14 +61,15 @@ export const getPersona = async (req: Request, res: Response) => {
 
   // find food by the id
   const persona = await entityManager.findOne(Persona, {
-    where: { id: personaId }, relations: ['category']
+    where: { id: personaId },
+    relations: ['category'],
   });
 
   if (persona) {
     return res.status(200).json({
       code: ResponseCode.SUCCESS,
       message: 'Food found.',
-      persona
+      persona,
     });
   } else {
     return res.status(204).send();
@@ -93,8 +94,8 @@ export const updatePersona = async (req: Request, res: Response) => {
 
   const { id, title, description, systemMessage, symbol, examples, call, voices, categoryId } = body;
   const category = {
-    id:categoryId
-  }
+    id: categoryId,
+  };
   const persona = new Persona({ title, description, systemMessage, symbol, examples, call, voices, category });
 
   // Validation of input for errors
@@ -116,10 +117,22 @@ export const findByTitle = async (req: Request, res: Response) => {
   const { title } = req.body;
 
   const persona = await entityManager.findOne(Persona, {
-    where: { title: title }, relations: ['category']
+    where: { title: title },
+    relations: ['category'],
   });
 
   res.status(200).json(persona);
+};
+
+export const findByCategory = async (req: Request, res: Response) => {
+  const { categoryId } = req.body;
+
+  const category = await entityManager.findOne(Category, {
+    where: { id: categoryId },
+    relations: ['personas'],
+  });
+
+  res.status(200).json(category);
 };
 
 export const getPersonas = async (req: Request, res: Response) => {
@@ -129,8 +142,7 @@ export const getPersonas = async (req: Request, res: Response) => {
   // const { limit, offset } = validateLimitOffset(body);
 
   // find all foods
-  const personas = await entityManager.find(Persona, { relations: ['category']
-  });
+  const personas = await entityManager.find(Persona, { relations: ['category'] });
 
   return res.status(200).json(personas);
 };

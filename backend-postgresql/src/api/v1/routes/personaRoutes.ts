@@ -10,6 +10,7 @@ import {
   getPersonas,
   deletePersona,
   findByTitle,
+  findByCategory,
 } from '../controllers/personaController';
 
 const router = express.Router();
@@ -24,5 +25,6 @@ router.post('/create', createPersona);
 
 router.post('/update', updatePersona);
 router.post('/findByTitle', findByTitle);
+router.post('/findByCategory', findByCategory);
 
 export default router;
