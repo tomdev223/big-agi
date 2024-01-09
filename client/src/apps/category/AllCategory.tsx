@@ -62,7 +62,7 @@ export function AllCategory(props: {}) {
   const goToPersonaListByCategory = (id: string) => {
     router.push({
       pathname: '/indexByCategory',
-      query: { id: editId }, // Additional query params can be added here
+      query: { id: id }, // Additional query params can be added here
     });
   };
   const goToPersonasPage = (id: string) => {
