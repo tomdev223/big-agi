@@ -59,21 +59,15 @@ export function AllCategory(props: {}) {
   const [editId, setEditId] = React.useState('');
   const [categories, setCategories] = React.useState<OriginalDataType[]>([]);
 
-  const findByCategory = async (categoryId: string) => {
-    try {
-      const response = await axios.post(`${NEXT_PUBLIC_PROTOCOL}://${NEXT_PUBLIC_SERVER_HOST}/api/persona/findByCategory`, {
-        categoryId: categoryId,
-      });
-      if (response.data) {
-        console.log('Category', response.data);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
+  const goToPersonaListByCategory = () => {
+    router.push({
+      pathname: '/indexByCategory',
+      query: { id: editId }, // Additional query params can be added here
+    });
   };
   const goToPersonasPage = (id: string) => {
-    findByCategory(id as string);
     setEditId(id);
+    goToPersonaListByCategory();
   };
   const goToCreate = () => {
     // router.push(`/createPersona`);
@@ -153,9 +147,12 @@ export function AllCategory(props: {}) {
           <Button className="editPersona" type="button" variant="solid" onClick={goToCreate} sx={{ marginRight: 2 }}>
             Add
           </Button>
-          <Button className="editPersona" type="button" variant="outlined" onClick={goToEdit}>
+          {/* <Button className="editPersona" type="button" variant="outlined" onClick={goToEdit}>
             Edit
-          </Button>
+          </Button> */}
+          {/* <Button className="editPersona" type="button" variant="outlined" onClick={goToPersonaListByCategory}>
+            Show Personas in Category
+          </Button> */}
         </Box>
         <Box></Box>
       </Stack>
