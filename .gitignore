@@ -3,6 +3,7 @@
 /backend-postgresql/build
 /backend-postgresql/.idea
 /backend-postgresql/.vscode
+/backend-postgresql/.env
 /backend-mongodb/node_modules
 /backend-mongodb/build
 /backend-mongodb/.idea
