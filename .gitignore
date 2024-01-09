@@ -19,6 +19,7 @@
 /client/.next/
 /client/out/
 /client/.env.local
+/client/yarn.lock
 
 # production
 /client/build
