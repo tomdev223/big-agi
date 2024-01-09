@@ -92,13 +92,6 @@ export function PersonaSelector(props: {
       query: { id: id }, // Additional query params can be added here
     });
   };
-  const goToCreate = () => {
-    // router.push(`/createPersona`);
-    router.push({
-      pathname: '/createPersona',
-    });
-  };
-
   // state
   const [searchQuery, setSearchQuery] = React.useState('');
   const [filteredIDs, setFilteredIDs] = React.useState<SystemPurposeId[] | null>(null);
@@ -159,8 +152,17 @@ export function PersonaSelector(props: {
     setEditId(newEditId); // This will schedule the state to be updated
     navigateToPersonaEdit(newEditId as string); // Use the new value directly
   };
-  const redirectToCreate = () => {
-    goToCreate();
+  const goToCreatePersona = () => {
+    // router.push(`/createPersona`);
+    router.push({
+      pathname: '/createPersona',
+    });
+  };
+  const goToCreateCategory = () => {
+    // router.push(`/createPersona`);
+    router.push({
+      pathname: '/category/createCategory',
+    });
   };
 
   const handlePurposeChanged = (purposeId: SystemPurposeId | null) => {
@@ -223,7 +225,7 @@ export function PersonaSelector(props: {
             }}
           >
             <Typography level="title-sm">AI Persona</Typography>
-            <Button variant="plain" color="neutral" size="sm" onClick={redirectToCreate}>
+            <Button variant="plain" color="neutral" size="sm" onClick={goToCreatePersona}>
               Create
             </Button>
             <Button variant="plain" color="neutral" size="sm" onClick={toggleEditMode}>
@@ -315,6 +317,9 @@ export function PersonaSelector(props: {
               }}
             />
           )}
+          <Button className="editPersona" type="button" variant="solid" onClick={goToCreateCategory} sx={{ marginRight: 2 }}>
+            Add Category
+          </Button>
         </Box>
       </Stack>
     </>
