@@ -17,7 +17,7 @@ export function ChatDropdowns(props: {
   return <>
 
     {/* Model selector */}
-    {chatLLMDropdown}
+    {/* {chatLLMDropdown} */}
 
     {/* Persona selector */}
     {personaDropdown}
