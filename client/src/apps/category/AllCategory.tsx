@@ -59,7 +59,20 @@ export function AllCategory(props: {}) {
   const [editId, setEditId] = React.useState('');
   const [categories, setCategories] = React.useState<OriginalDataType[]>([]);
 
+  const findByCategory = async (categoryId: string) => {
+    try {
+      const response = await axios.post(`${NEXT_PUBLIC_PROTOCOL}://${NEXT_PUBLIC_SERVER_HOST}/api/persona/findByCategory`, {
+        categoryId: categoryId,
+      });
+      if (response.data) {
+        console.log('Category', response.data);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
   const goToPersonasPage = (id: string) => {
+    findByCategory(id as string);
     setEditId(id);
   };
   const goToCreate = () => {
@@ -74,6 +87,7 @@ export function AllCategory(props: {}) {
       query: { id: editId }, // Additional query params can be added here
     });
   };
+
   React.useEffect(() => {
     const fetchData = async () => {
       try {
