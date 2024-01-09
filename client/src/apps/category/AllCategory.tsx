@@ -59,7 +59,7 @@ export function AllCategory(props: {}) {
   const [editId, setEditId] = React.useState('');
   const [categories, setCategories] = React.useState<OriginalDataType[]>([]);
 
-  const goToPersonaListByCategory = () => {
+  const goToPersonaListByCategory = (id: string) => {
     router.push({
       pathname: '/indexByCategory',
       query: { id: editId }, // Additional query params can be added here
@@ -67,7 +67,7 @@ export function AllCategory(props: {}) {
   };
   const goToPersonasPage = (id: string) => {
     setEditId(id);
-    goToPersonaListByCategory();
+    goToPersonaListByCategory(id as string);
   };
   const goToCreate = () => {
     // router.push(`/createPersona`);
