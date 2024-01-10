@@ -136,7 +136,7 @@ export function AllCategory(props: {}) {
                     margin: 1,
                   }}
                 >
-                  <div style={{ fontSize: '2rem' }}>{item.icon}</div>
+                  <div style={{ fontSize: '4rem' }}>{item.icon}</div>
                   <div>{item.title}</div>
                 </Button>
               </Grid>

@@ -262,7 +262,7 @@ export function PersonaSelector(props: {
                       sx={{ alignSelf: 'flex-start' }}
                     />
                   )}
-                  <div style={{ fontSize: '2rem' }}>{props.systemPurposes[spId as SystemPurposeId]?.symbol}</div>
+                  <div style={{ fontSize: '4rem' }}>{props.systemPurposes[spId as SystemPurposeId]?.symbol}</div>
                   <div>{props.systemPurposes[spId as SystemPurposeId]?.title}</div>
                 </Button>
               </Grid>
