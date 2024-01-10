@@ -26,6 +26,7 @@ export function CreatePersona() {
   const [symbol, setSymbol] = React.useState('');
   const [description, setDescription] = React.useState('');
   const [prompts, setPrompts] = React.useState('');
+  const [categoryId, setCategoryId] = React.useState('');
   const router = useRouter();
   const handleTitleChange = (event: any) => {
     setTitle(event.target.value);
@@ -38,6 +39,9 @@ export function CreatePersona() {
   };
   const handlePromptsChange = (event: any) => {
     setPrompts(event.target.value);
+  };
+  const handleCategoryIdChange = (val: string) => {
+    setCategoryId(val);
   };
   const navigateToDashboard = () => {
     // router.push(`/editPersona/${id}`);
@@ -52,6 +56,7 @@ export function CreatePersona() {
         symbol: symbol,
         description: description,
         systemMessage: prompts,
+        categoryId: categoryId,
       });
       if (response.data) {
         navigateToDashboard();
@@ -129,7 +134,7 @@ export function CreatePersona() {
             <Typography>Category</Typography>
           </Box>
           <Box>
-            <DropDown categories={categories}></DropDown>
+            <DropDown categoryIdUpdate={handleCategoryIdChange} categories={categories}></DropDown>
           </Box>
           <Button className="editPersona" type="button" variant="solid" sx={{ minWidth: 120 }} onClick={createPersona}>
             Create

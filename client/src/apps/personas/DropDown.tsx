@@ -8,19 +8,20 @@ type OriginalDataType = {
   icon: string;
   color: string;
 };
-export function DropDown(props: { categories: OriginalDataType[] }) {
+export function DropDown(props: {   categoryIdUpdate: (val: string) => void  , categories: OriginalDataType[] }) {
   const [value, setValue] = React.useState('');
 
   const handleChange = (event: any) => {
     if (event) {
       console.log('Updated value', props.categories[event?.target.value].title);
-      setValue(props.categories[event?.target.value].title);
+      setValue(props.categories[event?.target.value].id);
+      props.categoryIdUpdate(props.categories[event?.target.value].id as string);
     }
   };
 
   return (
     <FormControl>
-      <Select value="sss" onChange={handleChange}>
+      <Select  onChange={handleChange}>
         {props.categories.map((item, key) => (
           <Grid key={key}>
             <MenuItem value={key}>{item.title}</MenuItem>
