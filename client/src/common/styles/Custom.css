@@ -20,6 +20,7 @@
     display: flex; /* Flex display for centering content */
     align-items: center; /* Align items vertically */
     justify-content: center; /* Center content horizontally */
+    margin: auto;
 }
 
 #largeCallButton:hover {
