@@ -16,8 +16,8 @@ import axios from 'axios';
 // Absolutely dislike this workaround, but it's the only way I found to make it work
 import { useRouter } from 'next/router';
 
-const bpTileSize = { xs: 116, md: 125, xl: 130 };
-const bpTileSizeWidth = { xs: 180, md: 200, xl: 250 };
+const bpTileSize = { xs: 116, md: 180, xl: 250 };
+const bpTileSizeWidth = { xs: 180, md: 300, xl: 400 };
 const tileCols = [3, 4, 6];
 const tileSpacing = 1;
 const bpMaxWidth = Object.entries(bpTileSize).reduce(
@@ -118,7 +118,7 @@ export function AllCategory(props: {}) {
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
           <Typography sx={{ fontSize: 20, marginBottom: 5 }}>Available training categories</Typography>
         </Box>
-        <Box sx={{ maxWidth: bpMaxWidth }}>
+        <Box >
           <Grid container spacing={tileSpacing} sx={{ justifyContent: 'flex-start' }}>
             {categories.map((item, key) => (
               <Grid key={key}>

@@ -22,7 +22,7 @@ import axios from 'axios';
 // Absolutely dislike this workaround, but it's the only way I found to make it work
 import { useRouter } from 'next/router';
 
-const bpTileSize = { xs: 116, md: 125, xl: 130 };
+const bpTileSize = { xs: 180, md: 300, xl: 400 };
 const tileCols = [3, 4, 6];
 const tileSpacing = 1;
 const bpMaxWidth = Object.entries(bpTileSize).reduce(
@@ -213,7 +213,7 @@ export function PersonaSelector(props: {
       )}
 
       <Stack direction="column" sx={{ minHeight: '60vh', justifyContent: 'center', alignItems: 'center' }}>
-        <Box sx={{ maxWidth: bpMaxWidth }}>
+        <Box>
           <Box
             sx={{
               display: 'flex',
