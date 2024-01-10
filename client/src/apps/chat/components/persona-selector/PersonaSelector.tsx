@@ -213,8 +213,8 @@ export function PersonaSelector(props: {
         </Box>
       )}
 
-      <Stack direction="column" sx={{ minHeight: '60vh', justifyContent: 'center', alignItems: 'center' }}>
-        <Box maxWidth={bpMaxWidth}>
+      <Stack maxWidth={bpMaxWidth} direction="column" sx={{ minHeight: '60vh', justifyContent: 'center', alignItems: 'center' }}>
+        <Box>
           <Box
             sx={{
               display: 'flex',
