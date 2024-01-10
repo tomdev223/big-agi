@@ -234,7 +234,7 @@ export function PersonaSelector(props: {
             </Button>
           </Box>
 
-          <Grid container spacing={tileSpacing} sx={{ justifyContent: 'flex-start' }}>
+          <Grid container spacing={tileSpacing} sx={{ justifyContent: 'center' }}>
             {purposeIDs.map((spId) => (
               <Grid key={spId}>
                 <Button
