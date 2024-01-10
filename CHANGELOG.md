@@ -4,6 +4,16 @@ Welcome to big-AGI upgraded version.
 We customized BIG-AGI for AI-Seller project.
 It wil help business to save assistant.
 
+### What's New in 1.0.6 · Jan 10, 2024
+
+- **Category preview**: Implemented preview for create category page and edit category page
+- **Dashboard page**: Show the categories boxes in the home page, replacing tree the current persona's
+- **Dropdown in Persona**: Add the category drop down field into the Create Persona form
+- **Category link**: Link avaliable categories
+- **Add new category button**: In the persona webform, add a link to "Add new category"
+- **Persona width**: Set a maximum width to the images
+- **Persona by category**:  Be sure that only the linked personas are shown when clicking a category
+  
 ### What's New in 1.0.5 · Jan 06, 2024
 
 - **Category CRUD**: CRUD in backend and build create and edit category pages
