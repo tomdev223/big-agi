@@ -23,7 +23,7 @@ import axios from 'axios';
 // Absolutely dislike this workaround, but it's the only way I found to make it work
 import { useRouter } from 'next/router';
 
-const bpTileSize = { xs: 150, md: 250, xl: 300 };
+const bpTileSize = { xs: 100, md: 150, xl: 500 };
 const tileCols = [3, 4, 6];
 const tileSpacing = 1;
 const bpMaxWidth = Object.entries(bpTileSize).reduce(
@@ -242,11 +242,13 @@ export function PersonaSelector(props: {
                   color={!editMode && systemPurposeId === spId ? 'primary' : props.systemPurposes[spId as SystemPurposeId].highlighted ? 'warning' : 'neutral'}
                   onClick={() => !editMode && handlePurposeChanged(spId as SystemPurposeId)}
                   sx={{
+                    position: "relative",
                     flexDirection: 'column',
                     fontWeight: 500,
                     gap: bpTileGap,
-                    height: bpTileSize,
-                    width: bpTileSize,
+                    height: "200px",
+                    width: "200px",
+                    marginLeft: "20px",
                     ...(editMode || systemPurposeId !== spId
                       ? {
                           boxShadow: 'md',
@@ -265,14 +267,12 @@ export function PersonaSelector(props: {
                   )}
                   <div >
                     <Image
-                      layout="responsive"
+                      layout="fill"
                       src={props.systemPurposes[spId as SystemPurposeId]?.symbol}
-                      width={250}
-                      height={250}
                       alt="Picture of the author"
                     />
                     </div>
-                  <div style={{ fontSize: '1.5rem' }}>{props.systemPurposes[spId as SystemPurposeId]?.title}</div>
+                  <p style={{ fontSize: '1rem', zIndex:3, bottom: 0, position: "absolute", margin: 0 }}>{props.systemPurposes[spId as SystemPurposeId]?.title}</p>
                 </Button>
               </Grid>
             ))}
