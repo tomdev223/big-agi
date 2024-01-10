@@ -40,6 +40,9 @@ export function CreatePersona() {
   const handlePromptsChange = (event: any) => {
     setPrompts(event.target.value);
   };
+  const handleCategoryIdChangeSelf = (event: any) => {
+    setCategoryId(event.target.value);
+  };
   const handleCategoryIdChange = (val: string) => {
     setCategoryId(val);
   };
@@ -134,6 +137,7 @@ export function CreatePersona() {
             <Typography>Category</Typography>
           </Box>
           <Box>
+          <Input fullWidth variant="outlined" placeholder="CategoryId" value={categoryId} onChange={handleCategoryIdChangeSelf} />
             <DropDown categoryIdUpdate={handleCategoryIdChange} categories={categories}></DropDown>
           </Box>
           <Button className="editPersona" type="button" variant="solid" sx={{ minWidth: 120 }} onClick={createPersona}>

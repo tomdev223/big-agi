@@ -14,14 +14,13 @@ export function DropDown(props: {   categoryIdUpdate: (val: string) => void  , c
   const handleChange = (event: any) => {
     if (event) {
       console.log('Updated value', props.categories[event?.target.value].title);
-      setValue(props.categories[event?.target.value].id);
+      setValue(event?.target.value);
       props.categoryIdUpdate(props.categories[event?.target.value].id as string);
     }
   };
-
   return (
     <FormControl>
-      <Select  onChange={handleChange}>
+      <Select value={value}  onChange={handleChange}>
         {props.categories.map((item, key) => (
           <Grid key={key}>
             <MenuItem value={key}>{item.title}</MenuItem>
