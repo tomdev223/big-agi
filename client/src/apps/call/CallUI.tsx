@@ -372,8 +372,8 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
       </Typography>
 
       <CallAvatar
-        symbol={persona?.symbol || '?'}
-        imageUrl={persona?.imageUri}
+        symbol={""}
+        imageUrl={persona?.symbol}
         isRinging={isRinging}
         onClick={() => setAvatarClickCount(avatarClickCount + 1)}
       />
