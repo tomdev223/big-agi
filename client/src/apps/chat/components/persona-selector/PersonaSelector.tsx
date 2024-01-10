@@ -6,6 +6,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import ScienceIcon from '@mui/icons-material/Science';
 import SearchIcon from '@mui/icons-material/Search';
 import TelegramIcon from '@mui/icons-material/Telegram';
+import Image from 'next/image'
 
 import { DConversationId, useChatStore } from '~/common/state/store-chats';
 import { Link } from '~/common/components/Link';
@@ -262,8 +263,15 @@ export function PersonaSelector(props: {
                       sx={{ alignSelf: 'flex-start' }}
                     />
                   )}
-                  <div style={{ fontSize: '4rem' }}>{props.systemPurposes[spId as SystemPurposeId]?.symbol}</div>
-                  <div>{props.systemPurposes[spId as SystemPurposeId]?.title}</div>
+                  <div style={{ fontSize: '4rem' }}>
+                    <Image
+                      src={props.systemPurposes[spId as SystemPurposeId]?.symbol}
+                      width={220}
+                      height={220}
+                      alt="Picture of the author"
+                    />
+                    </div>
+                  <div><h1>{props.systemPurposes[spId as SystemPurposeId]?.title}</h1></div>
                 </Button>
               </Grid>
             ))}

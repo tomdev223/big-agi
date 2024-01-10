@@ -20,7 +20,7 @@ export function ChatDropdowns(props: {
     {/* {chatLLMDropdown} */}
 
     {/* Persona selector */}
-    {personaDropdown}
+    {/* {personaDropdown} */}
 
   </>;
 }

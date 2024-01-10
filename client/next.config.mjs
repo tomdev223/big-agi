@@ -1,5 +1,16 @@
 /** @type {import('next').NextConfig} */
 let nextConfig = {
+  
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'i.imgur.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
+  },
   reactStrictMode: true,
 
   // Note: disabled to chech whether the project becomes slower with this
