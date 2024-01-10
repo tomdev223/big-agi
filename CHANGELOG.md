@@ -13,6 +13,7 @@ It wil help business to save assistant.
 - **Add new category button**: In the persona webform, add a link to "Add new category"
 - **Persona width**: Set a maximum width to the images
 - **Persona by category**:  Be sure that only the linked personas are shown when clicking a category
+- **Icon size**:  Large icon for persona and category
   
 ### What's New in 1.0.5 · Jan 06, 2024
 
