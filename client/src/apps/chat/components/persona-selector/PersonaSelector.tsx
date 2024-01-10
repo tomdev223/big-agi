@@ -23,7 +23,7 @@ import axios from 'axios';
 // Absolutely dislike this workaround, but it's the only way I found to make it work
 import { useRouter } from 'next/router';
 
-const bpTileSize = { xs: 180, md: 300, xl: 400 };
+const bpTileSize = { xs: 150, md: 250, xl: 300 };
 const tileCols = [3, 4, 6];
 const tileSpacing = 1;
 const bpMaxWidth = Object.entries(bpTileSize).reduce(
@@ -263,15 +263,16 @@ export function PersonaSelector(props: {
                       sx={{ alignSelf: 'flex-start' }}
                     />
                   )}
-                  <div style={{ fontSize: '4rem' }}>
+                  <div >
                     <Image
+                      layout="responsive"
                       src={props.systemPurposes[spId as SystemPurposeId]?.symbol}
-                      width={220}
-                      height={220}
+                      width={250}
+                      height={250}
                       alt="Picture of the author"
                     />
                     </div>
-                  <div><h1>{props.systemPurposes[spId as SystemPurposeId]?.title}</h1></div>
+                  <div style={{ fontSize: '1.5rem' }}>{props.systemPurposes[spId as SystemPurposeId]?.title}</div>
                 </Button>
               </Grid>
             ))}
