@@ -17,7 +17,7 @@ export function LogoProgress(props: { showProgress: boolean }) {
     justifyContent: 'center',
   }}>
     <Box sx={{ position: 'absolute', mt: 0.75 }}>
-      <Image src='/icons/favicon-32x32.png' alt='App Logo' width={32} height={32} />
+      <Image src='/icons/ai-seller.png' alt='App Logo' width={32} height={32} />
     </Box>
     {props.showProgress && <CircularProgress size='lg' sx={{ position: 'absolute' }} />}
   </Box>;

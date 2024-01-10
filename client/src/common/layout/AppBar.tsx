@@ -13,6 +13,7 @@ import { Brand } from '../app.config';
 import { CloseableMenu } from '../components/CloseableMenu';
 import { Link } from '../components/Link';
 import { LogoSquircle } from '../components/LogoSquircle';
+import Image from 'next/image'
 
 // import { AppBarSupportItem } from './AppBarSupportItem';
 import { AppBarSwitcherItem } from './AppBarSwitcherItem';
@@ -21,14 +22,8 @@ import { closeLayoutDrawer, closeLayoutMenu, openLayoutPreferences, setLayoutDra
 function AppBarTitle() {
   return (
     <Link href="/">
-      <LogoSquircle
-        sx={{
-          width: 32,
-          height: 32,
-          color: 'white',
-          // filter: 'invert(1)',
-        }}
-      />
+      
+      <Image src='/icons/ai-seller.png' alt='App Logo' width={32} height={32} />
       <Typography
         sx={{
           ml: { xs: 1, md: 2 },

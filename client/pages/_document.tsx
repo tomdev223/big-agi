@@ -21,9 +21,9 @@ export default function MyDocument({ emotionStyleTags }: MyDocumentProps) {
         <meta name='theme-color' content={Brand.Meta.ThemeColor} />
 
         {/* Favicons & PWA */}
-        <link rel='shortcut icon' href='/favicon.ico' />
-        <link rel='icon' type='image/png' sizes='32x32' href='/icons/favicon-32x32.png' />
-        <link rel='icon' type='image/png' sizes='16x16' href='/icons/favicon-16x16.png' />
+        <link rel='shortcut icon' href='/icon/ai-seller.png' />
+        <link rel='icon' type='image/png' sizes='32x32' href='/icons/ai-seller.png' />
+        <link rel='icon' type='image/png' sizes='16x16' href='/icons/ai-seller.png' />
         <link rel='apple-touch-icon' sizes='180x180' href='/icons/apple-touch-icon.png' />
         <link rel='manifest' href='/manifest.json' />
         <meta name='apple-mobile-web-app-capable' content='yes' />
