@@ -127,7 +127,7 @@ export function CreatePersona() {
             <Typography>prompts</Typography>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
-            <Textarea variant="soft" autoFocus minRows={1} placeholder="Prompts" value={prompts} onChange={handlePromptsChange} style={{ width: '100%' }} />
+            <Textarea variant="outlined" autoFocus minRows={1} placeholder="Prompts" value={prompts} onChange={handlePromptsChange} style={{ width: '100%' }} />
             {/* <Input fullWidth variant="outlined" placeholder="Prompts" value={prompts} onChange={handlePromptsChange} /> */}
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
