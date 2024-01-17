@@ -41,7 +41,7 @@ export async function speakText(text: string, voiceId?: string) {
     // const edgeResponse = await fetchApiElevenlabsSpeech(text, elevenLabsApiKey, voiceId || elevenLabsVoiceId, nonEnglish, false);
     
     //Piper for TTS
-    const edgeResponse: any = await axios.get(`${NEXT_PUBLIC_PROTOCOL}://3.13.141.173:8133/tts?model=US-danny&pitch=1`, 
+    const edgeResponse: any = await axios.get(`${NEXT_PUBLIC_PROTOCOL}://3.13.141.173:3003/tts?model=US-danny&pitch=1`, 
     {
       headers: {
       'Access-Control-Allow-Origin': '*',
