@@ -1,3 +1,4 @@
+import { NEXT_PUBLIC_PROTOCOL, NEXT_PUBLIC_SERVER_HOST, NEXT_PUBLIC_CLIENT_PORT } from '../../constants/index';
 import { backendCaps } from '~/modules/backend/state-backend';
 
 import { AudioLivePlayer } from '~/common/util/AudioLivePlayer';
@@ -7,6 +8,7 @@ import { useUIPreferencesStore } from '~/common/state/store-ui';
 
 import type { SpeechInputSchema } from './elevenlabs.router';
 import { getElevenLabsData, useElevenLabsData } from './store-module-elevenlabs';
+import axios from 'axios';
 
 
 export const isValidElevenLabsApiKey = (apiKey?: string) => !!apiKey && apiKey.trim()?.length >= 32;
@@ -35,7 +37,26 @@ export async function speakText(text: string, voiceId?: string) {
   const nonEnglish = !(preferredLanguage?.toLowerCase()?.startsWith('en'));
 
   try {
+    //Elevenlab for TTS
     const edgeResponse = await fetchApiElevenlabsSpeech(text, elevenLabsApiKey, voiceId || elevenLabsVoiceId, nonEnglish, false);
+    
+    //Piper for TTS
+  //   const edgeResponse: any = await axios.get(`${NEXT_PUBLIC_PROTOCOL}://3.13.141.173:8133/tts?model=US-danny&pitch=1`, 
+  //   {
+  //     headers: {
+  //     'Access-Control-Allow-Origin': '*',
+  //     'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+  //     'Authorization': 'mysecuretoken',
+  //   }, 
+  //   params: {
+  //     message: text,
+  //     filters:{
+  //       robotic:["roundstart"]
+  //     }
+  //   }
+  // });
+
+
     const audioBuffer = await edgeResponse.arrayBuffer();
     await playSoundBuffer(audioBuffer);
   } catch (error) {
