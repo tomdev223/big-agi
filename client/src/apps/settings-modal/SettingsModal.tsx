@@ -147,8 +147,6 @@ export function SettingsModal() {
         >
           <Tab disableIndicator value={1} sx={tabFixSx}>Chat</Tab>
           <Tab disableIndicator value={3} sx={tabFixSx}>Voice</Tab>
-          <Tab disableIndicator value={2} sx={tabFixSx}>Draw</Tab>
-          <Tab disableIndicator value={4} sx={tabFixSx}>Tools</Tab>
         </TabList>
 
         <TabPanel value={1} sx={{ p: 'var(--Tabs-gap)' }}>
@@ -175,26 +173,7 @@ export function SettingsModal() {
             </Topic>
           </Topics>
         </TabPanel>
-
-        <TabPanel value={2} sx={{ p: 'var(--Tabs-gap)' }}>
-          <Topics>
-            <Topic icon='🖍️️' title='Prodia API'>
-              <ProdiaSettings />
-            </Topic>
-          </Topics>
-        </TabPanel>
-
-        <TabPanel value={4} sx={{ p: 'var(--Tabs-gap)' }}>
-          <Topics>
-            <Topic icon={<SearchIcon />} title='Browsing' startCollapsed>
-              <BrowseSettings />
-            </Topic>
-            <Topic icon={<SearchIcon />} title='Google Search API' startCollapsed>
-              <GoogleSearchSettings />
-            </Topic>
-            {/*<Topic icon='🛠' title='Other tools...' />*/}
-          </Topics>
-        </TabPanel>
+        
       </Tabs>
 
       <Divider />
