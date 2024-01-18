@@ -38,23 +38,23 @@ export async function speakText(text: string, voiceId?: string) {
 
   try {
     //Elevenlab for TTS
-    // const edgeResponse = await fetchApiElevenlabsSpeech(text, elevenLabsApiKey, voiceId || elevenLabsVoiceId, nonEnglish, false);
+    const edgeResponse = await fetchApiElevenlabsSpeech(text, elevenLabsApiKey, voiceId || elevenLabsVoiceId, nonEnglish, false);
     
     //Piper for TTS
-    const edgeResponse: any = await axios.get(`${NEXT_PUBLIC_PROTOCOL}://3.13.141.173:3003/tts?model=US-danny&pitch=1`, 
-    {
-      headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-      'Authorization': 'mysecuretoken',
-    }, 
-    params: {
-      message: text,
-      filters:{
-        robotic:["roundstart"]
-      }
-    }
-  });
+  //   const edgeResponse: any = await axios.get(`${NEXT_PUBLIC_PROTOCOL}://3.13.141.173:3003/tts?model=US-danny&pitch=1`, 
+  //   {
+  //     headers: {
+  //     'Access-Control-Allow-Origin': '*',
+  //     'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+  //     'Authorization': 'mysecuretoken',
+  //   }, 
+  //   params: {
+  //     message: text,
+  //     filters:{
+  //       robotic:["roundstart"]
+  //     }
+  //   }
+  // });
 
 
     const audioBuffer = await edgeResponse.arrayBuffer();
@@ -75,7 +75,22 @@ export async function EXPERIMENTAL_speakTextStream(text: string, voiceId?: strin
   const { preferredLanguage } = useUIPreferencesStore.getState();
   const nonEnglish = !(preferredLanguage?.toLowerCase()?.startsWith('en'));
 
-  const edgeResponse = await fetchApiElevenlabsSpeech(text, elevenLabsApiKey, voiceId || elevenLabsVoiceId, nonEnglish, true);
+  // const edgeResponse = await fetchApiElevenlabsSpeech(text, elevenLabsApiKey, voiceId || elevenLabsVoiceId, nonEnglish, true);
+   //Piper for TTS
+    const edgeResponse: any = await axios.get(`${NEXT_PUBLIC_PROTOCOL}://3.13.141.173:3003/tts?model=US-danny&pitch=1`, 
+    {
+      headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+      'Authorization': 'mysecuretoken',
+    }, 
+    params: {
+      message: text,
+      filters:{
+        robotic:["roundstart"]
+      }
+    }
+  });
 
   // if (!liveAudioPlayer)
   const liveAudioPlayer = new AudioLivePlayer();
