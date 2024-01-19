@@ -86,7 +86,7 @@ export async function EXPERIMENTAL_speakTextStream(text: string, voiceId?: strin
     }, 
     params: {
       message: text,
-      'filters[robotic]': ["roundstart"]
+      'filters[robotic]': "roundstart"
     }
   });
 
