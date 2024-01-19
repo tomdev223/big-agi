@@ -85,8 +85,10 @@ export async function EXPERIMENTAL_speakTextStream(text: string, voiceId?: strin
       'Authorization': 'mysecuretoken',
     }, 
     params: {
+      model: 'US-danny',
+      pitch: 1,
       message: text,
-      'filters[robotic]': "roundstart"
+      'filters[robotic]': 'roundstart' // Assuming 'roundstart' is a valid parameter
     }
   });
 
