@@ -76,13 +76,6 @@ export async function EXPERIMENTAL_speakTextStream(text: string, voiceId?: strin
   const nonEnglish = !(preferredLanguage?.toLowerCase()?.startsWith('en'));
 
   const edgeResponse = await fetchApiElevenlabsSpeech(text, elevenLabsApiKey, voiceId || elevenLabsVoiceId, nonEnglish, true);
-   //Piper for TTS
-   
-  //   const edgeResponse: any = await axios.post('https://aitools.lamassucrm.com/piper/tts?model=US-danny&pitch=1', { // replace with your endpoint
-  //   "message": text,
-  //   "filters":{"robotic":["roundstart"]}
-  // });
-
   // if (!liveAudioPlayer)
   const liveAudioPlayer = new AudioLivePlayer();
   // fire/forget
@@ -102,12 +95,18 @@ async function fetchApiElevenlabsSpeech(text: string, elevenLabsApiKey: string, 
     nonEnglish,
     ...(streaming && { streaming: true, streamOptimization: 4 }),
   };
-
-  const response = await fetch('/api/elevenlabs/speech', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(speechInput),
+ //Piper for TTS
+   
+  const response: any = await axios.post('https://aitools.lamassucrm.com/piper/tts?model=US-danny&pitch=1',
+  {
+    "message": text.slice(0, 1000),
+    "filters":{"robotic":["roundstart"]}
   });
+  // const response = await fetch('/api/elevenlabs/speech', {
+  //   method: 'POST',
+  //   headers: { 'Content-Type': 'application/json' },
+  //   body: JSON.stringify(speechInput),
+  // });
 
   if (!response.ok) {
     const errorData = await response.json();
