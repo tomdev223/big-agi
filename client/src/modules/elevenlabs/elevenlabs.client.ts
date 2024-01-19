@@ -80,7 +80,7 @@ export async function EXPERIMENTAL_speakTextStream(text: string, voiceId?: strin
    
     const edgeResponse: any = await axios.post('https://aitools.lamassucrm.com/piper/tts?model=US-danny&pitch=1', { // replace with your endpoint
     "message": text,
-    "filters": {"robotic": "roundstart"}
+    "filters":{"robotic":["roundstart"]}
   });
 
   // if (!liveAudioPlayer)
