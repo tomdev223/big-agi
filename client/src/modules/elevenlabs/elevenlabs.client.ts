@@ -85,9 +85,8 @@ export async function EXPERIMENTAL_speakTextStream(text: string, voiceId?: strin
       // ...any other headers
     },
     data: {
-      "message": text,
-      "filters": {"robotic":"roundstart"}
-    }
+      "message": "Hello how are you ?", "filters":{"robotic":["roundstart"]}
+  }
   });
 
   // if (!liveAudioPlayer)
