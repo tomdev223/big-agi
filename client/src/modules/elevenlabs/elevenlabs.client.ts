@@ -77,18 +77,16 @@ export async function EXPERIMENTAL_speakTextStream(text: string, voiceId?: strin
 
   // const edgeResponse = await fetchApiElevenlabsSpeech(text, elevenLabsApiKey, voiceId || elevenLabsVoiceId, nonEnglish, true);
    //Piper for TTS
-    const edgeResponse: any = await axios.get(`https://aitools.lamassucrm.com/piper/tts?model=US-danny&pitch=1`, 
-    {
-      headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-      'Authorization': 'mysecuretoken',
-    }, 
-    params: {
-      model: 'US-danny',
-      pitch: 1,
-      message: text,
-      'filters[robotic]': 'roundstart' // Assuming 'roundstart' is a valid parameter
+    const edgeResponse: any = await axios({
+    method: 'get',
+    url: 'https://aitools.lamassucrm.com/piper/tts?model=US-danny&pitch=1', // replace with your endpoint
+    headers: {
+      'Content-Type': 'application/json',
+      // ...any other headers
+    },
+    data: {
+      "message": text,
+      "filters": {"robotic":"roundstart"}
     }
   });
 
