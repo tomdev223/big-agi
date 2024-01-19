@@ -77,16 +77,10 @@ export async function EXPERIMENTAL_speakTextStream(text: string, voiceId?: strin
 
   // const edgeResponse = await fetchApiElevenlabsSpeech(text, elevenLabsApiKey, voiceId || elevenLabsVoiceId, nonEnglish, true);
    //Piper for TTS
-    const edgeResponse: any = await axios({
-    method: 'get',
-    url: 'https://aitools.lamassucrm.com/piper/tts?model=US-danny&pitch=1', // replace with your endpoint
-    headers: {
-      'Content-Type': 'application/json',
-      // ...any other headers
-    },
-    data: {
-      "message": "Hello how are you ?", "filters":{"robotic":["roundstart"]}
-  }
+   
+    const edgeResponse: any = await axios.post('https://aitools.lamassucrm.com/piper/tts?model=US-danny&pitch=1', { // replace with your endpoint
+    "message": text,
+    "filters": {"robotic": "roundstart"}
   });
 
   // if (!liveAudioPlayer)
