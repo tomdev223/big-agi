@@ -75,13 +75,13 @@ export async function EXPERIMENTAL_speakTextStream(text: string, voiceId?: strin
   const { preferredLanguage } = useUIPreferencesStore.getState();
   const nonEnglish = !(preferredLanguage?.toLowerCase()?.startsWith('en'));
 
-  // const edgeResponse = await fetchApiElevenlabsSpeech(text, elevenLabsApiKey, voiceId || elevenLabsVoiceId, nonEnglish, true);
+  const edgeResponse = await fetchApiElevenlabsSpeech(text, elevenLabsApiKey, voiceId || elevenLabsVoiceId, nonEnglish, true);
    //Piper for TTS
    
-    const edgeResponse: any = await axios.post('https://aitools.lamassucrm.com/piper/tts?model=US-danny&pitch=1', { // replace with your endpoint
-    "message": text,
-    "filters":{"robotic":["roundstart"]}
-  });
+  //   const edgeResponse: any = await axios.post('https://aitools.lamassucrm.com/piper/tts?model=US-danny&pitch=1', { // replace with your endpoint
+  //   "message": text,
+  //   "filters":{"robotic":["roundstart"]}
+  // });
 
   // if (!liveAudioPlayer)
   const liveAudioPlayer = new AudioLivePlayer();
