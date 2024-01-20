@@ -87,10 +87,10 @@ async function fetchApiElevenlabsSpeech(text: string, elevenLabsApiKey: string, 
   const response = await fetch('https://aitools.lamassucrm.com/piper/tts?model=US-danny&pitch=1', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      "message": text.slice(0, 1000),
-      "filters":{"robotic":["roundstart"]}
-    }),
+    body: {
+      message: text.slice(0, 1000),
+      filters:{"robotic":["roundstart"]}
+    },
   });
   // const response = await fetch('/api/elevenlabs/speech', {
   //   method: 'POST',
