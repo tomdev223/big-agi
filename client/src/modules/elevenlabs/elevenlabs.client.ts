@@ -39,24 +39,6 @@ export async function speakText(text: string, voiceId?: string) {
   try {
     //Elevenlab for TTS
     const edgeResponse = await fetchApiElevenlabsSpeech(text, elevenLabsApiKey, voiceId || elevenLabsVoiceId, nonEnglish, false);
-    
-    //Piper for TTS
-  //   const edgeResponse: any = await axios.get(`${NEXT_PUBLIC_PROTOCOL}://3.13.141.173:3003/tts?model=US-danny&pitch=1`, 
-  //   {
-  //     headers: {
-  //     'Access-Control-Allow-Origin': '*',
-  //     'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-  //     'Authorization': 'mysecuretoken',
-  //   }, 
-  //   params: {
-  //     message: text,
-  //     filters:{
-  //       robotic:["roundstart"]
-  //     }
-  //   }
-  // });
-
-
     const audioBuffer = await edgeResponse.arrayBuffer();
     await playSoundBuffer(audioBuffer);
   } catch (error) {
@@ -97,17 +79,24 @@ async function fetchApiElevenlabsSpeech(text: string, elevenLabsApiKey: string, 
   };
  //Piper for TTS
    
-  const response: any = await axios.post('https://aitools.lamassucrm.com/piper/tts?model=US-danny&pitch=1',
-  {
-    "message": text.slice(0, 1000),
-    "filters":{"robotic":["roundstart"]}
+  // const response: any = await axios.post('https://aitools.lamassucrm.com/piper/tts?model=US-danny&pitch=1',
+  // {
+  //   "message": text.slice(0, 1000),
+  //   "filters":{"robotic":["roundstart"]}
+  // });
+  const response = await fetch('https://aitools.lamassucrm.com/piper/tts?model=US-danny&pitch=1', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      "message": text.slice(0, 1000),
+      "filters":{"robotic":["roundstart"]}
+    }),
   });
   // const response = await fetch('/api/elevenlabs/speech', {
   //   method: 'POST',
   //   headers: { 'Content-Type': 'application/json' },
   //   body: JSON.stringify(speechInput),
   // });
-
   if (!response.ok) {
     const errorData = await response.json();
     throw new Error(errorData.error || errorData.message || 'Unknown error');
