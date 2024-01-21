@@ -210,7 +210,9 @@ export function AppChat() {
       const id = addSnackbar({ key: 'focused-title', message: title, type: 'title' });
       return () => removeSnackbar(id);
     }
-  }, [focusedChatNumber, focusedChatTitle]);
+  }, [
+    // focusedChatNumber, focusedChatTitle
+  ]);
 
   // Execution
 
