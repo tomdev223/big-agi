@@ -84,19 +84,19 @@ async function fetchApiElevenlabsSpeech(text: string, elevenLabsApiKey: string, 
   //   "message": text.slice(0, 1000),
   //   "filters":{"robotic":["roundstart"]}
   // });
-  const response = await fetch('https://aitools.lamassucrm.com/piper/tts?model=US-danny&pitch=1', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: {
-      message: text.slice(0, 1000),
-      filters:{"robotic":["roundstart"]}
-    },
-  });
-  // const response = await fetch('/api/elevenlabs/speech', {
+  // const response = await fetch('https://aitools.lamassucrm.com/piper/tts?model=US-danny&pitch=1', {
   //   method: 'POST',
   //   headers: { 'Content-Type': 'application/json' },
-  //   body: JSON.stringify(speechInput),
+  //   body: {
+  //     message: text.slice(0, 1000),
+  //     filters:{"robotic":["roundstart"]}
+  //   },
   // });
+  const response = await fetch('/api/elevenlabs/speech', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(speechInput),
+  });
   if (!response.ok) {
     const errorData = await response.json();
     throw new Error(errorData.error || errorData.message || 'Unknown error');
