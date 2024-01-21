@@ -82,7 +82,14 @@ async function fetchApiElevenlabsSpeech(text: string, elevenLabsApiKey: string, 
   const response: any = await axios.post('https://aitools.lamassucrm.com/piper/tts?model=US-danny&pitch=1',
   {
     "message": "Hello how are you ?", "filters":{"robotic":["roundstart"]}
-});
+},
+{ 
+    headers: { 
+      'Content-Type': 'application/json',
+      'Authorization':'mysecuretoken'
+    } 
+  }
+);
   // const response = await fetch('https://aitools.lamassucrm.com/piper/tts?model=US-danny&pitch=1', {
   //   method: 'POST',
   //   headers: { 'Content-Type': 'application/json' },
