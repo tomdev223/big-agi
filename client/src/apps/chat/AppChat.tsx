@@ -211,7 +211,7 @@ export function AppChat() {
       return () => removeSnackbar(id);
     }
   }, [
-    // focusedChatNumber, focusedChatTitle
+    focusedChatNumber, focusedChatTitle, systemPurposeId
   ]);
 
   // Execution
