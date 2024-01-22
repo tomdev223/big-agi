@@ -6,9 +6,15 @@ export function playSoundUrl(url: string) {
 }
 
 export async function playSoundBuffer(audioBuffer: ArrayBuffer, mimeType: string) {
+  // const audioContext = new AudioContext();
+  // const bufferSource = audioContext.createBufferSource();
+  // bufferSource.buffer = await audioContext.decodeAudioData(audioBuffer);
+  // bufferSource.connect(audioContext.destination);
+  // bufferSource.start();
   const audioContext = new AudioContext();
+  const decodedData = await audioContext.decodeAudioData(audioBuffer.slice(0));
   const bufferSource = audioContext.createBufferSource();
-  bufferSource.buffer = await audioContext.decodeAudioData(audioBuffer);
+  bufferSource.buffer = decodedData;
   bufferSource.connect(audioContext.destination);
   bufferSource.start();
 }
