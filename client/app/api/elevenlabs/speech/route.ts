@@ -3,6 +3,7 @@ import { createEmptyReadableStream, safeErrorString, serverFetchOrThrow } from '
 import { elevenlabsAccess, elevenlabsVoiceId, ElevenlabsWire, speechInputSchema } from '~/modules/elevenlabs/elevenlabs.router';
 
 import axios from 'axios';
+import { NextResponse } from 'next/server';
 
 /* NOTE: Why does this file even exist?
 
@@ -44,7 +45,7 @@ const handler = async (req: Request) => {
     }
     );
       const audioArrayBuffer = await upstreamResponse.arrayBuffer();
-      return new Response(audioArrayBuffer, { status: 200, headers: { 'Content-Type': 'audio/mpeg' } });
+      return new NextResponse(audioArrayBuffer, { status: 200, headers: { 'Content-Type': 'audio/mpeg' } });
     // NOTE: this is disabled, as we pass-through what we get upstream for speed, as it is not worthy
     //       to wait for the entire audio to be downloaded before we send it to the client
     // if (!streaming) {
