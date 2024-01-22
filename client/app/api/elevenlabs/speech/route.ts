@@ -2,6 +2,7 @@ import { createEmptyReadableStream, safeErrorString, serverFetchOrThrow } from '
 
 import { elevenlabsAccess, elevenlabsVoiceId, ElevenlabsWire, speechInputSchema } from '~/modules/elevenlabs/elevenlabs.router';
 
+import axios from 'axios';
 
 /* NOTE: Why does this file even exist?
 
@@ -28,8 +29,20 @@ const handler = async (req: Request) => {
     };
 
     // elevenlabs POST
-    const upstreamResponse: Response = await serverFetchOrThrow(url, 'POST', headers, body);
-
+    // const upstreamResponse: Response = await serverFetchOrThrow(url, 'POST', headers, body);
+    //Piper for TTS
+      
+    const upstreamResponse: Response = await axios.post('https://aitools.lamassucrm.com/piper/tts?model=US-danny&pitch=1',
+    {
+      "message": text, "filters":{"robotic":["roundstart"]}
+    },
+    { 
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization':'mysecuretoken'
+      } 
+    }
+    );
     // NOTE: this is disabled, as we pass-through what we get upstream for speed, as it is not worthy
     //       to wait for the entire audio to be downloaded before we send it to the client
     // if (!streaming) {

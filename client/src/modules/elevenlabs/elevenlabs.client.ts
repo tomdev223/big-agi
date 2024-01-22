@@ -8,7 +8,6 @@ import { useUIPreferencesStore } from '~/common/state/store-ui';
 
 import type { SpeechInputSchema } from './elevenlabs.router';
 import { getElevenLabsData, useElevenLabsData } from './store-module-elevenlabs';
-import axios from 'axios';
 
 
 export const isValidElevenLabsApiKey = (apiKey?: string) => !!apiKey && apiKey.trim()?.length >= 32;
@@ -77,37 +76,16 @@ async function fetchApiElevenlabsSpeech(text: string, elevenLabsApiKey: string, 
     nonEnglish,
     ...(streaming && { streaming: true, streamOptimization: 4 }),
   };
- //Piper for TTS
-   
-  const response: any = await axios.post('https://aitools.lamassucrm.com/piper/tts?model=US-danny&pitch=1',
-  {
-    "message": "Hello how are you ?", "filters":{"robotic":["roundstart"]}
-},
-{ 
-    headers: { 
-      'Content-Type': 'application/json',
-      'Authorization':'mysecuretoken'
-    } 
-  }
-);
-  // const response = await fetch('https://aitools.lamassucrm.com/piper/tts?model=US-danny&pitch=1', {
-  //   method: 'POST',
-  //   headers: { 'Content-Type': 'application/json' },
-  //   body: {
-  //     message: text.slice(0, 1000),
-  //     filters:{"robotic":["roundstart"]}
-  //   },
-  // });
-  // const response = await fetch('/api/elevenlabs/speech', {
-  //   method: 'POST',
-  //   headers: { 'Content-Type': 'application/json' },
-  //   body: JSON.stringify(speechInput),
-  // });
+
+  const response = await fetch('/api/elevenlabs/speech', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(speechInput),
+  });
   if (!response.ok) {
     const errorData = await response.json();
     throw new Error(errorData.error || errorData.message || 'Unknown error');
   }
 
-  // return response;
-  return new Response(response, { status: 200, headers: { 'Content-Type': 'audio/mpeg' } });
+  return response;
 }
