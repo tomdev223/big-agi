@@ -99,6 +99,8 @@ async function fetchApiElevenlabsSpeech(text: string, elevenLabsApiKey: string, 
     const errorData = await response.json();
     throw new Error(errorData.error || errorData.message || 'Unknown error');
   }
+  const audioArrayBuffer = await response.arrayBuffer();
 
-  return response;
+  return new Response(audioArrayBuffer, { status: 200, headers: { 'Content-Type': 'audio/wav' } });
+  // return response;
 }
