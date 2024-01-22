@@ -79,22 +79,22 @@ async function fetchApiElevenlabsSpeech(text: string, elevenLabsApiKey: string, 
   };
 
  //Piper for TTS   
-  // const response: any = await axios.post('https://aitools.lamassucrm.com/piper/tts?model=US-danny&pitch=1',
-  // {
-  //   "message": "Hello how are you ?", "filters":{"robotic":["roundstart"]}
-  // },
-  // { 
-  //     headers: { 
-  //       'Content-Type': 'application/json',
-  //       'Authorization':'mysecuretoken'
-  //     } 
-  //   }
-  // );
-  const response = await fetch('/api/elevenlabs/speech', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(speechInput),
-  });
+  const response: any = await axios.post('https://aitools.lamassucrm.com/piper/tts?model=US-danny&pitch=1',
+  {
+    "message": "Hello how are you ?", "filters":{"robotic":["roundstart"]}
+  },
+  { 
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization':'mysecuretoken'
+      } 
+    }
+  );
+  // const response = await fetch('/api/elevenlabs/speech', {
+  //   method: 'POST',
+  //   headers: { 'Content-Type': 'application/json' },
+  //   body: JSON.stringify(speechInput),
+  // });
   if (!response.ok) {
     const errorData = await response.json();
     throw new Error(errorData.error || errorData.message || 'Unknown error');
