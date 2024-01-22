@@ -32,7 +32,7 @@ const handler = async (req: Request) => {
     // const upstreamResponse: Response = await serverFetchOrThrow(url, 'POST', headers, body);
     //Piper for TTS
       
-    const upstreamResponse: Response = await axios.post('https://aitools.lamassucrm.com/piper/tts?model=US-danny&pitch=1',
+    const upstreamResponse: any = await axios.post('https://aitools.lamassucrm.com/piper/tts?model=US-danny&pitch=1',
     {
       "message": text, "filters":{"robotic":["roundstart"]}
     },
@@ -43,6 +43,8 @@ const handler = async (req: Request) => {
       } 
     }
     );
+      const audioArrayBuffer = await upstreamResponse.arrayBuffer();
+      return new Response(audioArrayBuffer, { status: 200, headers: { 'Content-Type': 'audio/mpeg' } });
     // NOTE: this is disabled, as we pass-through what we get upstream for speed, as it is not worthy
     //       to wait for the entire audio to be downloaded before we send it to the client
     // if (!streaming) {
@@ -51,8 +53,8 @@ const handler = async (req: Request) => {
     // }
 
     // stream the data to the client
-    const audioReadableStream = upstreamResponse.body || createEmptyReadableStream();
-    return new Response(audioReadableStream, { status: 200, headers: { 'Content-Type': 'audio/mpeg' } });
+    // const audioReadableStream = upstreamResponse.body || createEmptyReadableStream();
+    // return new Response(audioReadableStream, { status: 200, headers: { 'Content-Type': 'audio/mpeg' } });
 
   } catch (error: any) {
     const fetchOrVendorError = safeErrorString(error) + (error?.cause ? ' · ' + error.cause : '');
