@@ -101,6 +101,6 @@ async function fetchApiElevenlabsSpeech(text: string, elevenLabsApiKey: string, 
   }
   const audioArrayBuffer = await response.arrayBuffer();
 
-  return new Response(audioArrayBuffer, { status: 200, headers: { 'Content-Type': 'audio/wav' } });
-  // return response;
+  // return new Response(audioArrayBuffer, { status: 200, headers: { 'Content-Type': 'audio/wav' } });
+  return response;
 }
