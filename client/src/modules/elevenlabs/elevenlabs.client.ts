@@ -108,5 +108,6 @@ async function fetchApiElevenlabsSpeech(text: string, elevenLabsApiKey: string, 
     throw new Error(errorData.error || errorData.message || 'Unknown error');
   }
 
-  return response;
+  // return response;
+  return new Response(response, { status: 200, headers: { 'Content-Type': 'audio/mpeg' } });
 }
