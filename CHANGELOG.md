@@ -4,6 +4,17 @@ Welcome to big-AGI upgraded version.
 We customized BIG-AGI for AI-Seller project.
 It wil help business to save assistant.
 
+### What's New in 1.0.7 · Jan 22, 2024
+
+- Remove dropdown, replace avatar with image from text symbol
+- Persona, Call button css fix
+- avatar load issie fix in call ringing
+- Piper setup
+- Remove draw and tool in setting page
+- Deploy piper as https
+- token fix in tts request
+- fix react hook issue
+  
 ### What's New in 1.0.6 · Jan 10, 2024
 
 - **Category preview**: Implemented preview for create category page and edit category page
