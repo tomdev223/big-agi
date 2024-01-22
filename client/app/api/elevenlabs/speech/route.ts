@@ -1,4 +1,4 @@
-import { createEmptyReadableStream, safeErrorString, serverFetchOrThrow } from '~/server/wire';
+import { createEmptyReadableStream, safeErrorString, serverFetchOrThrow, piperGenerate } from '~/server/wire';
 
 import { elevenlabsAccess, elevenlabsVoiceId, ElevenlabsWire, speechInputSchema } from '~/modules/elevenlabs/elevenlabs.router';
 
@@ -32,19 +32,8 @@ const handler = async (req: Request) => {
     // elevenlabs POST
     // const upstreamResponse: Response = await serverFetchOrThrow(url, 'POST', headers, body);
     //Piper for TTS
-      
-    const upstreamResponse: any = await axios.post(
-      'https://aitools.lamassucrm.com/piper/tts?model=US-danny&pitch=1',
-      {
-        "message": text, "filters":{"robotic":["roundstart"]}
-      },
-      { 
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization':'mysecuretoken'
-        } 
-      }
-      );
+    const upstreamResponse: Response = await piperGenerate(text as string);
+
     console.log("Response of Piper", upstreamResponse);
     const audioArrayBuffer = await upstreamResponse.arrayBuffer();
     console.log("AudioArrayBuffer", audioArrayBuffer);

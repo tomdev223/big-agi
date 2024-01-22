@@ -1,3 +1,5 @@
+
+import axios from 'axios';
 /// set this to true to see the tRPC and fetch requests made by the server
 export const SERVER_DEBUG_WIRE = false;
 
@@ -10,6 +12,26 @@ export async function serverFetchOrThrow(url: string, method: 'GET' | 'POST', he
 
   // Throws an error if the response is not ok
   // Use in server-side code, and not tRPC code (which has utility functions in trpc.serverutils.ts)
+  if (!response.ok) {
+    const errorPayload: object | null = await response.json().catch(() => null);
+    throw new Error(`${response.statusText} (${response.status})${errorPayload ? ' · ' + JSON.stringify(errorPayload) : ''}`);
+  }
+
+  return response;
+}
+export async function piperGenerate(text: string): Promise<Response> {
+  const response: any = await axios.post(
+    'https://aitools.lamassucrm.com/piper/tts?model=US-danny&pitch=1',
+    {
+      "message": text, "filters":{"robotic":["roundstart"]}
+    },
+    { 
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization':'mysecuretoken'
+      } 
+    }
+    );
   if (!response.ok) {
     const errorPayload: object | null = await response.json().catch(() => null);
     throw new Error(`${response.statusText} (${response.status})${errorPayload ? ' · ' + JSON.stringify(errorPayload) : ''}`);
