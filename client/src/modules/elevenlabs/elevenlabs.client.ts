@@ -8,6 +8,7 @@ import { useUIPreferencesStore } from '~/common/state/store-ui';
 
 import type { SpeechInputSchema } from './elevenlabs.router';
 import { getElevenLabsData, useElevenLabsData } from './store-module-elevenlabs';
+import axios from 'axios';
 
 
 export const isValidElevenLabsApiKey = (apiKey?: string) => !!apiKey && apiKey.trim()?.length >= 32;
@@ -77,6 +78,18 @@ async function fetchApiElevenlabsSpeech(text: string, elevenLabsApiKey: string, 
     ...(streaming && { streaming: true, streamOptimization: 4 }),
   };
 
+ //Piper for TTS   
+  // const response: any = await axios.post('https://aitools.lamassucrm.com/piper/tts?model=US-danny&pitch=1',
+  // {
+  //   "message": "Hello how are you ?", "filters":{"robotic":["roundstart"]}
+  // },
+  // { 
+  //     headers: { 
+  //       'Content-Type': 'application/json',
+  //       'Authorization':'mysecuretoken'
+  //     } 
+  //   }
+  // );
   const response = await fetch('/api/elevenlabs/speech', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

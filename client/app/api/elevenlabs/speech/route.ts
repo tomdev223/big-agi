@@ -1,9 +1,7 @@
-import { createEmptyReadableStream, safeErrorString, serverFetchOrThrow, piperGenerate } from '~/server/wire';
+import { createEmptyReadableStream, safeErrorString, serverFetchOrThrow } from '~/server/wire';
 
 import { elevenlabsAccess, elevenlabsVoiceId, ElevenlabsWire, speechInputSchema } from '~/modules/elevenlabs/elevenlabs.router';
 
-import axios from 'axios';
-import { NextResponse } from 'next/server';
 
 /* NOTE: Why does this file even exist?
 
@@ -30,14 +28,8 @@ const handler = async (req: Request) => {
     };
 
     // elevenlabs POST
-    // const upstreamResponse: Response = await serverFetchOrThrow(url, 'POST', headers, body);
-    //Piper for TTS
-    const upstreamResponse: Response = await piperGenerate(text as string);
+    const upstreamResponse: Response = await serverFetchOrThrow(url, 'POST', headers, body);
 
-    console.log("Response of Piper", upstreamResponse);
-    const audioArrayBuffer = await upstreamResponse.arrayBuffer();
-    console.log("AudioArrayBuffer", audioArrayBuffer);
-    return new NextResponse(audioArrayBuffer, { status: 200, headers: { 'Content-Type': 'audio/mpeg' } });
     // NOTE: this is disabled, as we pass-through what we get upstream for speed, as it is not worthy
     //       to wait for the entire audio to be downloaded before we send it to the client
     // if (!streaming) {
@@ -46,8 +38,8 @@ const handler = async (req: Request) => {
     // }
 
     // stream the data to the client
-    // const audioReadableStream = upstreamResponse.body || createEmptyReadableStream();
-    // return new Response(audioReadableStream, { status: 200, headers: { 'Content-Type': 'audio/mpeg' } });
+    const audioReadableStream = upstreamResponse.body || createEmptyReadableStream();
+    return new Response(audioReadableStream, { status: 200, headers: { 'Content-Type': 'audio/mpeg' } });
 
   } catch (error: any) {
     const fetchOrVendorError = safeErrorString(error) + (error?.cause ? ' · ' + error.cause : '');
