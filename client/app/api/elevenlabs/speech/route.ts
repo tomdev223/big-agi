@@ -33,17 +33,18 @@ const handler = async (req: Request) => {
     // const upstreamResponse: Response = await serverFetchOrThrow(url, 'POST', headers, body);
     //Piper for TTS
       
-    const upstreamResponse: any = await axios.post('https://aitools.lamassucrm.com/piper/tts?model=US-danny&pitch=1',
-    {
-      "message": text, "filters":{"robotic":["roundstart"]}
-    },
-    { 
-      headers: { 
-        'Content-Type': 'application/json',
-        'Authorization':'mysecuretoken'
-      } 
-    }
-    );
+    const upstreamResponse: any = await axios.post(
+      'https://aitools.lamassucrm.com/piper/tts?model=US-danny&pitch=1',
+      {
+        "message": text, "filters":{"robotic":["roundstart"]}
+      },
+      { 
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization':'mysecuretoken'
+        } 
+      }
+      );
     console.log("Response of Piper", upstreamResponse);
     const audioArrayBuffer = await upstreamResponse.arrayBuffer();
     console.log("AudioArrayBuffer", audioArrayBuffer);
