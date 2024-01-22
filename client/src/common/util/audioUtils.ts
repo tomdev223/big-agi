@@ -5,7 +5,7 @@ export function playSoundUrl(url: string) {
   audio.play().catch(error => console.error('Error playing audio:', url, error));
 }
 
-export async function playSoundBuffer(audioBuffer: ArrayBuffer) {
+export async function playSoundBuffer(audioBuffer: any) {
   const audioContext = new AudioContext();
   const bufferSource = audioContext.createBufferSource();
   bufferSource.buffer = await audioContext.decodeAudioData(audioBuffer);
