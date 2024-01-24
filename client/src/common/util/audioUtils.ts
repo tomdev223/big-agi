@@ -16,7 +16,11 @@ export async function playSoundBuffer(audioBuffer: ArrayBuffer, mimeType: string
   const bufferSource = audioContext.createBufferSource();
   bufferSource.buffer = decodedData;
   bufferSource.connect(audioContext.destination);
-  bufferSource.start();
+  bufferSource.start(0);
+  return () => {
+    bufferSource.stop();
+    audioContext.close();
+  };
 }
 
 
