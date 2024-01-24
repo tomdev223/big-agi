@@ -40,23 +40,6 @@ export async function speakText(text: string, voiceId?: string) {
     //Elevenlab for TTS
     const edgeResponse = await fetchApiElevenlabsSpeech(text, elevenLabsApiKey, voiceId || elevenLabsVoiceId, nonEnglish, false);
     const audioBuffer = await edgeResponse.arrayBuffer();
-    // const audioBlob = new Blob([audioBuffer], { type: 'audio/wav' });
-    // const audioUrl = URL.createObjectURL(audioBlob);
-
-    // const audioContext = new AudioContext();
-
-    // // Fetch the audio file as an ArrayBuffer
-    // fetch(audioUrl)
-    //   .then(response => response.arrayBuffer())
-    //   .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
-    //   .then(audioBuffer => {
-    //     const source = audioContext.createBufferSource();
-    //     source.buffer = audioBuffer;
-    //     source.connect(audioContext.destination);
-    //     source.start();
-    //   })
-    //   .catch(e => console.error('The audio file could not be played:', e));
-
     await playSoundBuffer(audioBuffer, 'audio/wav');
   } catch (error) {
     console.error('Error playing first text:', error);
