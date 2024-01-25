@@ -33,7 +33,7 @@ export class AudioLivePlayer {
     const sourceNode = this.audioContext.createMediaElementSource(this.audioElement);
     sourceNode.connect(this.audioContext.destination);
 
-    const mimeType = 'audio/wav';
+    const mimeType = 'audio/mpeg';
     this.mediaSource.addEventListener('sourceopen', async () => {
       const sourceBuffer: SourceBuffer = this.mediaSource.addSourceBuffer(mimeType);
       this.reader = esgeReadableStream.getReader();
