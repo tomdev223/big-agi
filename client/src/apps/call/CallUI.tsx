@@ -306,7 +306,7 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
     let error: any | null = null;
     streamChat(chatLLMId, callPrompt, responseAbortController.current.signal, (updatedMessage: Partial<DMessage>) => {
       const text = updatedMessage.text?.trim();
-      if (text) {
+      if (text && text != "") {
         finalText = text;
         setPersonaTextInterim(text);
       }
