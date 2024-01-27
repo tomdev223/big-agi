@@ -306,7 +306,6 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
     let error: any | null = null;
     streamChat(chatLLMId, callPrompt, responseAbortController.current.signal, (updatedMessage: Partial<DMessage>) => {
       const text = updatedMessage.text?.trim();
-      console.log("Open ai reply: ", text);
       if (text) {
         finalText = text;
         setPersonaTextInterim(text);
@@ -316,6 +315,7 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
         if (err?.name !== 'AbortError') error = err;
       })
       .finally(() => {
+        console.log("reply:", finalText);
         setPersonaTextInterim(null);
         setCallMessages((messages) => [...messages, createDMessage('assistant', finalText + (error ? ` (ERROR: ${error.message || error.toString()})` : ''))]);
         // fire/forget
