@@ -315,11 +315,13 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
         if (err?.name !== 'AbortError') error = err;
       })
       .finally(() => {
+        if(finalText!=""){          
         console.log("reply:", finalText);
         setPersonaTextInterim(null);
         setCallMessages((messages) => [...messages, createDMessage('assistant', finalText + (error ? ` (ERROR: ${error.message || error.toString()})` : ''))]);
         // fire/forget
         void EXPERIMENTAL_speakTextStream(finalText, personaVoiceId);
+        }
       });
 
     return () => {
