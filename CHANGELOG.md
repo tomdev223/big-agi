@@ -4,6 +4,12 @@ Welcome to big-AGI upgraded version.
 We customized BIG-AGI for AI-Seller project.
 It wil help business to save assistant.
 
+### What's New in 1.0.8 · Jan 30, 2024
+
+- Add category field in edit persona page
+- Piper api content-type match with mpeg - mp3
+- Voice change to US-kusal
+
 ### What's New in 1.0.7 · Jan 22, 2024
 
 - Remove dropdown, replace avatar with image from text symbol
