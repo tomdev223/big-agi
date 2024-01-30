@@ -47,7 +47,7 @@ export function EditPersona() {
         setTitle(response.data.persona.title);
         setDescription(response.data.persona.description);
         setPrompts(response.data.persona.systemMessage);
-        setCategoryId(response.data.persona.categoryId);
+        setCategoryId(response.data.persona.category.id);
         setId(response.data.persona.id);
       }
     } catch (error) {
