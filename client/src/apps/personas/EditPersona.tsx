@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import { Textarea } from '@mui/joy';
 import { SystemPurposeId } from '../../data';
+import { DropDown } from './DropDown';
 
 export function EditPersona() {
   const [id, setId] = React.useState('');
@@ -18,6 +19,7 @@ export function EditPersona() {
   const [symbol, setSymbol] = React.useState('');
   const [description, setDescription] = React.useState('');
   const [prompts, setPrompts] = React.useState('');
+  const [categoryId, setCategoryId] = React.useState('');
   const router = useRouter();
   const handleTitleChange = (event: any) => {
     setTitle(event.target.value);
@@ -31,6 +33,12 @@ export function EditPersona() {
   const handlePromptsChange = (event: any) => {
     setPrompts(event.target.value);
   };
+  const handleCategoryIdChangeSelf = (event: any) => {
+    setCategoryId(event.target.value);
+  };
+  const handleCategoryIdChange = (val: string) => {
+    setCategoryId(val);
+  };
   const getPersonaById = async (id: string) => {
     try {
       const response = await axios.get(`${NEXT_PUBLIC_PROTOCOL}://${NEXT_PUBLIC_SERVER_HOST}/api/persona/${id}`);
@@ -39,6 +47,7 @@ export function EditPersona() {
         setTitle(response.data.persona.title);
         setDescription(response.data.persona.description);
         setPrompts(response.data.persona.systemMessage);
+        setCategoryId(response.data.persona.categoryId);
         setId(response.data.persona.id);
       }
     } catch (error) {
@@ -60,6 +69,7 @@ export function EditPersona() {
         symbol: symbol,
         description: description,
         systemMessage: prompts,
+        categoryId: categoryId,
       });
       if (response.data) {
         navigateToPersonaEdit(id as string);
@@ -68,6 +78,7 @@ export function EditPersona() {
       console.error('Error:', error);
     }
   };
+  
   React.useEffect(() => {
     const id = router.query.id;
 
@@ -114,6 +125,10 @@ export function EditPersona() {
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
             <Textarea variant="soft" autoFocus minRows={1} placeholder="Prompts" value={prompts} onChange={handlePromptsChange} style={{ width: '100%' }} />
             {/* <Input fullWidth variant="outlined" placeholder="Prompts" value={prompts} onChange={handlePromptsChange} /> */}
+          </Box>
+          <Box>
+          <Input fullWidth variant="outlined" placeholder="CategoryId" value={categoryId} onChange={handleCategoryIdChangeSelf} />
+            <DropDown categoryIdUpdate={handleCategoryIdChange} categories={categories}></DropDown>
           </Box>
           <Button className="editPersona" type="button" variant="solid" sx={{ minWidth: 120 }} onClick={updatePersona}>
             Update

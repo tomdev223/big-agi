@@ -102,7 +102,7 @@ export function CreatePersona() {
     >
       <Container disableGutters maxWidth="md" sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
         <Typography level="title-lg" sx={{ textAlign: 'center' }}>
-          Edit Persona Profile
+          Create Persona Profile
         </Typography>
 
         <ListDivider sx={{ my: 2 }} />
