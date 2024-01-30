@@ -57,7 +57,7 @@ export function EditPersona() {
   const navigateToPersonaEdit = (id: string) => {
     // router.push(`/editPersona/${id}`);
     router.push({
-      pathname: '/editPersona',
+      pathname: '/indexByCategory',
       query: { id: id }, // Additional query params can be added here
     });
   };
@@ -72,7 +72,7 @@ export function EditPersona() {
         categoryId: categoryId,
       });
       if (response.data) {
-        navigateToPersonaEdit(id as string);
+        navigateToPersonaEdit(categoryId as string);
       }
     } catch (error) {
       console.error('Error:', error);
