@@ -204,9 +204,12 @@ export const useSpeechRecognition = (onResultCallback: (result: SpeechResult) =>
           chunk += '.';
 
         if (result.isFinal)
-          speechResult.transcript += chunk + ' ';
+        // speechResult.transcript += chunk + ' ';
+          speechResult.transcript ='Agent speaking...';
+          
         else
-          speechResult.interimTranscript += chunk + ' ';
+          // speechResult.interimTranscript += chunk + ' ';        
+          speechResult.transcript ='Agent speaking...';
       }
 
       // update the UI
