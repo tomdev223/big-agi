@@ -117,6 +117,7 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
   const [avatarClickCount, setAvatarClickCount] = React.useState<number>(0); // const [micMuted, setMicMuted] = React.useState(false);
   const [callElapsedTime, setCallElapsedTime] = React.useState<string>('00:00');
   const [callMessages, setCallMessages] = React.useState<DMessage[]>([]);
+  const [sellerMessages, setSellerMessages] = React.useState<DMessage[]>([]);
   const [overridePersonaVoice, setOverridePersonaVoice] = React.useState<boolean>(false);
   const [personaTextInterim, setPersonaTextInterim] = React.useState<string | null>(null);
   const [pushToTalk, setPushToTalk] = React.useState(false);
@@ -318,6 +319,7 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
         if(finalText!=""){          
         console.log("reply:", finalText);
         setPersonaTextInterim(null);
+        setSellerMessages((messages) => [...messages, createDMessage('assistant', finalText + (error ? ` (ERROR: ${error.message || error.toString()})` : ''))]);
         setCallMessages((messages) => [...messages, createDMessage('assistant', finalText + (error ? ` (ERROR: ${error.message || error.toString()})` : ''))]);
         // fire/forget
         void EXPERIMENTAL_speakTextStream(finalText, personaVoiceId);
@@ -423,7 +425,7 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
             {!!personaTextInterim && <CallMessage text={personaTextInterim} variant="solid" color="neutral" role="assistant" />}
 
             {/* Messages (last 6 messages, in reverse order) */}
-            {callMessages
+            {sellerMessages
               .slice(-6)
               .reverse()
               .map((message) => (
