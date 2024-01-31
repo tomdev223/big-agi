@@ -275,6 +275,7 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
       // command: restart chat
       case 'Restart.':
         setCallMessages([]);
+        setSellerMessages([]);
         return;
     }
 
