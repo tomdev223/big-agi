@@ -15,13 +15,12 @@ import { AppBar } from './AppBar';
 import { GlobalShortcutItem, useGlobalShortcuts } from '../components/useGlobalShortcut';
 import { NoSSR } from '../components/NoSSR';
 import { openLayoutModelsSetup, openLayoutPreferences, openLayoutShortcuts } from './store-applayout';
-import { DModelSourceId, useSourceSetup } from '~/modules/llms/store-llms';
-import { ModelVendorOpenAI } from '~/modules/llms/vendors/openai/openai.vendor';
+// import { DModelSourceId, useSourceSetup } from '~/modules/llms/store-llms';
+// import { ModelVendorOpenAI } from '~/modules/llms/vendors/openai/openai.vendor';
 
 export function AppLayout(props: {
   noAppBar?: boolean, suspendAutoModelsSetup?: boolean,
   children: React.ReactNode,
-  sourceId: DModelSourceId
 }) {
   // external state
   const { centerMode } = useUIPreferencesStore(state => ({ centerMode: isPwa() ? 'full' : state.centerMode }), shallow);
