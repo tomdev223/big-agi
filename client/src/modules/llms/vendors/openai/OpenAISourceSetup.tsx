@@ -77,14 +77,12 @@ export function OpenAISourceSetup(props: { sourceId: DModelSourceId }) {
           if (output.apiname === 'openai api')
           {
             apikey = output.key;
-            console.log("Open ai api key:", output.key);
           }
           else
             console.log("Not open ai api key", output.key);
         });
 
         await updateSetup({ oaiKey: apikey });
-        console.log("Get all apikeys", originalData);
       } catch (error) {
         console.error('Error during the Axios POST request:', error);
       }
