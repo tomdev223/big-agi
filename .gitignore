@@ -1,14 +1,14 @@
 # dependencies
-backend-postgresql/node_modules
-backend-postgresql/build
-backend-postgresql/.idea
-backend-postgresql/.vscode
-backend-postgresql/.env
-backend-mongodb/node_modules
-backend-mongodb/build
-backend-mongodb/.idea
-backend-mongodb/.vscode
-node_modules
+/backend-postgresql/node_modules
+/backend-postgresql/build
+/backend-postgresql/.idea
+/backend-postgresql/.vscode
+/backend-postgresql/.env
+/backend-mongodb/node_modules
+/backend-mongodb/build
+/backend-mongodb/.idea
+/backend-mongodb/.vscode
+/node_modules
 /.pnp
 .pnp.js
 /.idea
