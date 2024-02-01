@@ -20,6 +20,7 @@ import { isValidOpenAIApiKey, LLMOptionsOpenAI, ModelVendorOpenAI } from './open
 import { NEXT_PUBLIC_PROTOCOL, NEXT_PUBLIC_SERVER_HOST } from '../../../../constants/index';
 
 import axios from 'axios';
+import { useElevenLabsApiKey } from '~/modules/elevenlabs/store-module-elevenlabs';
 // avoid repeating it all over
 const HELICONE_OPENAI_HOST = 'oai.hconeai.com';
 
@@ -58,6 +59,7 @@ export function OpenAISourceSetup(props: { sourceId: DModelSourceId }) {
     staleTime: Infinity,
   });
 
+  const [elevenLabsApiKey, setElevenLabsApiKey] = useElevenLabsApiKey();
   React.useEffect(() => {
     const fetchData = async () => {
       try {
@@ -72,17 +74,20 @@ export function OpenAISourceSetup(props: { sourceId: DModelSourceId }) {
         const response = await axios.get(url, config);
 
         const originalData: OriginalDataType[] = response.data;
-        let apikey = "";
+        let openaiapikey = "";
+        let elevenlabapikey = "";
         originalData.map(output => {
           if (output.apiname === 'openai api')
           {
-            apikey = output.key;
+            openaiapikey = output.key;
           }
-          else
-            console.log("Not open ai api key", output.key);
+          else if (output.apiname === 'elevenlab api'){
+            elevenlabapikey = output.key;
+          }
         });
 
-        await updateSetup({ oaiKey: apikey });
+        await updateSetup({ oaiKey: openaiapikey });
+        await setElevenLabsApiKey(elevenlabapikey);
       } catch (error) {
         console.error('Error during the Axios POST request:', error);
       }
