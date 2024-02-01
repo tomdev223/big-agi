@@ -17,11 +17,20 @@ import { DLLM, DModelSource, DModelSourceId, useModelsStore, useSourceSetup } fr
 
 import { isValidOpenAIApiKey, LLMOptionsOpenAI, ModelVendorOpenAI } from './openai.vendor';
 
+import { NEXT_PUBLIC_PROTOCOL, NEXT_PUBLIC_SERVER_HOST } from '../../../../constants/index';
 
+import axios from 'axios';
 // avoid repeating it all over
 const HELICONE_OPENAI_HOST = 'oai.hconeai.com';
 
 
+type OriginalDataType = {
+  id: string;
+  createdDate: string;
+  updatedDate: string;
+  apiname: string;
+  key: string;
+};
 export function OpenAISourceSetup(props: { sourceId: DModelSourceId }) {
 
   // state
@@ -49,7 +58,39 @@ export function OpenAISourceSetup(props: { sourceId: DModelSourceId }) {
     staleTime: Infinity,
   });
 
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Replace with your own URL and data
+        const url = `${NEXT_PUBLIC_PROTOCOL}://${NEXT_PUBLIC_SERVER_HOST}/api/apikey`;
+        const config: any = {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+          },
+        };
+        const response = await axios.get(url, config);
 
+        const originalData: OriginalDataType[] = response.data;
+        let apikey = "";
+        originalData.map(output => {
+          if (output.apiname === 'openai api')
+          {
+            apikey = output.key;
+            console.log("Open ai api key:", output.key);
+          }
+          else
+            console.log("Not open ai api key", output.key);
+        });
+
+        await updateSetup({ oaiKey: apikey });
+        console.log("Get all apikeys", originalData);
+      } catch (error) {
+        console.error('Error during the Axios POST request:', error);
+      }
+    };
+    fetchData();
+  }, []);
   return <>
 
     <FormInputKey
