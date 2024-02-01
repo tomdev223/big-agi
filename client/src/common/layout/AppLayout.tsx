@@ -15,11 +15,22 @@ import { AppBar } from './AppBar';
 import { GlobalShortcutItem, useGlobalShortcuts } from '../components/useGlobalShortcut';
 import { NoSSR } from '../components/NoSSR';
 import { openLayoutModelsSetup, openLayoutPreferences, openLayoutShortcuts } from './store-applayout';
+import { NEXT_PUBLIC_PROTOCOL, NEXT_PUBLIC_SERVER_HOST } from '../../constants';
+import axios from 'axios';
+import { DModelSourceId, useSourceSetup } from '~/modules/llms/store-llms';
+import { ModelVendorOpenAI } from '~/modules/llms/vendors/openai/openai.vendor';
 
-
+type OriginalDataType = {
+  id: string;
+  createdDate: string;
+  updatedDate: string;
+  apiname: string;
+  key: string;
+};
 export function AppLayout(props: {
   noAppBar?: boolean, suspendAutoModelsSetup?: boolean,
   children: React.ReactNode,
+  sourceId: DModelSourceId,
 }) {
   // external state
   const { centerMode } = useUIPreferencesStore(state => ({ centerMode: isPwa() ? 'full' : state.centerMode }), shallow);
@@ -34,7 +45,41 @@ export function AppLayout(props: {
     ['?', true, true, false, openLayoutShortcuts],
   ], []);
   useGlobalShortcuts(shortcuts);
+  const { source, sourceHasLLMs, access, updateSetup } =
+    useSourceSetup(props.sourceId, ModelVendorOpenAI.getAccess);
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Replace with your own URL and data
+        const url = `${NEXT_PUBLIC_PROTOCOL}://${NEXT_PUBLIC_SERVER_HOST}/api/apikey`;
+        const config: any = {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+          },
+        };
+        const response = await axios.get(url, config);
 
+        const originalData: OriginalDataType[] = response.data;
+        let apikey = "";
+        originalData.map(output => {
+          if (output.apiname === 'openai api')
+          {
+            apikey = output.key;
+            console.log("Open ai api key:", output.key);
+          }
+          else
+            console.log("Not open ai api key", output.key);
+        });
+
+        await updateSetup({ oaiKey: apikey });
+        console.log("Get all apikeys", originalData);
+      } catch (error) {
+        console.error('Error during the Axios POST request:', error);
+      }
+    };
+    fetchData();
+  }, []);
   return (
     // Global NoSSR wrapper: the overall Container could have hydration issues when using localStorage and non-default maxWidth
     <NoSSR>
