@@ -7,9 +7,10 @@
     "server": "npm run dev --prefix backend-postgresql",
     "client": "npm run dev --prefix client",
     "prod_client": "npm run start --prefix client",
+    "prod_server": "npm run production --prefix backend-postgresql",
     "live": "concurrently \"mongod --dbpath db --port 27017\" \"npm run server\" \"npm run client\"",
-    "dev": "concurrently  \"npm run server\" \"npm run client\"",
-    "dev_prod": "concurrently  \"npm run server\" \"npm run prod_client\"",
+    "dev": "concurrently  \"npm run server\" \"npm run prod_client\"",
+    "prod": "concurrently  \"npm run prod_server\" \"npm run prod_client\"",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "author": "Brad Traversy",
