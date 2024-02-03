@@ -259,24 +259,24 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
     switch (callMessages[callMessages.length - 1].text) {
       // do not respond
       case 'Stop.':
-        break;
+        return;
       // command: close the call
       case 'Goodbye.':
         setStage('ended');
         setTimeout(() => {
           void routerPush('/');
         }, 2000);
-        break;
+        return;
       // command: regenerate answer
       case 'Retry.':
       case 'Try again.':
         setCallMessages((messages) => messages.slice(0, messages.length - 2));
-        break;
+        return;
       // command: restart chat
       case 'Restart.':
-        setCallMessages([]);
         setSellerMessages([]);
-        break;
+        setCallMessages([]);
+        return;
     }
 
     // bail if no llm selected
