@@ -146,7 +146,10 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
     setSpeechInterim(result.done ? null : { ...result });
     if (result.done) {
       const transcribed = result.transcript.trim();
-      if (transcribed.length >= 1) setCallMessages((messages) => [...messages, createDMessage('user', transcribed)]);
+      if (transcribed.length >= 1) {
+        console.log("Agent said:", transcribed);
+        setCallMessages((messages) => [...messages, createDMessage('user', transcribed)]);
+      }
     }
   }, []);
   const { isSpeechEnabled, isRecording, isRecordingAudio, isRecordingSpeech, startRecording, stopRecording, toggleRecording } = useSpeechRecognition(
