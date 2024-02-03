@@ -416,8 +416,8 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
               <CallMessage
                 text={
                   <>
-                    {speechInterim?.transcript ? 'Agent speaking...' + ' ' : ''}
-                    <i>{speechInterim?.interimTranscript}</i>
+                    {speechInterim?.interimTranscript ==='Listening...' ? 'Listening...' + ' ' : 'Agent speaking...'}
+                    {/*<i>{speechInterim?.interimTranscript}</i>*/}
                   </>
                 }
                 variant={isRecordingSpeech ? 'solid' : 'outlined'}
