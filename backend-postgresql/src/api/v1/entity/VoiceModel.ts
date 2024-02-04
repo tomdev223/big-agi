@@ -29,7 +29,7 @@ export default class VoiceModel extends Date {
   language: string;
 
   @Column({ type: 'varchar', nullable: true })
-  sex: string;
+  genre: string;
 
   @Column({ type: 'varchar', nullable: false })
   voiceName: string;
