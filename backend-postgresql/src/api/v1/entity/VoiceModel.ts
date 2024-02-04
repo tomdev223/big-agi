@@ -25,12 +25,12 @@ export default class VoiceModel extends Date {
     Object.assign(this, voiceModel);
   }
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', nullable: false })
   language: string;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', nullable: true })
   sex: string;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', nullable: false })
   voiceName: string;
 }
