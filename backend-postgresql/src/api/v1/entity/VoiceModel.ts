@@ -1,5 +1,4 @@
-// Typeorm
-// Typeorm
+
 import {
   Entity,
   Column,
@@ -19,16 +18,19 @@ import { IsUUID, Length } from 'class-validator';
 import { invalidIdentifier } from '../constants';
 
 // Database name
-@Entity('internal_api_keys')
-export default class Apikey extends Date {
-  constructor(apikey: Partial<Apikey>) {
+@Entity('voice_model')
+export default class VoiceModel extends Date {
+  constructor(voiceModel: Partial<VoiceModel>) {
     super();
-    Object.assign(this, apikey);
+    Object.assign(this, voiceModel);
   }
 
   @Column({ type: 'varchar' })
-  apiname: string;
+  language: string;
 
   @Column({ type: 'varchar' })
-  key: string;
+  sex: string;
+
+  @Column({ type: 'varchar' })
+  voiceName: string;
 }
