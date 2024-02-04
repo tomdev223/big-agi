@@ -15,6 +15,7 @@ import userRoutes from './routes/userRoutes';
 import personaRoutes from './routes/personaRoutes';
 import categoryRoutes from './routes/categoryRoutes';
 import apikeyRoutes from './routes/apikeyRoutes';
+import voiceModelRoutes from './routes/voiceModelRoutes';
 // Constants, Helpers & Types
 import { API_VERSION, SERVER_PORT, CLIENT_PORT, SERVER_HOST, serverReady } from './constants';
 import { postgresConnect } from './helpers';
@@ -55,6 +56,7 @@ const initializeApp = () => {
   app.use(`${API_VERSION}/persona`, personaRoutes);
   app.use(`${API_VERSION}/category`, categoryRoutes);
   app.use(`${API_VERSION}/apikey`, apikeyRoutes);
+  app.use(`${API_VERSION}/voiceModel`, voiceModelRoutes);
 
   // restaurant related routes
 
