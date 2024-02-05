@@ -47,7 +47,7 @@ export async function speakText(text: string, voiceId?: string) {
 
 // let liveAudioPlayer: LiveAudioPlayer | undefined = undefined;
 
-export async function EXPERIMENTAL_speakTextStream(text: string, voiceId?: string) {
+export async function EXPERIMENTAL_speakTextStream(text: string, voiceId?: string, , personaLanguage?: string, personaModelName?: string) {
   if (!(text?.trim())) return;
 
   const { elevenLabsApiKey, elevenLabsVoiceId } = getElevenLabsData();
@@ -56,7 +56,7 @@ export async function EXPERIMENTAL_speakTextStream(text: string, voiceId?: strin
   const { preferredLanguage } = useUIPreferencesStore.getState();
   const nonEnglish = !(preferredLanguage?.toLowerCase()?.startsWith('en'));
 
-  const edgeResponse = await fetchApiElevenlabsSpeech(text, elevenLabsApiKey, voiceId || elevenLabsVoiceId, nonEnglish, true);
+  const edgeResponse = await fetchApiElevenlabsSpeech(text, elevenLabsApiKey, personaLanguage, personaModelName, voiceId || elevenLabsVoiceId, nonEnglish, true);
   // if (!liveAudioPlayer)
   const liveAudioPlayer = new AudioLivePlayer();
   // fire/forget
@@ -67,7 +67,7 @@ export async function EXPERIMENTAL_speakTextStream(text: string, voiceId?: strin
 /**
  * Note: we have to use this client-side API instead of TRPC because of ArrayBuffers..
  */
-async function fetchApiElevenlabsSpeech(text: string, elevenLabsApiKey: string, elevenLabsVoiceId: string, nonEnglish: boolean, streaming: boolean): Promise<Response> {
+async function fetchApiElevenlabsSpeech(text: string, elevenLabsApiKey: string, personaLanguage: string, personaModelName: string, elevenLabsVoiceId: string, nonEnglish: boolean, streaming: boolean): Promise<Response> {
   // NOTE: hardcoded 1000 as a failsafe, since the API will take very long and consume lots of credits for longer texts
   const speechInput: SpeechInputSchema = {
     elevenKey: elevenLabsApiKey,
@@ -77,7 +77,7 @@ async function fetchApiElevenlabsSpeech(text: string, elevenLabsApiKey: string, 
     ...(streaming && { streaming: true, streamOptimization: 4 }),
   };
 
-  const response = await fetch('https://aitools.lamassucrm.com/piper/tts?model=US-kusal&pitch=1', {
+  const response = await fetch('https://aitools.lamassucrm.com/piper/tts?'+'language='+personaLanguage+'model='+personaModelName+'&pitch=1', {
     method: 'POST',
     headers: { 
       'Content-Type': 'application/json',
