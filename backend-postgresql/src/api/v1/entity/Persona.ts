@@ -51,6 +51,11 @@ export default class Persona extends Date {
     elevenLabs: {
       voiceId: string;
     };
+    piper: {
+      language: string;
+      genre: string;
+      modelName: string;
+    }
   };
 
   @ManyToOne(() => Category, (category) => category.personas, { nullable: true, onDelete: 'CASCADE' })

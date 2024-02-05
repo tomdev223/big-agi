@@ -18,12 +18,12 @@ export const createVoiceModel = async (req: Request, res: Response) => {
   // authenticated user and request body
   const { user, body } = req;
 
-  const { language, genre, voiceName } = body;
+  const { language, genre, modelName } = body;
   console.log('req body', body);
   const voiceModel = new VoiceModel({
     language,
     genre,
-    voiceName,
+    modelName,
   });
   // Validation of input for errors
   const errors = await validateError(voiceModel, res);
@@ -79,12 +79,12 @@ export const updateVoiceModel = async (req: Request, res: Response) => {
   // authenticated user
   const { user, body } = req;
 
-  const { id, language, genre, voiceName } = body;
+  const { id, language, genre, modelName } = body;
 
   const voiceModel = new VoiceModel({
     language,
     genre,
-    voiceName,
+    modelName,
   });
 
   // Validation of input for errors

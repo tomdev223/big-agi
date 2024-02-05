@@ -32,5 +32,5 @@ export default class VoiceModel extends Date {
   genre: string;
 
   @Column({ type: 'varchar', nullable: false })
-  voiceName: string;
+  modelName: string;
 }
