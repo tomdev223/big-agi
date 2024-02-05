@@ -265,7 +265,7 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
     void EXPERIMENTAL_speakTextStream(firstMessage,  personaLanguage, personaModelName, personaVoiceId);
 
     return () => clearInterval(interval);
-  }, [isConnected, personaCallStarters, personaVoiceId]);
+  }, [isConnected, personaCallStarters, personaVoiceId, personaLanguage, personaModelName]);
 
   // [E] persona streaming response - upon new user message
   React.useEffect(() => {
