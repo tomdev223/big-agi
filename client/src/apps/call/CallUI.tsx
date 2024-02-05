@@ -346,7 +346,7 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
       responseAbortController.current?.abort();
       responseAbortController.current = null;
     };
-  }, [isConnected, callMessages, chatLLMId, messages, personaVoiceId, personaSystemMessage, routerPush]);
+  }, [isConnected, callMessages, chatLLMId, messages, personaVoiceId, personaSystemMessage, routerPush, personaLanguage, personaModelName]);
 
   // [E] Message interrupter
   const abortTrigger = isConnected && isRecordingSpeech;
