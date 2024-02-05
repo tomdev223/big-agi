@@ -149,8 +149,8 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
   const personaCallStarters = persona?.call?.starters ?? undefined;
   const personaVoiceId = overridePersonaVoice ? undefined : persona?.voices?.elevenLabs?.voiceId ?? undefined;
   const personaSystemMessage = persona?.systemMessage ?? undefined;
-  const personaLanguage = overridePersonaVoice ? undefined : persona?.voices?.piper?.language ?? undefined;
-  const personaModelName = overridePersonaVoice ? undefined : persona?.voices?.piper?.modelName ?? undefined;
+  const personaLanguage =  persona?.voices?.piper?.language ?? undefined;
+  const personaModelName = persona?.voices?.piper?.modelName ?? undefined;
 
   // hooks and speech
   const [speechInterim, setSpeechInterim] = React.useState<SpeechResult | null>(null);
@@ -262,7 +262,7 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
 
     setCallMessages([createDMessage('assistant', firstMessage)]);
     // fire/forget
-    void EXPERIMENTAL_speakTextStream(firstMessage, personaVoiceId, personaLanguage, personaModelName);
+    void EXPERIMENTAL_speakTextStream(firstMessage,  personaLanguage, personaModelName, personaVoiceId);
 
     return () => clearInterval(interval);
   }, [isConnected, personaCallStarters, personaVoiceId]);
@@ -338,7 +338,7 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
         setSellerMessages((messages) => [...messages, createDMessage('assistant', finalText + (error ? ` (ERROR: ${error.message || error.toString()})` : ''))]);
         setCallMessages((messages) => [...messages, createDMessage('assistant', finalText + (error ? ` (ERROR: ${error.message || error.toString()})` : ''))]);
         // fire/forget
-        void EXPERIMENTAL_speakTextStream(finalText, personaVoiceId, personaLanguage, personaModelName);
+        void EXPERIMENTAL_speakTextStream(finalText, personaLanguage, personaModelName, personaVoiceId);
         }
       });
 

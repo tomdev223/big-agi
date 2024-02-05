@@ -26,7 +26,7 @@ export function useCapability(): CapabilityElevenLabsSpeechSynthesis {
 }
 
 
-export async function speakText(text: string, voiceId?: string) {
+export async function speakText(text: string, voiceId?: string  ) {
   if (!(text?.trim())) return;
 
   const { elevenLabsApiKey, elevenLabsVoiceId } = getElevenLabsData();
@@ -37,7 +37,7 @@ export async function speakText(text: string, voiceId?: string) {
 
   try {
     //Elevenlab for TTS
-    const edgeResponse = await fetchApiElevenlabsSpeech(text, elevenLabsApiKey, voiceId || elevenLabsVoiceId, nonEnglish, false);
+    const edgeResponse = await fetchApiElevenlabsSpeech(text, elevenLabsApiKey, "en", "US-kusal",voiceId || elevenLabsVoiceId, nonEnglish, false);
     const audioBuffer = await edgeResponse.arrayBuffer();
     await playSoundBuffer(audioBuffer, 'audio/mpeg');
   } catch (error) {
@@ -47,7 +47,7 @@ export async function speakText(text: string, voiceId?: string) {
 
 // let liveAudioPlayer: LiveAudioPlayer | undefined = undefined;
 
-export async function EXPERIMENTAL_speakTextStream(text: string, voiceId?: string, , personaLanguage?: string, personaModelName?: string) {
+export async function EXPERIMENTAL_speakTextStream(text: string,  personaLanguage: string, personaModelName: string, voiceId?: string ) {
   if (!(text?.trim())) return;
 
   const { elevenLabsApiKey, elevenLabsVoiceId } = getElevenLabsData();
