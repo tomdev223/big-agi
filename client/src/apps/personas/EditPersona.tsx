@@ -12,6 +12,8 @@ import axios from 'axios';
 import { Textarea } from '@mui/joy';
 import { SystemPurposeId } from '../../data';
 import { useState } from 'react';
+
+import { EXPERIMENTAL_speakTextStream } from '~/modules/elevenlabs/elevenlabs.client';
 type OriginalDataType = {
   id: string;
   createdDate: string;
@@ -117,6 +119,9 @@ export function EditPersona() {
 
   const handleVoiceModelChange = (_event: any, value: any | null) => {
     setVoiceModel(value);
+    if(language && value){
+      void EXPERIMENTAL_speakTextStream("Our AI Training Platform equips call center agents with the skills and confidence to excel in customer interactions", language, value);
+    }
   };
   const handleLanguageChange = (_event: any, value: any | null) => {
     setLanguage(value);

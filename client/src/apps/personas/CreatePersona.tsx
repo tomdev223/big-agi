@@ -78,7 +78,7 @@ export function CreatePersona() {
   const handleVoiceModelChange = (_event: any, value: any | null) => {
     setVoiceModel(value);
     if(language && value){
-      void EXPERIMENTAL_speakTextStream("Hello", language, value);
+      void EXPERIMENTAL_speakTextStream("Our AI Training Platform equips call center agents with the skills and confidence to excel in customer interactions", language, value);
     }
   };
   const handleLanguageChange = (_event: any, value: any | null) => {
