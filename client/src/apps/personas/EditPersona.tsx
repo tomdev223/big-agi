@@ -73,7 +73,7 @@ export function EditPersona() {
         setTitle(response.data.persona.title);
         setDescription(response.data.persona.description);
         setPrompts(response.data.persona.systemMessage);
-        setCategoryId(response.data.persona.category.id);
+        setCategoryId(response.data.persona.category);
         setId(response.data.persona.id);
         setLanguage(response.data.persona.voices.piper.language);
         setVoiceModel(response.data.persona.voices.piper.modelName);
