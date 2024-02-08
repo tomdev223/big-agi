@@ -75,7 +75,8 @@ export function EditPersona() {
         setPrompts(response.data.persona.systemMessage);
         setCategoryId(response.data.persona.category.id);
         setId(response.data.persona.id);
-        setVoiceModel(response.data.persona.voices.piper.modelName)
+        setLanguage(response.data.persona.voices.piper.language);
+        setVoiceModel(response.data.persona.voices.piper.modelName);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -101,7 +102,7 @@ export function EditPersona() {
           piper: {
             language: language,
             modelName: voiceModel,
-          }
+          },
         },
       });
       if (response.data) {
@@ -119,8 +120,12 @@ export function EditPersona() {
 
   const handleVoiceModelChange = (_event: any, value: any | null) => {
     setVoiceModel(value);
-    if(language && value){
-      void EXPERIMENTAL_speakTextStream("Our AI Training Platform equips call center agents with the skills and confidence to excel in customer interactions", language, value);
+    if (language && value) {
+      void EXPERIMENTAL_speakTextStream(
+        'Our AI Training Platform equips call center agents with the skills and confidence to excel in customer interactions',
+        language,
+        value,
+      );
     }
   };
   const handleLanguageChange = (_event: any, value: any | null) => {
@@ -137,8 +142,8 @@ export function EditPersona() {
         const config: any = {
           headers: {
             'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
-          }
+            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+          },
         };
         const response = await axios.get(url, config);
 
@@ -207,13 +212,13 @@ export function EditPersona() {
             <Typography>Category</Typography>
           </Box>
           <Box>
-
             <Select
-              value={selValue} onChange={handleVoiceChange}
-              variant='outlined'
+              value={selValue}
+              onChange={handleVoiceChange}
+              variant="outlined"
               slotProps={{
                 root: { sx: { width: '100%' } },
-                indicator: { sx: { opacity: 0.5 } }
+                indicator: { sx: { opacity: 0.5 } },
               }}
             >
               {categories.map((option, key) => (
@@ -223,41 +228,37 @@ export function EditPersona() {
               ))}
             </Select>
           </Box>
-
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
             <Typography>Language</Typography>
           </Box>
           <Box>
             <Select
-              value={language} onChange={handleLanguageChange}
-              variant='outlined'
+              value={language}
+              onChange={handleLanguageChange}
+              variant="outlined"
               slotProps={{
                 root: { sx: { width: '100%' } },
-                indicator: { sx: { opacity: 0.5 } }
+                indicator: { sx: { opacity: 0.5 } },
               }}
             >
-              <Option value={"en"}>
-                English
-              </Option>
-              <Option value={"es"}>
-                Spanish
-              </Option>
+              <Option value={'en'}>English</Option>
+              <Option value={'es'}>Spanish</Option>
             </Select>
           </Box>
-
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
             <Typography>VoiceModel</Typography>
           </Box>
           <Box>
             <Select
-              value={voiceModel} onChange={handleVoiceModelChange}
-              variant='outlined'
+              value={voiceModel}
+              onChange={handleVoiceModelChange}
+              variant="outlined"
               slotProps={{
                 root: { sx: { width: '100%' } },
-                indicator: { sx: { opacity: 0.5 } }
+                indicator: { sx: { opacity: 0.5 } },
               }}
             >
-              {voiceModels.map((option, key) => (
+              {voiceModels.map((option, key) =>
                 // <Option key={key} value={option.modelName}>
                 //   {option.modelName}
                 // </Option>
@@ -265,9 +266,8 @@ export function EditPersona() {
                   <Option key={key} value={option.modelName}>
                     {option.modelName}
                   </Option>
-                ) : null
-              ))}
-
+                ) : null,
+              )}
             </Select>
           </Box>
           <Button className="editPersona" type="button" variant="solid" sx={{ minWidth: 120 }} onClick={updatePersona}>
