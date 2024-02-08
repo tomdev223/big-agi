@@ -115,7 +115,7 @@ export function EditPersona() {
 
   const handleVoiceChange = (_event: any, value: any | null) => {
     setSelValue(value);
-    setCategoryId(value?.id as string);
+    setCategoryId(value);
   };
 
   const handleVoiceModelChange = (_event: any, value: any | null) => {
@@ -222,7 +222,7 @@ export function EditPersona() {
               }}
             >
               {categories.map((option, key) => (
-                <Option key={key} value={option}>
+                <Option key={key} value={option.id}>
                   {option.title}
                 </Option>
               ))}
