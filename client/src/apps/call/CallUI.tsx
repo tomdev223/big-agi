@@ -96,7 +96,7 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
         language: string;
         genre: string;
         modelName: string;
-      }
+      };
     };
     examples: string[];
   };
@@ -119,7 +119,7 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
           language: string;
           genre: string;
           modelName: string;
-        }
+        };
       };
     };
   };
@@ -149,7 +149,7 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
   const personaCallStarters = persona?.call?.starters ?? undefined;
   const personaVoiceId = overridePersonaVoice ? undefined : persona?.voices?.elevenLabs?.voiceId ?? undefined;
   const personaSystemMessage = persona?.systemMessage ?? undefined;
-  const personaLanguage =  persona?.voices?.piper?.language ?? undefined;
+  const personaLanguage = persona?.voices?.piper?.language ?? undefined;
   const personaModelName = persona?.voices?.piper?.modelName ?? undefined;
 
   // hooks and speech
@@ -159,8 +159,11 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
     if (result.done) {
       const transcribed = result.transcript.trim();
       if (transcribed.length >= 1) {
-        console.log("Agent said:", transcribed);
-        setCallMessages((messages) => [...messages, createDMessage('user', transcribed)]);
+        console.log('Agent said:', transcribed);
+        //Conditoin for check if agent say same text with last text
+        if (transcribed !== callMessages[callMessages.length - 1].text) {
+          setCallMessages((messages) => [...messages, createDMessage('user', transcribed)]);
+        }
       }
     }
   }, []);
@@ -262,7 +265,7 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
 
     setCallMessages([createDMessage('assistant', firstMessage)]);
     // fire/forget
-    void EXPERIMENTAL_speakTextStream(firstMessage,  personaLanguage, personaModelName, personaVoiceId);
+    void EXPERIMENTAL_speakTextStream(firstMessage, personaLanguage, personaModelName, personaVoiceId);
 
     return () => clearInterval(interval);
   }, [isConnected, personaCallStarters, personaVoiceId, personaLanguage, personaModelName]);
@@ -342,17 +345,18 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
     //     void EXPERIMENTAL_speakTextStream(finalText, personaLanguage, personaModelName, personaVoiceId);
     //     }
     //   });
-    function handleStreamChat(chatLLMId : any, callPrompt : any, signal: any, retryCount = 0) {
-      let finalText = "";
-      let error : any = null;
+    function handleStreamChat(chatLLMId: any, callPrompt: any, signal: any, retryCount = 0) {
+      let finalText = '';
+      let error: any = null;
 
       streamChat(chatLLMId, callPrompt, signal, (updatedMessage) => {
         const text = updatedMessage.text?.trim();
-        console.log("Stream chat: ", text);
+        console.log('Stream chat: ', text);
         if (text) {
           finalText = text;
           setPersonaTextInterim(text);
-        } else if (retryCount < 3) { // Assuming you have a retry limit to prevent infinite loops
+        } else if (retryCount < 3) {
+          // Assuming you have a retry limit to prevent infinite loops
           console.log(`Text was undefined, retrying... Attempt ${retryCount + 1}`);
           handleStreamChat(chatLLMId, callPrompt, signal, retryCount + 1);
           return; // Prevent further execution for this call
@@ -362,8 +366,8 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
           if (err?.name !== 'AbortError') error = err;
         })
         .finally(() => {
-          if(finalText !== ""){
-            console.log("reply:", finalText);
+          if (finalText !== '') {
+            console.log('reply:', finalText);
             setPersonaTextInterim(null);
             const messageContent = finalText + (error ? ` (ERROR: ${error.message || error.toString()})` : '');
             setSellerMessages((messages) => [...messages, createDMessage('assistant', messageContent)]);
@@ -374,9 +378,8 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
         });
     }
 
-// Usage example
+    // Usage example
     handleStreamChat(chatLLMId, callPrompt, responseAbortController.current.signal);
-
 
     return () => {
       responseAbortController.current?.abort();
@@ -428,12 +431,7 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
         {isConnected ? personaName : 'Hello'}
       </Typography>
 
-      <CallAvatar
-        symbol={""}
-        imageUrl={persona?.symbol}
-        isRinging={isRinging}
-        onClick={() => setAvatarClickCount(avatarClickCount + 1)}
-      />
+      <CallAvatar symbol={''} imageUrl={persona?.symbol} isRinging={isRinging} onClick={() => setAvatarClickCount(avatarClickCount + 1)} />
 
       <CallStatus
         callerName={isConnected ? undefined : personaName}
@@ -464,7 +462,7 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
               <CallMessage
                 text={
                   <>
-                    {speechInterim?.interimTranscript ==='Listening...' ? 'Listening...' + ' ' : 'Agent speaking...'}
+                    {speechInterim?.interimTranscript === 'Listening...' ? 'Listening...' + ' ' : 'Agent speaking...'}
                     {/*<i>{speechInterim?.interimTranscript}</i>*/}
                   </>
                 }
