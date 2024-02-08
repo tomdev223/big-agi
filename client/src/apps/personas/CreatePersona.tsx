@@ -13,6 +13,7 @@ import { Textarea } from '@mui/joy';
 import { useState } from 'react';
 // import { SystemPurposeId } from '../../data';
 
+import { EXPERIMENTAL_speakTextStream } from '~/modules/elevenlabs/elevenlabs.client';
 type OriginalDataType = {
   id: string;
   createdDate: string;
@@ -76,6 +77,7 @@ export function CreatePersona() {
   };
   const handleVoiceModelChange = (_event: any, value: any | null) => {
     setVoiceModel(value);
+    void EXPERIMENTAL_speakTextStream("Hello", language, value);
   };
   const handleLanguageChange = (_event: any, value: any | null) => {
     setLanguage(value);
