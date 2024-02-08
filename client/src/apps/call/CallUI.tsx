@@ -161,9 +161,11 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
       if (transcribed.length >= 1) {
         console.log('Agent said:', transcribed);
         //Conditoin for check if agent say same text with last text
-        if (transcribed !== callMessages[callMessages.length - 1].text) {
-          setCallMessages((messages) => [...messages, createDMessage('user', transcribed)]);
-        }
+        if (callMessages.length > 0) {
+          if (transcribed !== callMessages[callMessages.length - 1].text) {
+            setCallMessages((messages) => [...messages, createDMessage('user', transcribed)]);
+          }
+        } else setCallMessages((messages) => [...messages, createDMessage('user', transcribed)]);
       }
     }
   }, []);
