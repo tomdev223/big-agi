@@ -95,7 +95,6 @@ async function fetchApiElevenlabsSpeech(text: string, elevenLabsApiKey: string, 
   if (!response.ok) {
     const errorData = await response.json();
     throw new Error(errorData.error || errorData.message || 'Unknown error');
-    fetchApiElevenlabsSpeech(text, elevenLabsApiKey, personaLanguage, personaModelName, elevenLabsVoiceId, nonEnglish, streaming);
   }
   return response;
 }
