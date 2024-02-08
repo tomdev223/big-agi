@@ -93,7 +93,7 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
         voiceId: string;
       };
       piper: {
-        language: string;
+        langu1age: string;
         genre: string;
         modelName: string;
       }

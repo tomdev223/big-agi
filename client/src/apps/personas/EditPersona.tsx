@@ -178,6 +178,7 @@ export function EditPersona() {
               ))}
             </Select>
           </Box>
+          
           <Button className="editPersona" type="button" variant="solid" sx={{ minWidth: 120 }} onClick={updatePersona}>
             Update
           </Button>

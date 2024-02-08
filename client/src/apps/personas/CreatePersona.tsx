@@ -21,6 +21,14 @@ type OriginalDataType = {
   icon: string;
   color: string;
 };
+type VoiceModelType = {
+  id: string;
+  createdDate: string;
+  updatedDate: string;
+  language: string;
+  genre: string;
+  modelName: string;
+};
 
 export function CreatePersona() {
   const [title, setTitle] = React.useState('');
@@ -53,6 +61,30 @@ export function CreatePersona() {
       pathname: '/'
     });
   };
+
+
+  const [categories, setCategories] = React.useState<OriginalDataType[]>([]);
+  const [voiceModels, setVoiceModels] = React.useState<VoiceModelType[]>([]);
+  const [selValue, setSelValue] = useState(null);
+  const [language, setLanguage] = useState(null);
+  const [genre, setGenre] = useState(null);
+  const [voiceModel, setVoiceModel] = useState(null);
+
+  const handleVoiceChange = (_event: any, value: any | null) => {
+    setSelValue(value);
+    setCategoryId(value?.id as string);
+  };
+  const handleVoiceModelChange = (_event: any, value: any | null) => {
+    setVoiceModel(value);
+  };
+  const handleLanguageChange = (_event: any, value: any | null) => {
+    setLanguage(value);
+  };
+  const handleGenreChange = (_event: any, value: any | null) => {
+    console.log("Selected gen", value);
+    setGenre(value);
+  };
+
   const createPersona = async () => {
     try {
       const response = await axios.post(`${NEXT_PUBLIC_PROTOCOL}://${NEXT_PUBLIC_SERVER_HOST}/api/persona/create`, {
@@ -60,7 +92,14 @@ export function CreatePersona() {
         symbol: symbol,
         description: description,
         systemMessage: prompts,
-        categoryId: categoryId
+        categoryId: categoryId,
+        voices: {
+          piper: {
+            language: language,
+            genre: genre,
+            modelName: voiceModel,
+          }
+        },
       });
       if (response.data) {
         navigateToDashboard();
@@ -69,8 +108,6 @@ export function CreatePersona() {
       console.error('Error:', error);
     }
   };
-
-  const [categories, setCategories] = React.useState<OriginalDataType[]>([]);
   React.useEffect(() => {
     const fetchData = async () => {
       try {
@@ -90,14 +127,22 @@ export function CreatePersona() {
         console.error('Error during the Axios POST request:', error);
       }
     };
+    const getVoiceModels = async () => {
+      try {
+        const response = await axios.get(`${NEXT_PUBLIC_PROTOCOL}://${NEXT_PUBLIC_SERVER_HOST}/api/voiceModel`);
+        const resultData: VoiceModelType[] = response.data;
+        setVoiceModels(resultData);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
     fetchData();
+    getVoiceModels();
+
   }, []);
 
-  const [selValue, setSelValue] = useState(null)
-  const handleVoiceChange = (_event: any, value: any | null) => {
-    setSelValue(value);
-    setCategoryId(value?.id as string);
-  };
+
+
   return (
     <Sheet
       sx={{
@@ -159,7 +204,72 @@ export function CreatePersona() {
                 </Option>
               ))}
             </Select>
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
+            <Typography>Language</Typography>
+          </Box>
+          <Box>
+            <Select
+              value={language} onChange={handleLanguageChange}
+              variant='outlined'
+              slotProps={{
+                root: { sx: { width: '100%' } },
+                indicator: { sx: { opacity: 0.5 } }
+              }}
+            >
+              <Option value={"en"}>
+                English
+              </Option>
+              <Option value={"es"}>
+                Spanish
+              </Option>
+            </Select>
+          </Box>
+          {/*<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>*/}
+          {/*  <Typography>Genre</Typography>*/}
+          {/*</Box>*/}
+          {/*<Box>*/}
+          {/*  <Select*/}
+          {/*    value={genre} onChange={handleGenreChange}*/}
+          {/*    variant='outlined'*/}
+          {/*    slotProps={{*/}
+          {/*      root: { sx: { width: '100%' } },*/}
+          {/*      indicator: { sx: { opacity: 0.5 } }*/}
+          {/*    }}*/}
+          {/*  >*/}
+          {/*    <Option value={"Man"}>*/}
+          {/*      Man*/}
+          {/*    </Option>*/}
+          {/*    <Option value={"Woman"}>*/}
+          {/*      Woman*/}
+          {/*    </Option>*/}
+          {/*  </Select>*/}
+          {/*</Box>*/}
 
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
+            <Typography>VoiceModel</Typography>
+          </Box>
+          <Box>
+            <Select
+              value={voiceModel} onChange={handleVoiceModelChange}
+              variant='outlined'
+              slotProps={{
+                root: { sx: { width: '100%' } },
+                indicator: { sx: { opacity: 0.5 } }
+              }}
+            >
+              {voiceModels.map((option, key) => (
+                // <Option key={key} value={option.modelName}>
+                //   {option.modelName}
+                // </Option>
+                  option.language == language ? ( // Assuming 'isActive' is the condition you're checking
+                  <Option key={key} value={option}>
+                {option.modelName}
+                  </Option>
+                  ) : null
+              ))}
+
+            </Select>
           </Box>
           <Button className='editPersona' type='button' variant='solid' sx={{ minWidth: 120 }} onClick={createPersona}>
             Create
