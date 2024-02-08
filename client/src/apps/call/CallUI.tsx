@@ -342,9 +342,9 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
     //     void EXPERIMENTAL_speakTextStream(finalText, personaLanguage, personaModelName, personaVoiceId);
     //     }
     //   });
-    function handleStreamChat(chatLLMId, callPrompt, signal, retryCount = 0) {
+    function handleStreamChat(chatLLMId : any, callPrompt : any, signal: any, retryCount = 0) {
       let finalText = "";
-      let error = null;
+      let error : any = null;
 
       streamChat(chatLLMId, callPrompt, signal, (updatedMessage) => {
         const text = updatedMessage.text?.trim();
