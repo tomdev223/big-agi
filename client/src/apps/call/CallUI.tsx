@@ -321,27 +321,62 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
     responseAbortController.current = new AbortController();
     let finalText = '';
     let error: any | null = null;
-    streamChat(chatLLMId, callPrompt, responseAbortController.current.signal, (updatedMessage: Partial<DMessage>) => {
-      const text = updatedMessage.text?.trim();
-      console.log("Stream chat: ", text);
-      if (text) {
-        finalText = text;
-        setPersonaTextInterim(text);
-      }
-    })
-      .catch((err: DOMException) => {
-        if (err?.name !== 'AbortError') error = err;
-      })
-      .finally(() => {
-        if(finalText!=""){          
-        console.log("reply:", finalText);
-        setPersonaTextInterim(null);
-        setSellerMessages((messages) => [...messages, createDMessage('assistant', finalText + (error ? ` (ERROR: ${error.message || error.toString()})` : ''))]);
-        setCallMessages((messages) => [...messages, createDMessage('assistant', finalText + (error ? ` (ERROR: ${error.message || error.toString()})` : ''))]);
-        // fire/forget
-        void EXPERIMENTAL_speakTextStream(finalText, personaLanguage, personaModelName, personaVoiceId);
+    // streamChat(chatLLMId, callPrompt, responseAbortController.current.signal, (updatedMessage: Partial<DMessage>) => {
+    //   const text = updatedMessage.text?.trim();
+    //   console.log("Stream chat: ", text);
+    //   if (text) {
+    //     finalText = text;
+    //     setPersonaTextInterim(text);
+    //   }
+    // })
+    //   .catch((err: DOMException) => {
+    //     if (err?.name !== 'AbortError') error = err;
+    //   })
+    //   .finally(() => {
+    //     if(finalText!=""){
+    //     console.log("reply:", finalText);
+    //     setPersonaTextInterim(null);
+    //     setSellerMessages((messages) => [...messages, createDMessage('assistant', finalText + (error ? ` (ERROR: ${error.message || error.toString()})` : ''))]);
+    //     setCallMessages((messages) => [...messages, createDMessage('assistant', finalText + (error ? ` (ERROR: ${error.message || error.toString()})` : ''))]);
+    //     // fire/forget
+    //     void EXPERIMENTAL_speakTextStream(finalText, personaLanguage, personaModelName, personaVoiceId);
+    //     }
+    //   });
+    function handleStreamChat(chatLLMId, callPrompt, signal, retryCount = 0) {
+      let finalText = "";
+      let error = null;
+
+      streamChat(chatLLMId, callPrompt, signal, (updatedMessage) => {
+        const text = updatedMessage.text?.trim();
+        console.log("Stream chat: ", text);
+        if (text) {
+          finalText = text;
+          setPersonaTextInterim(text);
+        } else if (retryCount < 3) { // Assuming you have a retry limit to prevent infinite loops
+          console.log(`Text was undefined, retrying... Attempt ${retryCount + 1}`);
+          handleStreamChat(chatLLMId, callPrompt, signal, retryCount + 1);
+          return; // Prevent further execution for this call
         }
-      });
+      })
+        .catch((err) => {
+          if (err?.name !== 'AbortError') error = err;
+        })
+        .finally(() => {
+          if(finalText !== ""){
+            console.log("reply:", finalText);
+            setPersonaTextInterim(null);
+            const messageContent = finalText + (error ? ` (ERROR: ${error.message || error.toString()})` : '');
+            setSellerMessages((messages) => [...messages, createDMessage('assistant', messageContent)]);
+            setCallMessages((messages) => [...messages, createDMessage('assistant', messageContent)]);
+            // fire/forget
+            void EXPERIMENTAL_speakTextStream(finalText, personaLanguage, personaModelName, personaVoiceId);
+          }
+        });
+    }
+
+// Usage example
+    handleStreamChat(chatLLMId, callPrompt, responseAbortController.current.signal);
+
 
     return () => {
       responseAbortController.current?.abort();
