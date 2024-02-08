@@ -77,7 +77,9 @@ export function CreatePersona() {
   };
   const handleVoiceModelChange = (_event: any, value: any | null) => {
     setVoiceModel(value);
-    void EXPERIMENTAL_speakTextStream("Hello", language, value);
+    if(language && value){
+      void EXPERIMENTAL_speakTextStream("Hello", language, value);
+    }
   };
   const handleLanguageChange = (_event: any, value: any | null) => {
     setLanguage(value);
