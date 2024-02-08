@@ -77,7 +77,7 @@ async function fetchApiElevenlabsSpeech(text: string, elevenLabsApiKey: string, 
     ...(streaming && { streaming: true, streamOptimization: 4 }),
   };
 
-  const response = await fetch('https://aitools.lamassucrm.com/piper/tts?'+'language='+personaLanguage+'&model='+personaModelName+'&pitch=1', {
+  const response = await fetch('https://aitools.lamassucrm.com/lamtts/tts?'+'language='+personaLanguage+'&model='+personaModelName+'&pitch=1', {
     method: 'POST',
     headers: { 
       'Content-Type': 'application/json',
