@@ -40,7 +40,6 @@ export function EditPersona() {
   const [categoryId, setCategoryId] = React.useState('');
   const [categories, setCategories] = React.useState<OriginalDataType[]>([]);
 
-  const [selValue, setSelValue] = useState(null);
   const [language, setLanguage] = useState(null);
   const [genre, setGenre] = useState(null);
   const [voiceModel, setVoiceModel] = useState(null);
@@ -73,7 +72,7 @@ export function EditPersona() {
         setTitle(response.data.persona.title);
         setDescription(response.data.persona.description);
         setPrompts(response.data.persona.systemMessage);
-        setCategoryId(response.data.persona.category);
+        setCategoryId(response.data.persona.category.id);
         setId(response.data.persona.id);
         setLanguage(response.data.persona.voices.piper.language);
         setVoiceModel(response.data.persona.voices.piper.modelName);
@@ -114,7 +113,6 @@ export function EditPersona() {
   };
 
   const handleVoiceChange = (_event: any, value: any | null) => {
-    setSelValue(value);
     setCategoryId(value);
   };
 
@@ -213,7 +211,7 @@ export function EditPersona() {
           </Box>
           <Box>
             <Select
-              value={selValue}
+              value={categoryId}
               onChange={handleVoiceChange}
               variant="outlined"
               slotProps={{
