@@ -10,7 +10,6 @@ import { Box, Input, Button, Container, ListDivider, Sheet, Typography, Option, 
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { Textarea } from '@mui/joy';
-import { DropDown } from './DropDown';
 import { useState } from 'react';
 // import { SystemPurposeId } from '../../data';
 
@@ -122,20 +121,20 @@ export function CreatePersona() {
             <Input fullWidth variant='outlined' placeholder='Symbol' value={symbol} onChange={handleSymbolChange} />
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
-            <Typography>title</Typography>
+            <Typography>Title</Typography>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
             <Input fullWidth variant='outlined' placeholder='Title' value={title} onChange={handleTitleChange} />
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
-            <Typography>description</Typography>
+            <Typography>Description</Typography>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
             <Input fullWidth variant='outlined' placeholder='Description' value={description}
                    onChange={handleDescriptionChange} />
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
-            <Typography>prompts</Typography>
+            <Typography>Prompts</Typography>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
             <Textarea variant='outlined' autoFocus minRows={1} placeholder='Prompts' value={prompts}

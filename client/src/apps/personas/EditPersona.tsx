@@ -1,7 +1,7 @@
 import { NEXT_PUBLIC_PROTOCOL, NEXT_PUBLIC_SERVER_HOST, NEXT_PUBLIC_CLIENT_PORT } from '../../constants';
 import * as React from 'react';
 
-import { Box, Input, Button, Container, ListDivider, Sheet, Typography, IconButton } from '@mui/joy';
+import { Box, Input, Button, Container, ListDivider, Sheet, Typography, Option, Select, IconButton } from '@mui/joy';
 import { YTPersonaCreator } from './YTPersonaCreator';
 import ScienceIcon from '@mui/icons-material/Science';
 
@@ -11,8 +11,15 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import { Textarea } from '@mui/joy';
 import { SystemPurposeId } from '../../data';
-import { DropDown } from './DropDown';
-
+import { useState } from 'react';
+type OriginalDataType = {
+  id: string;
+  createdDate: string;
+  updatedDate: string;
+  title: string;
+  icon: string;
+  color: string;
+};
 export function EditPersona() {
   const [id, setId] = React.useState('');
   const [title, setTitle] = React.useState('');
@@ -78,11 +85,36 @@ export function EditPersona() {
       console.error('Error:', error);
     }
   };
-  
+  const [categories, setCategories] = React.useState<OriginalDataType[]>([]);
+
+  const [selValue, setSelValue] = useState(null);
+  const handleVoiceChange = (_event: any, value: any | null) => {
+    setSelValue(value);
+    setCategoryId(value?.id as string);
+  };
   React.useEffect(() => {
     const id = router.query.id;
 
     getPersonaById(id as string);
+    const fetchData = async () => {
+      try {
+        // Replace with your own URL and data
+        const url = `${NEXT_PUBLIC_PROTOCOL}://${NEXT_PUBLIC_SERVER_HOST}/api/category`;
+        const config: any = {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
+          }
+        };
+        const response = await axios.get(url, config);
+
+        const originalData: OriginalDataType[] = response.data;
+        setCategories(originalData);
+      } catch (error) {
+        console.error('Error during the Axios POST request:', error);
+      }
+    };
+    fetchData();
   }, [router.query]);
   return (
     <Sheet
@@ -108,26 +140,43 @@ export function EditPersona() {
             <Input fullWidth variant="outlined" placeholder="Symbol" value={symbol} onChange={handleSymbolChange} />
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
-            <Typography>title</Typography>
+            <Typography>Title</Typography>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
             <Input fullWidth variant="outlined" placeholder="Title" value={title} onChange={handleTitleChange} />
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
-            <Typography>description</Typography>
+            <Typography>Description</Typography>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
             <Input fullWidth variant="outlined" placeholder="Description" value={description} onChange={handleDescriptionChange} />
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
-            <Typography>prompts</Typography>
+            <Typography>Prompts</Typography>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
             <Textarea variant="soft" autoFocus minRows={1} placeholder="Prompts" value={prompts} onChange={handlePromptsChange} style={{ width: '100%' }} />
             {/* <Input fullWidth variant="outlined" placeholder="Prompts" value={prompts} onChange={handlePromptsChange} /> */}
           </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
+            <Typography>Category</Typography>
+          </Box>
           <Box>
-          <Input fullWidth variant="outlined" placeholder="CategoryId" value={categoryId} onChange={handleCategoryIdChangeSelf} />
+
+            <Select
+              value={selValue} onChange={handleVoiceChange}
+              variant='outlined'
+              slotProps={{
+                root: { sx: { width: '100%' } },
+                indicator: { sx: { opacity: 0.5 } }
+              }}
+            >
+              {categories.map((option, key) => (
+                <Option key={key} value={option}>
+                  {option.title}
+                </Option>
+              ))}
+            </Select>
           </Box>
           <Button className="editPersona" type="button" variant="solid" sx={{ minWidth: 120 }} onClick={updatePersona}>
             Update
