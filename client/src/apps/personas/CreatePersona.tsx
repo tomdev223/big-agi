@@ -263,7 +263,7 @@ export function CreatePersona() {
                 //   {option.modelName}
                 // </Option>
                   option.language == language ? ( // Assuming 'isActive' is the condition you're checking
-                  <Option key={key} value={option}>
+                  <Option key={key} value={option.modelName}>
                 {option.modelName}
                   </Option>
                   ) : null
