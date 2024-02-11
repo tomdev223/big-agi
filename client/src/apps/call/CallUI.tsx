@@ -355,7 +355,6 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
 
       streamChat(chatLLMId, callPrompt, signal, (updatedMessage) => {
         const text = updatedMessage.text?.trim();
-        console.log('Stream chat: ', text);
         if (text) {
           finalText = text;
           setPersonaTextInterim(text);
@@ -371,7 +370,6 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
         })
         .finally(() => {
           if (finalText !== '') {
-            console.log('reply:', finalText);
             setPersonaTextInterim(null);
             const messageContent = finalText + (error ? ` (ERROR: ${error.message || error.toString()})` : '');
             setSellerMessages((messages) => [...messages, createDMessage('assistant', messageContent)]);
