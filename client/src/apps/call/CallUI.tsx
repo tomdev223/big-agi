@@ -128,6 +128,7 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
   const [callElapsedTime, setCallElapsedTime] = React.useState<string>('00:00');
   const [callMessages, setCallMessages] = React.useState<DMessage[]>([]);
   const [sellerMessages, setSellerMessages] = React.useState<DMessage[]>([]);
+  const [agentMessages, setAgentMessages] = React.useState<DMessage[]>([]);
   const [overridePersonaVoice, setOverridePersonaVoice] = React.useState<boolean>(false);
   const [personaTextInterim, setPersonaTextInterim] = React.useState<string | null>(null);
   const [pushToTalk, setPushToTalk] = React.useState(false);
@@ -165,11 +166,15 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
         console.log('Seller message history', sellerMessages);
 
         //Conditoin for check if agent say same text with last text
-        if (callMessages.length > 0) {
-          if (transcribed !== callMessages[callMessages.length - 1].text) {
+        if (agentMessages.length > 0) {
+          if (transcribed !== agentMessages[agentMessages.length - 1].text) {
             setCallMessages((messages) => [...messages, createDMessage('user', transcribed)]);
+            setAgentMessages((messages) => [...messages, createDMessage('user', transcribed)]);
           }
-        } else setCallMessages((messages) => [...messages, createDMessage('user', transcribed)]);
+        } else {
+          setCallMessages((messages) => [...messages, createDMessage('user', transcribed)]);
+          setAgentMessages((messages) => [...messages, createDMessage('user', transcribed)]);
+        }
       }
     }
   }, [callMessages, sellerMessages]);
