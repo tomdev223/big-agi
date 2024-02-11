@@ -162,6 +162,8 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
         console.log('Agent said:', transcribed);
         console.log('Chat history', callMessages);
         console.log('Chat history length', callMessages.length);
+        console.log('Seller message history', sellerMessages);
+
         //Conditoin for check if agent say same text with last text
         if (callMessages.length > 0) {
           if (transcribed !== callMessages[callMessages.length - 1].text) {
