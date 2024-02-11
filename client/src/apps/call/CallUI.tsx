@@ -172,7 +172,7 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
         } else setCallMessages((messages) => [...messages, createDMessage('user', transcribed)]);
       }
     }
-  }, []);
+  }, [callMessages, sellerMessages]);
   const { isSpeechEnabled, isRecording, isRecordingAudio, isRecordingSpeech, startRecording, stopRecording, toggleRecording } = useSpeechRecognition(
     onSpeechResultCallback,
     1000,
