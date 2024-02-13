@@ -45,10 +45,10 @@ export function ModelsModal(props: { suspendAutoModelsSetup?: boolean }) {
   const multiSource = modelSources.length > 1;
 
   // if no sources at startup, open the modal
-  React.useEffect(() => {
-    if (!selectedSourceId && !props.suspendAutoModelsSetup)
-      openLayoutModelsSetup();
-  }, [selectedSourceId, props.suspendAutoModelsSetup]);
+  // React.useEffect(() => {
+  //   if (!selectedSourceId && !props.suspendAutoModelsSetup)
+  //     openLayoutModelsSetup();
+  // }, [selectedSourceId, props.suspendAutoModelsSetup]);
 
   // add the default source on cold - will require setup
   React.useEffect(() => {
