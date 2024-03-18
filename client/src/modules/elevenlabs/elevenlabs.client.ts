@@ -1,6 +1,5 @@
 import {
   NEXT_PUBLIC_PROTOCOL,
-  NEXT_TTS_HOST,
   NEXT_PUBLIC_CLIENT_PORT,
   NEXT_TTS_HOST
 } from '../../constants/index';
