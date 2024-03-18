@@ -1,4 +1,9 @@
-import { NEXT_PUBLIC_PROTOCOL, NEXT_TTS_SERVER_HOST, NEXT_PUBLIC_CLIENT_PORT } from '../../constants/index';
+import {
+  NEXT_PUBLIC_PROTOCOL,
+  NEXT_TTS_HOST,
+  NEXT_PUBLIC_CLIENT_PORT,
+  NEXT_TTS_HOST
+} from '../../constants/index';
 import { backendCaps } from '~/modules/backend/state-backend';
 
 import { AudioLivePlayer } from '~/common/util/AudioLivePlayer';
@@ -77,7 +82,7 @@ async function fetchApiElevenlabsSpeech(text: string, elevenLabsApiKey: string, 
     ...(streaming && { streaming: true, streamOptimization: 4 }),
   };
 
-  const response = await fetch(NEXT_PUBLIC_PROTOCOL+'://'+NEXT_TTS_SERVER_HOST+'/tts?'+'language='+personaLanguage+'&model='+personaModelName+'&pitch=1', {
+  const response = await fetch(NEXT_PUBLIC_PROTOCOL+'://'+NEXT_TTS_HOST+'/tts?'+'language='+personaLanguage+'&model='+personaModelName+'&pitch=1', {
     method: 'POST',
     headers: { 
       'Content-Type': 'application/json',
