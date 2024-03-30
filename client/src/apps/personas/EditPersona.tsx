@@ -14,6 +14,7 @@ import { SystemPurposeId } from '../../data';
 import { useState } from 'react';
 
 import { EXPERIMENTAL_speakTextStream } from '~/modules/elevenlabs/elevenlabs.client';
+import useAudioPlayer from '~/modules/elevenlabs/all-talks';
 type OriginalDataType = {
   id: string;
   createdDate: string;
@@ -44,6 +45,7 @@ export function EditPersona() {
   const [genre, setGenre] = useState(null);
   const [voiceModel, setVoiceModel] = useState(null);
   const [voiceModels, setVoiceModels] = React.useState<VoiceModelType[]>([]);
+  const { fetchAndPlayAudio } = useAudioPlayer();
 
   const router = useRouter();
   const handleTitleChange = (event: any) => {
@@ -119,11 +121,12 @@ export function EditPersona() {
   const handleVoiceModelChange = (_event: any, value: any | null) => {
     setVoiceModel(value);
     if (language && value) {
-      void EXPERIMENTAL_speakTextStream(
-        'Our AI Training Platform equips call center agents with the skills and confidence to excel in customer interactions',
-        language,
-        value,
-      );
+      // void EXPERIMENTAL_speakTextStream(
+      //   'Our AI Training Platform equips call center agents with the skills and confidence to excel in customer interactions',
+      //   language,
+      //   value,
+      // );
+      fetchAndPlayAudio('Our AI Training Platform equips call center agents with the skills and confidence to excel in customer interactions', language);
     }
   };
   const handleLanguageChange = (_event: any, value: any | null) => {

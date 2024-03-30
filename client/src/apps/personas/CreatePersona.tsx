@@ -14,6 +14,7 @@ import { useState } from 'react';
 // import { SystemPurposeId } from '../../data';
 
 import { EXPERIMENTAL_speakTextStream } from '~/modules/elevenlabs/elevenlabs.client';
+import useAudioPlayer from '~/modules/elevenlabs/all-talks';
 type OriginalDataType = {
   id: string;
   createdDate: string;
@@ -59,10 +60,9 @@ export function CreatePersona() {
   const navigateToDashboard = () => {
     // router.push(`/editPersona/${id}`);
     router.push({
-      pathname: '/'
+      pathname: '/',
     });
   };
-
 
   const [categories, setCategories] = React.useState<OriginalDataType[]>([]);
   const [voiceModels, setVoiceModels] = React.useState<VoiceModelType[]>([]);
@@ -70,6 +70,7 @@ export function CreatePersona() {
   const [language, setLanguage] = useState(null);
   const [genre, setGenre] = useState(null);
   const [voiceModel, setVoiceModel] = useState(null);
+  const { fetchAndPlayAudio } = useAudioPlayer();
 
   const handleVoiceChange = (_event: any, value: any | null) => {
     setSelValue(value);
@@ -77,15 +78,20 @@ export function CreatePersona() {
   };
   const handleVoiceModelChange = (_event: any, value: any | null) => {
     setVoiceModel(value);
-    if(language && value){
-      void EXPERIMENTAL_speakTextStream("Our AI Training Platform equips call center agents with the skills and confidence to excel in customer interactions", language, value);
+    if (language && value) {
+      // void EXPERIMENTAL_speakTextStream(
+      //   'Our AI Training Platform equips call center agents with the skills and confidence to excel in customer interactions',
+      //   language,
+      //   value,
+      // );
+      fetchAndPlayAudio('Our AI Training Platform equips call center agents with the skills and confidence to excel in customer interactions', language);
     }
   };
   const handleLanguageChange = (_event: any, value: any | null) => {
     setLanguage(value);
   };
   const handleGenreChange = (_event: any, value: any | null) => {
-    console.log("Selected gen", value);
+    console.log('Selected gen', value);
     setGenre(value);
   };
 
@@ -102,7 +108,7 @@ export function CreatePersona() {
             language: language,
             genre: genre,
             modelName: voiceModel,
-          }
+          },
         },
       });
       if (response.data) {
@@ -120,8 +126,8 @@ export function CreatePersona() {
         const config: any = {
           headers: {
             'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
-          }
+            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+          },
         };
         const response = await axios.get(url, config);
 
@@ -142,10 +148,7 @@ export function CreatePersona() {
     };
     fetchData();
     getVoiceModels();
-
   }, []);
-
-
 
   return (
     <Sheet
@@ -153,11 +156,11 @@ export function CreatePersona() {
         flexGrow: 1,
         overflowY: 'auto',
         backgroundColor: 'background.level1',
-        p: { xs: 3, md: 6 }
+        p: { xs: 3, md: 6 },
       }}
     >
-      <Container disableGutters maxWidth='md' sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-        <Typography level='title-lg' sx={{ textAlign: 'center' }}>
+      <Container disableGutters maxWidth="md" sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+        <Typography level="title-lg" sx={{ textAlign: 'center' }}>
           Create Persona Profile
         </Typography>
 
@@ -167,27 +170,25 @@ export function CreatePersona() {
             <Typography>Avatar Image Url</Typography>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
-            <Input fullWidth variant='outlined' placeholder='Symbol' value={symbol} onChange={handleSymbolChange} />
+            <Input fullWidth variant="outlined" placeholder="Symbol" value={symbol} onChange={handleSymbolChange} />
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
             <Typography>Title</Typography>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
-            <Input fullWidth variant='outlined' placeholder='Title' value={title} onChange={handleTitleChange} />
+            <Input fullWidth variant="outlined" placeholder="Title" value={title} onChange={handleTitleChange} />
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
             <Typography>Description</Typography>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
-            <Input fullWidth variant='outlined' placeholder='Description' value={description}
-                   onChange={handleDescriptionChange} />
+            <Input fullWidth variant="outlined" placeholder="Description" value={description} onChange={handleDescriptionChange} />
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
             <Typography>Prompts</Typography>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
-            <Textarea variant='outlined' autoFocus minRows={1} placeholder='Prompts' value={prompts}
-                      onChange={handlePromptsChange} style={{ width: '100%' }} />
+            <Textarea variant="outlined" autoFocus minRows={1} placeholder="Prompts" value={prompts} onChange={handlePromptsChange} style={{ width: '100%' }} />
             {/* <Input fullWidth variant="outlined" placeholder="Prompts" value={prompts} onChange={handlePromptsChange} /> */}
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>
@@ -195,11 +196,12 @@ export function CreatePersona() {
           </Box>
           <Box>
             <Select
-              value={selValue} onChange={handleVoiceChange}
-              variant='outlined'
+              value={selValue}
+              onChange={handleVoiceChange}
+              variant="outlined"
               slotProps={{
                 root: { sx: { width: '100%' } },
-                indicator: { sx: { opacity: 0.5 } }
+                indicator: { sx: { opacity: 0.5 } },
               }}
             >
               {categories.map((option, key) => (
@@ -214,19 +216,16 @@ export function CreatePersona() {
           </Box>
           <Box>
             <Select
-              value={language} onChange={handleLanguageChange}
-              variant='outlined'
+              value={language}
+              onChange={handleLanguageChange}
+              variant="outlined"
               slotProps={{
                 root: { sx: { width: '100%' } },
-                indicator: { sx: { opacity: 0.5 } }
+                indicator: { sx: { opacity: 0.5 } },
               }}
             >
-              <Option value={"en"}>
-                English
-              </Option>
-              <Option value={"es"}>
-                Spanish
-              </Option>
+              <Option value={'en'}>English</Option>
+              <Option value={'es'}>Spanish</Option>
             </Select>
           </Box>
           {/*<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left', gap: 1 }}>*/}
@@ -255,27 +254,27 @@ export function CreatePersona() {
           </Box>
           <Box>
             <Select
-              value={voiceModel} onChange={handleVoiceModelChange}
-              variant='outlined'
+              value={voiceModel}
+              onChange={handleVoiceModelChange}
+              variant="outlined"
               slotProps={{
                 root: { sx: { width: '100%' } },
-                indicator: { sx: { opacity: 0.5 } }
+                indicator: { sx: { opacity: 0.5 } },
               }}
             >
-              {voiceModels.map((option, key) => (
+              {voiceModels.map((option, key) =>
                 // <Option key={key} value={option.modelName}>
                 //   {option.modelName}
                 // </Option>
-                  option.language == language ? ( // Assuming 'isActive' is the condition you're checking
+                option.language == language ? ( // Assuming 'isActive' is the condition you're checking
                   <Option key={key} value={option.modelName}>
-                {option.modelName}
+                    {option.modelName}
                   </Option>
-                  ) : null
-              ))}
-
+                ) : null,
+              )}
             </Select>
           </Box>
-          <Button className='editPersona' type='button' variant='solid' sx={{ minWidth: 120 }} onClick={createPersona}>
+          <Button className="editPersona" type="button" variant="solid" sx={{ minWidth: 120 }} onClick={createPersona}>
             Create
           </Button>
         </form>
