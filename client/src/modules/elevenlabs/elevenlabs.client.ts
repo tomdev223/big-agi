@@ -1,8 +1,7 @@
 import {
   NEXT_PUBLIC_PROTOCOL,
   NEXT_PUBLIC_CLIENT_PORT,
-  NEXT_TTS_HOST,
-  NEXT_PUBLIC_ALL_TALKS
+  NEXT_TTS_HOST
 } from '../../constants/index';
 import { backendCaps } from '~/modules/backend/state-backend';
 
@@ -82,23 +81,16 @@ async function fetchApiElevenlabsSpeech(text: string, elevenLabsApiKey: string, 
     ...(streaming && { streaming: true, streamOptimization: 4 }),
   };
 
-  const response = await fetch(`${NEXT_PUBLIC_ALL_TALKS}/api/tts-generate-streaming?text=${text}&voice=&language=${personaLanguage}&output_file=${"audio"+Math.floor(Math.random() * 1000000).toString()+".wav"}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
+  const response = await fetch(NEXT_PUBLIC_PROTOCOL+'://'+'aitools.lamassucrm.com/lamtts'+'/tts?'+'language='+personaLanguage+'&model='+personaModelName+'&pitch=1', {
+    method: 'POST',
+    headers: { 
+      'Content-Type': 'application/json',
+      'Authorization':'mysecuretoken'
+    } ,
+    body: JSON.stringify({
+      "message": text, "filters":{"robotic":["roundstart"]}
+    }),
   });
-
-  // const response = await fetch(NEXT_PUBLIC_PROTOCOL+'://'+'aitools.lamassucrm.com/lamtts'+'/tts?'+'language='+personaLanguage+'&model='+personaModelName+'&pitch=1', {
-  //   method: 'POST',
-  //   headers: { 
-  //     'Content-Type': 'application/json',
-  //     'Authorization':'mysecuretoken'
-  //   } ,
-  //   body: JSON.stringify({
-  //     "message": text, "filters":{"robotic":["roundstart"]}
-  //   }),
-  // });
   // const response = await fetch('/api/elevenlabs/speech', {
   //   method: 'POST',
   //   headers: { 'Content-Type': 'application/json' },
