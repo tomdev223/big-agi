@@ -126,7 +126,7 @@ export function EditPersona() {
       //   language,
       //   value,
       // );
-      fetchAndPlayAudio('Our AI Training Platform equips call center agents with the skills and confidence to excel in customer interactions', language);
+      void fetchAndPlayAudio('Our AI Training Platform equips call center agents with the skills and confidence to excel in customer interactions', language);
     }
   };
   const handleLanguageChange = (_event: any, value: any | null) => {

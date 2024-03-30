@@ -282,7 +282,7 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
     setCallMessages([createDMessage('assistant', firstMessage)]);
     // fire/forget
     // void EXPERIMENTAL_speakTextStream(firstMessage, personaLanguage, personaModelName, personaVoiceId);
-    fetchAndPlayAudio(firstMessage, personaLanguage);
+    void fetchAndPlayAudio(firstMessage, personaLanguage);
     return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConnected, personaCallStarters, personaVoiceId, personaLanguage, personaModelName]);
@@ -389,7 +389,7 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
             setCallMessages((messages) => [...messages, createDMessage('assistant', messageContent)]);
             // fire/forget
             // void EXPERIMENTAL_speakTextStream(finalText, personaLanguage, personaModelName, personaVoiceId);
-            fetchAndPlayAudio(finalText, personaLanguage);
+            void fetchAndPlayAudio(finalText, personaLanguage);
           }
         });
     }
