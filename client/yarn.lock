@@ -4447,6 +4447,11 @@ wasm-feature-detect@^1.2.11:
   resolved "https://registry.yarnpkg.com/wasm-feature-detect/-/wasm-feature-detect-1.6.1.tgz#21c7c35f9b233d71d2948d4a8b3e2098c452b940"
   integrity sha512-R1i9ED8UlLu/foILNB1ck9XS63vdtqU/tP1MCugVekETp/ySCrBZRk5I/zI67cI1wlQYeSonNm1PLjDHZDNg6g==
 
+webaudio-wav-stream-player@^1.0.11:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/webaudio-wav-stream-player/-/webaudio-wav-stream-player-1.0.11.tgz#6b8f4f0a12ff1dbd87b451772d6700749fa87397"
+  integrity sha512-wFbVjlnxrpD4RR51ugxEs+xrcUjAEbAaTDr3vCtudXf9TDfr3LjvWxuw9PcNm31HynB1yLtCvDznGVfYGYeUeA==
+
 webidl-conversions@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-3.0.1.tgz#24534275e2a7bc6be7bc86611cc16ae0a5654871"

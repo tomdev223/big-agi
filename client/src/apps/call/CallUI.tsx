@@ -32,6 +32,7 @@ import { CallButton } from './components/CallButton';
 import { CallMessage } from './components/CallMessage';
 import { CallStatus } from './components/CallStatus';
 import axios from 'axios';
+import useAudioPlayer from '~/modules/elevenlabs/all-talks';
 
 function CallMenuItems(props: {
   pushToTalk: boolean;
@@ -155,33 +156,37 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
 
   // hooks and speech
   const [speechInterim, setSpeechInterim] = React.useState<SpeechResult | null>(null);
-  const onSpeechResultCallback = React.useCallback((result: SpeechResult) => {
-    setSpeechInterim(result.done ? null : { ...result });
-    if (result.done) {
-      const transcribed = result.transcript.trim();
-      if (transcribed.length >= 1) {
-        console.log('Agent said:', transcribed);
-        console.log('Chat history', callMessages);
-        console.log('Chat history length', callMessages.length);
-        console.log('Seller message history', sellerMessages);
+  const onSpeechResultCallback = React.useCallback(
+    (result: SpeechResult) => {
+      setSpeechInterim(result.done ? null : { ...result });
+      if (result.done) {
+        const transcribed = result.transcript.trim();
+        if (transcribed.length >= 1) {
+          console.log('Agent said:', transcribed);
+          console.log('Chat history', callMessages);
+          console.log('Chat history length', callMessages.length);
+          console.log('Seller message history', sellerMessages);
 
-        //Conditoin for check if agent say same text with last text
-        if (agentMessages.length > 0) {
-          if (transcribed !== agentMessages[agentMessages.length - 1].text) {
+          //Conditoin for check if agent say same text with last text
+          if (agentMessages.length > 0) {
+            if (transcribed !== agentMessages[agentMessages.length - 1].text) {
+              setCallMessages((messages) => [...messages, createDMessage('user', transcribed)]);
+              setAgentMessages((messages) => [...messages, createDMessage('user', transcribed)]);
+            }
+          } else {
             setCallMessages((messages) => [...messages, createDMessage('user', transcribed)]);
             setAgentMessages((messages) => [...messages, createDMessage('user', transcribed)]);
           }
-        } else {
-          setCallMessages((messages) => [...messages, createDMessage('user', transcribed)]);
-          setAgentMessages((messages) => [...messages, createDMessage('user', transcribed)]);
         }
       }
-    }
-  }, [callMessages, sellerMessages]);
+    },
+    [callMessages, sellerMessages],
+  );
   const { isSpeechEnabled, isRecording, isRecordingAudio, isRecordingSpeech, startRecording, stopRecording, toggleRecording } = useSpeechRecognition(
     onSpeechResultCallback,
     1000,
   );
+  const { fetchAndPlayAudio } = useAudioPlayer();
 
   // derived state
   const isRinging = stage === 'ring';
@@ -276,9 +281,10 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
 
     setCallMessages([createDMessage('assistant', firstMessage)]);
     // fire/forget
-    void EXPERIMENTAL_speakTextStream(firstMessage, personaLanguage, personaModelName, personaVoiceId);
-
+    // void EXPERIMENTAL_speakTextStream(firstMessage, personaLanguage, personaModelName, personaVoiceId);
+    void fetchAndPlayAudio(firstMessage, personaLanguage);
     return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConnected, personaCallStarters, personaVoiceId, personaLanguage, personaModelName]);
 
   // [E] persona streaming response - upon new user message
@@ -382,7 +388,8 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
             setSellerMessages((messages) => [...messages, createDMessage('assistant', messageContent)]);
             setCallMessages((messages) => [...messages, createDMessage('assistant', messageContent)]);
             // fire/forget
-            void EXPERIMENTAL_speakTextStream(finalText, personaLanguage, personaModelName, personaVoiceId);
+            // void EXPERIMENTAL_speakTextStream(finalText, personaLanguage, personaModelName, personaVoiceId);
+            void fetchAndPlayAudio(finalText, personaLanguage);
           }
         });
     }
@@ -394,6 +401,7 @@ export function CallUI(props: { conversationId: string; personaId: string }) {
       responseAbortController.current?.abort();
       responseAbortController.current = null;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConnected, callMessages, chatLLMId, messages, personaVoiceId, personaSystemMessage, routerPush, personaLanguage, personaModelName]);
 
   // [E] Message interrupter

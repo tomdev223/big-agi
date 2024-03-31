@@ -43,6 +43,7 @@ import axios from 'axios';
 
 import { useRouter } from 'next/router';
 import { useChatStore } from '~/common/state/store-chats';
+import useAudioPlayer from '~/modules/elevenlabs/all-talks';
 /**
  * Mode: how to treat the input from the Composer
  */
@@ -123,6 +124,7 @@ export function AppChatByCategory() {
     wipeAllConversations,
     setMessages,
   } = useConversation(focusedConversationId);
+  const { fetchAndPlayAudio } = useAudioPlayer();
 
   // Window actions
 
@@ -338,7 +340,8 @@ export function AppChatByCategory() {
   };
 
   const handleTextSpeak = async (text: string) => {
-    await speakText(text);
+    // await speakText(text);
+    await fetchAndPlayAudio(text, 'en');
   };
 
   // Chat actions

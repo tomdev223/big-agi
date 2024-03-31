@@ -42,6 +42,7 @@ import type { InferGetStaticPropsType, GetStaticProps } from 'next';
 import axios from 'axios';
 
 import { useChatStore } from '~/common/state/store-chats';
+import useAudioPlayer from '~/modules/elevenlabs/all-talks';
 /**
  * Mode: how to treat the input from the Composer
  */
@@ -122,7 +123,7 @@ export function AppChat() {
     wipeAllConversations,
     setMessages,
   } = useConversation(focusedConversationId);
-
+  const { fetchAndPlayAudio } = useAudioPlayer();
   // Window actions
 
   const chatPaneIDs = chatPanes.length > 0 ? chatPanes.map((pane) => pane.conversationId) : [null];
@@ -210,9 +211,7 @@ export function AppChat() {
       const id = addSnackbar({ key: 'focused-title', message: title, type: 'title' });
       return () => removeSnackbar(id);
     }
-  }, [
-    focusedChatNumber, focusedChatTitle, systemPurposeId
-  ]);
+  }, [focusedChatNumber, focusedChatTitle, systemPurposeId]);
 
   // Execution
 
@@ -335,7 +334,8 @@ export function AppChat() {
   };
 
   const handleTextSpeak = async (text: string) => {
-    await speakText(text);
+    // await speakText(text);
+    await fetchAndPlayAudio(text, 'en');
   };
 
   // Chat actions
